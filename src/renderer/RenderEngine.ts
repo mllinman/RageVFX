@@ -7,8 +7,9 @@ export interface ImageData {
   width: number;
   height: number;
   channels: number;
-  data: Float32Array | Uint8Array;
-  format: 'rgba' | 'rgb' | 'float';
+  data: Float32Array | Uint8Array | Uint16Array;
+  format: 'rgba' | 'rgb' | 'float' | 'rgba8' | 'rgba16' | 'rgba32f' | 'exr';
+  colorSpace?: string;
 }
 
 export interface RenderSettings {

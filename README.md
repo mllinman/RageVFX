@@ -261,17 +261,17 @@ RageVFX is optimized for professional workflows:
 
 ## Roadmap
 
-### Version 1.1
-- [ ] 3D geometry support with Three.js integration
-- [ ] Advanced particle systems
-- [ ] Motion tracking nodes
-- [ ] Keying and rotoscoping tools
+### Version 1.1 ✅
+- [x] 3D geometry support with Three.js integration
+- [x] Advanced particle systems
+- [x] Motion tracking nodes
+- [x] Keying and rotoscoping tools
 
-### Version 1.2
-- [ ] Python scripting support
-- [ ] OpenColorIO integration
-- [ ] EXR and high-bit-depth format support
-- [ ] Network rendering
+### Version 1.2 ✅
+- [x] Python scripting support
+- [x] OpenColorIO integration
+- [x] EXR and high-bit-depth format support
+- [x] Network rendering
 
 ### Version 2.0
 - [ ] Full 3D rendering pipeline

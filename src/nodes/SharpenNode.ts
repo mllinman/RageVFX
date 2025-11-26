@@ -71,7 +71,7 @@ export class SharpenNode extends Node {
   }
 
   private gaussianBlur(
-    data: Uint8Array | Float32Array,
+    data: Uint8Array | Uint16Array | Float32Array,
     width: number,
     height: number,
     channels: number,
