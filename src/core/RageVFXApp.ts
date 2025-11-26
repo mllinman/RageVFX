@@ -75,6 +75,37 @@ import { DotNode } from '../nodes/DotNode';
 import { FrameHoldNode } from '../nodes/FrameHoldNode';
 import { TimeOffsetNode } from '../nodes/TimeOffsetNode';
 
+// Version 1.1 - 3D nodes
+import { Geometry3DNode } from '../nodes/Geometry3DNode';
+import { MeshNode } from '../nodes/MeshNode';
+import { CameraNode } from '../nodes/CameraNode';
+import { LightNode } from '../nodes/LightNode';
+
+// Version 1.1 - Particle nodes
+import { ParticleSystemNode } from '../nodes/ParticleSystemNode';
+import { ParticleEmitterNode } from '../nodes/ParticleEmitterNode';
+import { ParticleForceNode } from '../nodes/ParticleForceNode';
+
+// Version 1.1 - Enhanced tracking nodes
+import { MotionVectorsNode } from '../nodes/MotionVectorsNode';
+import { TrackingDataNode } from '../nodes/TrackingDataNode';
+
+// Version 1.1 - Keying and rotoscoping nodes
+import { RotoscopeNode } from '../nodes/RotoscopeNode';
+import { SpillSuppressionNode } from '../nodes/SpillSuppressionNode';
+import { EdgeMatteNode } from '../nodes/EdgeMatteNode';
+
+// Version 1.2 - Scripting nodes
+import { PythonScriptNode } from '../nodes/PythonScriptNode';
+
+// Version 1.2 - Color management nodes
+import { OCIOColorSpaceNode } from '../nodes/OCIOColorSpaceNode';
+import { OCIOLookNode } from '../nodes/OCIOLookNode';
+
+// Version 1.2 - Network rendering nodes
+import { RenderFarmNode } from '../nodes/RenderFarmNode';
+import { NetworkClientNode } from '../nodes/NetworkClientNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -163,6 +194,37 @@ export class RageVFXApp {
     this.nodeRegistry.set('Dot', DotNode as any);
     this.nodeRegistry.set('FrameHold', FrameHoldNode as any);
     this.nodeRegistry.set('TimeOffset', TimeOffsetNode as any);
+    
+    // Version 1.1 - 3D nodes
+    this.nodeRegistry.set('Geometry3D', Geometry3DNode as any);
+    this.nodeRegistry.set('Mesh', MeshNode as any);
+    this.nodeRegistry.set('Camera', CameraNode as any);
+    this.nodeRegistry.set('Light', LightNode as any);
+    
+    // Version 1.1 - Particle nodes
+    this.nodeRegistry.set('ParticleSystem', ParticleSystemNode as any);
+    this.nodeRegistry.set('ParticleEmitter', ParticleEmitterNode as any);
+    this.nodeRegistry.set('ParticleForce', ParticleForceNode as any);
+    
+    // Version 1.1 - Enhanced tracking nodes
+    this.nodeRegistry.set('MotionVectors', MotionVectorsNode as any);
+    this.nodeRegistry.set('TrackingData', TrackingDataNode as any);
+    
+    // Version 1.1 - Keying and rotoscoping nodes
+    this.nodeRegistry.set('Rotoscope', RotoscopeNode as any);
+    this.nodeRegistry.set('SpillSuppression', SpillSuppressionNode as any);
+    this.nodeRegistry.set('EdgeMatte', EdgeMatteNode as any);
+    
+    // Version 1.2 - Scripting nodes
+    this.nodeRegistry.set('PythonScript', PythonScriptNode as any);
+    
+    // Version 1.2 - Color management nodes
+    this.nodeRegistry.set('OCIOColorSpace', OCIOColorSpaceNode as any);
+    this.nodeRegistry.set('OCIOLook', OCIOLookNode as any);
+    
+    // Version 1.2 - Network rendering nodes
+    this.nodeRegistry.set('RenderFarm', RenderFarmNode as any);
+    this.nodeRegistry.set('NetworkClient', NetworkClientNode as any);
   }
 
   /**

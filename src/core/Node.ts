@@ -6,10 +6,13 @@
 export enum DataType {
   IMAGE = 'image',
   GEOMETRY = 'geometry',
+  GEOMETRY_3D = 'geometry_3d',
   VECTOR = 'vector',
   NUMBER = 'number',
   COLOR = 'color',
   MATRIX = 'matrix',
+  PARTICLES = 'particles',
+  SCRIPT = 'script',
   ANY = 'any'
 }
 

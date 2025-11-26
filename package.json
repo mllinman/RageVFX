@@ -1,7 +1,7 @@
 {
   "name": "ragevfx",
-  "version": "1.0.0",
-  "description": "A powerful Node-based Visual Effects program with advanced compositing and 3D rendering capabilities",
+  "version": "1.2.0",
+  "description": "A powerful Node-based Visual Effects program with advanced compositing, 3D rendering, particle systems, and network rendering capabilities",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
@@ -23,11 +23,12 @@
   "license": "MIT",
   "dependencies": {
     "electron": "^27.0.0",
-    "three": "^0.158.0",
-    "gl-matrix": "^3.4.3"
+    "gl-matrix": "^3.4.3",
+    "three": "^0.158.0"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
+    "@types/three": "^0.181.0",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "eslint": "^8.54.0",

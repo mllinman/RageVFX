@@ -114,7 +114,7 @@ export class ChromaticAberrationNode extends Node {
   }
 
   private sampleBilinear(
-    data: Uint8Array | Float32Array,
+    data: Uint8Array | Uint16Array | Float32Array,
     width: number,
     height: number,
     channels: number,
