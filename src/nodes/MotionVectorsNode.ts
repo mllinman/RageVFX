@@ -3,7 +3,6 @@
  */
 
 import { Node, DataType } from '../core/Node';
-import { ImageData } from '../renderer/RenderEngine';
 
 export class MotionVectorsNode extends Node {
   constructor(id: string) {

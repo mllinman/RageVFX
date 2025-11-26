@@ -35,7 +35,7 @@ export class OCIOColorSpaceNode extends Node {
     const height = inputCanvas.height;
     const sourceColorSpace = this.getParameter('sourceColorSpace');
     const targetColorSpace = this.getParameter('targetColorSpace');
-    const config = this.getParameter('config');
+    // const config = this.getParameter('config'); // TODO: Use config for OCIO library integration
 
     // In a real implementation, this would use OpenColorIO library
     // For now, we'll implement basic color space conversions

@@ -3,7 +3,6 @@
  */
 
 import { Node, DataType } from '../core/Node';
-import { ImageData } from '../renderer/RenderEngine';
 
 interface Particle {
   x: number;

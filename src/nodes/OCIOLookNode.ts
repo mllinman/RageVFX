@@ -33,7 +33,7 @@ export class OCIOLookNode extends Node {
     const width = inputCanvas.width;
     const height = inputCanvas.height;
     const lookName = this.getParameter('lookName');
-    const direction = this.getParameter('direction');
+    // const direction = this.getParameter('direction'); // TODO: Use direction for OCIO library integration
     const strength = this.getParameter('strength');
 
     // In a real implementation, this would use OpenColorIO library
