@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RageVFX - Professional Visual Effects Software</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Top Menu Bar -->
+    <header class="menu-bar">
+      <div class="menu-section">
+        <button class="menu-btn">File</button>
+        <button class="menu-btn">Edit</button>
+        <button class="menu-btn">Node</button>
+        <button class="menu-btn">Render</button>
+        <button class="menu-btn">View</button>
+        <button class="menu-btn">Help</button>
+      </div>
+      <div class="app-title">
+        <h1>RageVFX</h1>
+        <span class="subtitle">Professional Visual Effects Software</span>
+      </div>
+      <div class="menu-section right">
+        <button class="icon-btn" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <!-- Left Sidebar - Node Library -->
+      <aside class="sidebar left">
+        <div class="sidebar-header">
+          <h3>Node Library</h3>
+          <input type="text" class="search-box" placeholder="Search nodes...">
+        </div>
+        <div class="node-categories">
+          <div class="category">
+            <div class="category-header">Input/Output</div>
+            <div class="node-item" draggable="true" data-node-type="ImageInput">
+              📷 Image Input
+            </div>
+            <div class="node-item" draggable="true" data-node-type="Output">
+              🎬 Output
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header">Color</div>
+            <div class="node-item" draggable="true" data-node-type="ColorCorrect">
+              🎨 Color Correct
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header">Filter</div>
+            <div class="node-item" draggable="true" data-node-type="Blur">
+              🌫️ Blur
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header">Composite</div>
+            <div class="node-item" draggable="true" data-node-type="Merge">
+              🔗 Merge
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header">Transform</div>
+            <div class="node-item" draggable="true" data-node-type="Transform">
+              ↔️ Transform 2D
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center - Node Graph Editor -->
+      <main class="node-editor">
+        <div class="editor-toolbar">
+          <button class="tool-btn" id="execute-btn">▶️ Execute</button>
+          <button class="tool-btn" id="clear-btn">🗑️ Clear</button>
+          <span class="separator">|</span>
+          <button class="tool-btn" id="zoom-in-btn">🔍+</button>
+          <button class="tool-btn" id="zoom-out-btn">🔍-</button>
+          <button class="tool-btn" id="fit-btn">⊡ Fit</button>
+        </div>
+        <canvas id="node-canvas" class="node-canvas"></canvas>
+        <div class="status-bar">
+          <span id="status-text">Ready</span>
+          <span id="node-count">Nodes: 0</span>
+        </div>
+      </main>
+
+      <!-- Right Sidebar - Properties & Preview -->
+      <aside class="sidebar right">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Node Properties</h3>
+          </div>
+          <div class="panel-content" id="properties-panel">
+            <p class="empty-message">Select a node to view properties</p>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Viewport</h3>
+            <div class="panel-controls">
+              <button class="icon-btn" title="Refresh">🔄</button>
+              <button class="icon-btn" title="Fullscreen">⛶</button>
+            </div>
+          </div>
+          <div class="panel-content viewport">
+            <canvas id="preview-canvas" class="preview-canvas"></canvas>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
