@@ -4,7 +4,7 @@
 
 RageVFX is a next-generation visual effects software that combines the power of node-based compositing with modern GPU-accelerated rendering. Built with cutting-edge web technologies and designed to rival industry-standard tools, RageVFX provides a comprehensive solution for creating award-winning visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-1.2.0-orange)
+![RageVFX](https://img.shields.io/badge/version-2.0.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
@@ -72,6 +72,34 @@ RageVFX is a next-generation visual effects software that combines the power of 
 #### Network Rendering (v1.2)
 - **Render Farm**: Coordinate distributed rendering across multiple machines
 - **Network Client**: Render client with auto-discovery and load balancing
+
+#### Full 3D Rendering Pipeline (v2.0)
+- **Scene**: Scene graph management for organizing 3D objects, lights, and cameras
+- **Renderer 3D**: Full 3D scene rendering with advanced options (ACES tone mapping, shadow maps)
+- **Material**: Advanced PBR material system with physical properties
+- **Environment Map**: HDR environment mapping for image-based lighting
+- **Shadow Map**: Dynamic shadow mapping with PCF soft shadows
+
+#### Volumetric Effects (v2.0)
+- **Volumetric Fog**: Atmospheric fog rendering with height falloff and scattering
+- **Volumetric Light**: God rays and light shaft effects
+- **Volume Render**: 3D volume rendering (ray casting, MIP, isosurface)
+- **Cloud Volume**: Procedural volumetric cloud rendering with animation
+
+#### Physics Simulation (v2.0)
+- **Rigid Body**: Rigid body physics with collision detection and response
+- **Soft Body**: Deformable soft body simulation (mass-spring system)
+- **Fluid Sim**: SPH-based fluid dynamics simulation
+- **Cloth Sim**: Realistic cloth and fabric simulation with wind forces
+- **Collision**: Advanced collision detection (AABB, sphere, box)
+
+#### Machine Learning Powered Tools (v2.0)
+- **Style Transfer**: Neural style transfer for artistic effects
+- **Upscale**: AI-powered image upscaling with edge enhancement
+- **Denoise**: AI-powered denoising with edge preservation
+- **Object Detection**: Object detection and instance segmentation
+- **Inpaint**: AI-powered content-aware fill and inpainting
+- **Depth Estimation**: Monocular depth estimation with colormap visualization
 
 ### 💼 Project Management
 - **Save/Load Projects**: Preserve your node graphs and settings
@@ -300,11 +328,17 @@ RageVFX is optimized for professional workflows:
 - [x] EXR and high-bit-depth format support
 - [x] Network rendering
 
-### Version 2.0
-- [ ] Full 3D rendering pipeline
-- [ ] Volumetric effects
-- [ ] Physics simulation nodes
-- [ ] Machine learning-powered tools
+### Version 2.0 ✅
+- [x] Full 3D rendering pipeline (Scene, Renderer3D, Material, EnvironmentMap, ShadowMap)
+- [x] Volumetric effects (VolumetricFog, VolumetricLight, VolumeRender, CloudVolume)
+- [x] Physics simulation nodes (RigidBody, SoftBody, FluidSim, ClothSim, Collision)
+- [x] Machine learning-powered tools (StyleTransfer, Upscale, Denoise, ObjectDetection, Inpaint, DepthEstimation)
+
+### Version 3.0 (Future)
+- [ ] Real-time raytracing with WebGPU
+- [ ] Advanced audio reactive nodes
+- [ ] Procedural mesh generation
+- [ ] Advanced rigging and animation system
 
 ## Contributing
 
