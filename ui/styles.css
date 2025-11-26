@@ -1,0 +1,316 @@
+/* RageVFX Professional UI Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --bg-tertiary: #333333;
+  --bg-hover: #3a3a3a;
+  --border-color: #444444;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --accent-primary: #ff6b35;
+  --accent-secondary: #f7931e;
+  --node-bg: #2c2c2c;
+  --node-border: #555555;
+  --connection-color: #4a9eff;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Menu Bar */
+.menu-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  height: 50px;
+}
+
+.menu-section {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.menu-section.right {
+  justify-content: flex-end;
+}
+
+.menu-btn, .icon-btn, .tool-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.menu-btn:hover, .icon-btn:hover, .tool-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-color);
+}
+
+.app-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-title h1 {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+/* Main Container */
+.main-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebars */
+.sidebar {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar.left {
+  width: 250px;
+}
+
+.sidebar.right {
+  width: 350px;
+  border-right: none;
+  border-left: 1px solid var(--border-color);
+}
+
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header h3 {
+  font-size: 16px;
+  margin-bottom: 0.5rem;
+}
+
+.search-box {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Node Categories */
+.node-categories {
+  padding: 0.5rem;
+}
+
+.category {
+  margin-bottom: 1rem;
+}
+
+.category-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  padding: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.node-item {
+  padding: 0.75rem;
+  margin: 0.25rem 0;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: move;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.node-item:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: translateX(4px);
+}
+
+/* Node Editor */
+.node-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  align-items: center;
+}
+
+.separator {
+  color: var(--border-color);
+  margin: 0 0.5rem;
+}
+
+.node-canvas {
+  flex: 1;
+  background: 
+    linear-gradient(90deg, var(--bg-tertiary) 1px, transparent 1px),
+    linear-gradient(0deg, var(--bg-tertiary) 1px, transparent 1px);
+  background-size: 40px 40px;
+  cursor: grab;
+}
+
+.node-canvas:active {
+  cursor: grabbing;
+}
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Panels */
+.panel {
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel:last-child {
+  flex: 1;
+  border-bottom: none;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.panel-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.panel-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.panel-content {
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.panel-content.viewport {
+  flex: 1;
+  padding: 0;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-message {
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-align: center;
+  padding: 2rem;
+}
+
+.preview-canvas {
+  max-width: 100%;
+  max-height: 100%;
+  background: repeating-conic-gradient(
+    var(--bg-tertiary) 0% 25%,
+    var(--bg-secondary) 0% 50%
+  ) 50% / 20px 20px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-color);
+}
+
+/* Button States */
+.tool-btn.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+#execute-btn {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  font-weight: 600;
+}
+
+#execute-btn:hover {
+  background: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+}

@@ -1,0 +1,311 @@
+# RageVFX
+
+**A Powerful Node-Based Visual Effects Program**
+
+RageVFX is a next-generation visual effects software that combines the power of node-based compositing with modern GPU-accelerated rendering. Built with cutting-edge web technologies and designed to rival industry-standard tools, RageVFX provides a comprehensive solution for creating award-winning visual effects.
+
+![RageVFX](https://img.shields.io/badge/version-1.0.0-orange)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
+
+## Features
+
+### 🎨 Comprehensive Node System
+- **Flexible Node Graph**: Intuitive node-based workflow for complex VFX pipelines
+- **Smart Connections**: Type-safe connections with automatic data flow validation
+- **Execution Optimization**: Intelligent topological sorting for efficient processing
+- **Circular Dependency Detection**: Automatic detection and prevention of circular dependencies
+
+### 🚀 GPU-Accelerated Rendering
+- **WebGL2 Support**: Hardware-accelerated image processing and rendering
+- **Custom Shader Library**: Extensive collection of optimized GPU shaders
+- **Real-time Preview**: Instant feedback with real-time viewport updates
+- **High-Quality Output**: Production-ready rendering with multiple quality settings
+
+### 🎬 Professional VFX Nodes
+
+#### Input/Output
+- **Image Input**: Load images from files or memory
+- **Output**: Export rendered results in various formats
+
+#### Color Operations
+- **Color Correct**: Adjust brightness, contrast, saturation, and hue
+- **Color Grade**: Advanced color grading with lift, gamma, gain controls
+
+#### Filters
+- **Blur**: Gaussian and box blur with quality settings
+- **Sharpen**: Edge enhancement and detail preservation
+- **Edge Detection**: Sobel-based edge detection
+
+#### Compositing
+- **Merge**: Advanced compositing with multiple blend modes (over, add, multiply, screen)
+- **Alpha Operations**: Premultiply, unpremultiply, and alpha manipulation
+
+#### Transform
+- **Transform 2D**: Scale, rotate, translate with pivot control
+- **Lens Distortion**: Barrel and pincushion distortion
+- **Perspective Transform**: 4-point perspective warping
+
+### 💼 Project Management
+- **Save/Load Projects**: Preserve your node graphs and settings
+- **Version Control Ready**: JSON-based project format
+- **Batch Processing**: Process multiple projects automatically
+
+### 🎯 Modern Architecture
+- **TypeScript**: Type-safe, maintainable codebase
+- **Electron**: Cross-platform desktop application
+- **Modular Design**: Extensible plugin architecture
+- **Clean Code**: Well-documented, professional implementation
+
+## Installation
+
+### Prerequisites
+- Node.js 18.0.0 or higher
+- npm or yarn package manager
+
+### Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/mllinman/RageVFX.git
+   cd RageVFX
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Build the application**
+   ```bash
+   npm run build
+   ```
+
+4. **Start RageVFX**
+   ```bash
+   npm start
+   ```
+
+## Usage
+
+### Basic Workflow
+
+1. **Create Nodes**: Drag nodes from the library to the node editor
+2. **Connect Nodes**: Click and drag between output and input sockets
+3. **Adjust Parameters**: Select nodes to modify their properties
+4. **Execute Graph**: Click the Execute button to process your VFX pipeline
+5. **Preview Results**: View the output in the viewport panel
+
+### Example: Simple Blur Effect
+
+```typescript
+// Create nodes
+const input = new ImageInputNode('input1');
+const blur = new BlurNode('blur1');
+const output = new OutputNode('output1');
+
+// Configure parameters
+blur.setParameter('blurAmount', 10.0);
+
+// Build graph
+graph.addNode(input);
+graph.addNode(blur);
+graph.addNode(output);
+
+// Connect nodes
+graph.connect('input1', 'image', 'blur1', 'image');
+graph.connect('blur1', 'image', 'output1', 'image');
+
+// Execute
+await graph.execute();
+```
+
+### Example: Color Correction Pipeline
+
+```typescript
+// Create a color grading pipeline
+const input = new ImageInputNode('input1');
+const colorCorrect = new ColorCorrectNode('cc1');
+const output = new OutputNode('output1');
+
+// Adjust color properties
+colorCorrect.setParameter('brightness', 0.1);
+colorCorrect.setParameter('contrast', 1.2);
+colorCorrect.setParameter('saturation', 1.3);
+
+// Build and execute
+graph.addNode(input);
+graph.addNode(colorCorrect);
+graph.addNode(output);
+graph.connect('input1', 'image', 'cc1', 'image');
+graph.connect('cc1', 'image', 'output1', 'image');
+await graph.execute();
+```
+
+## Architecture
+
+### Core Components
+
+```
+RageVFX/
+├── src/
+│   ├── core/              # Core engine components
+│   │   ├── Node.ts        # Base node class
+│   │   ├── NodeGraph.ts   # Graph management
+│   │   └── RageVFXApp.ts  # Main application
+│   ├── nodes/             # Node implementations
+│   │   ├── ImageInputNode.ts
+│   │   ├── BlurNode.ts
+│   │   ├── ColorCorrectNode.ts
+│   │   ├── MergeNode.ts
+│   │   ├── TransformNode.ts
+│   │   └── OutputNode.ts
+│   ├── renderer/          # Rendering engine
+│   │   ├── RenderEngine.ts
+│   │   └── ShaderLibrary.ts
+│   ├── ui/                # User interface
+│   └── main.ts            # Application entry point
+└── ui/                    # HTML/CSS/JS assets
+    ├── index.html
+    ├── styles.css
+    └── renderer.js
+```
+
+### Node System
+
+RageVFX uses a powerful node-based architecture:
+
+- **Base Node Class**: Abstract foundation for all nodes
+- **Type Safety**: Strongly-typed socket connections
+- **Data Flow**: Automatic data propagation through the graph
+- **Caching**: Intelligent caching to avoid redundant processing
+- **Dirty Tracking**: Optimized execution of only changed nodes
+
+### Render Engine
+
+The rendering system leverages modern GPU capabilities:
+
+- **WebGL2 Context**: Hardware-accelerated processing
+- **Shader Programs**: Optimized GLSL shaders for effects
+- **Framebuffers**: Efficient multi-pass rendering
+- **Texture Management**: Smart resource handling
+
+## Development
+
+### Building from Source
+
+```bash
+# Development mode with hot reload
+npm run dev
+
+# Production build
+npm run build
+
+# Run tests
+npm test
+
+# Lint code
+npm run lint
+```
+
+### Creating Custom Nodes
+
+Extend the `Node` base class to create custom nodes:
+
+```typescript
+import { Node, DataType } from '../core/Node';
+
+export class CustomNode extends Node {
+  constructor(id: string) {
+    super(id, 'Custom', 'My Custom Node');
+    this.metadata.category = 'Custom';
+    this.metadata.description = 'Custom node implementation';
+    
+    // Define inputs
+    this.addInput('input1', 'Input', DataType.IMAGE);
+    
+    // Define outputs
+    this.addOutput('output1', 'Output', DataType.IMAGE);
+    
+    // Set parameters
+    this.setParameter('strength', 1.0);
+  }
+
+  async process(): Promise<void> {
+    // Implement your processing logic
+    const input = this.inputs.get('input1');
+    const output = this.outputs.get('output1');
+    
+    if (input?.value && output) {
+      // Process data
+      output.value = this.processData(input.value);
+    }
+  }
+  
+  private processData(data: any): any {
+    // Your custom processing
+    return data;
+  }
+}
+```
+
+## Performance
+
+RageVFX is optimized for professional workflows:
+
+- **GPU Acceleration**: Leverages WebGL2 for hardware-accelerated processing
+- **Smart Caching**: Avoids redundant computations
+- **Lazy Evaluation**: Only processes nodes that need updating
+- **Multi-threading**: Uses Web Workers for CPU-intensive operations
+- **Memory Management**: Efficient resource cleanup and disposal
+
+## Roadmap
+
+### Version 1.1
+- [ ] 3D geometry support with Three.js integration
+- [ ] Advanced particle systems
+- [ ] Motion tracking nodes
+- [ ] Keying and rotoscoping tools
+
+### Version 1.2
+- [ ] Python scripting support
+- [ ] OpenColorIO integration
+- [ ] EXR and high-bit-depth format support
+- [ ] Network rendering
+
+### Version 2.0
+- [ ] Full 3D rendering pipeline
+- [ ] Volumetric effects
+- [ ] Physics simulation nodes
+- [ ] Machine learning-powered tools
+
+## Contributing
+
+We welcome contributions! Please see our contributing guidelines:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Built with TypeScript, Electron, and WebGL2
+- Inspired by industry-standard VFX tools
+- Designed for professional artists and developers
+
+## Support
+
+- 📧 Email: support@ragevfx.com
+- 💬 Discord: [Join our community](https://discord.gg/ragevfx)
+- 📖 Documentation: [docs.ragevfx.com](https://docs.ragevfx.com)
+- 🐛 Issues: [GitHub Issues](https://github.com/mllinman/RageVFX/issues)
+
+---
+
+**RageVFX** - *The Future of Visual Effects*
