@@ -148,7 +148,7 @@ export class RenderEngine {
   /**
    * Render with a specific shader
    */
-  render(shaderId: string, inputTextures: Map<string, string>, outputId: string): boolean {
+  render(shaderId: string, inputTextures: Map<string, string>, _outputId: string): boolean {
     if (!this.gl) return false;
 
     const program = this.shaders.get(shaderId);

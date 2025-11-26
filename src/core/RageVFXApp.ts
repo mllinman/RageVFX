@@ -10,6 +10,10 @@ import { ColorCorrectNode } from '../nodes/ColorCorrectNode';
 import { MergeNode } from '../nodes/MergeNode';
 import { TransformNode } from '../nodes/TransformNode';
 import { OutputNode } from '../nodes/OutputNode';
+import { NoiseNode } from '../nodes/NoiseNode';
+import { GradientNode } from '../nodes/GradientNode';
+import { ChromaKeyNode } from '../nodes/ChromaKeyNode';
+import { EdgeDetectNode } from '../nodes/EdgeDetectNode';
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -29,12 +33,29 @@ export class RageVFXApp {
    * Register all available node types
    */
   private registerNodes(): void {
+    // Input/Output nodes
     this.nodeRegistry.set('ImageInput', ImageInputNode as any);
-    this.nodeRegistry.set('Blur', BlurNode as any);
-    this.nodeRegistry.set('ColorCorrect', ColorCorrectNode as any);
-    this.nodeRegistry.set('Merge', MergeNode as any);
-    this.nodeRegistry.set('Transform', TransformNode as any);
     this.nodeRegistry.set('Output', OutputNode as any);
+    
+    // Generator nodes
+    this.nodeRegistry.set('Noise', NoiseNode as any);
+    this.nodeRegistry.set('Gradient', GradientNode as any);
+    
+    // Filter nodes
+    this.nodeRegistry.set('Blur', BlurNode as any);
+    this.nodeRegistry.set('EdgeDetect', EdgeDetectNode as any);
+    
+    // Color nodes
+    this.nodeRegistry.set('ColorCorrect', ColorCorrectNode as any);
+    
+    // Composite nodes
+    this.nodeRegistry.set('Merge', MergeNode as any);
+    
+    // Transform nodes
+    this.nodeRegistry.set('Transform', TransformNode as any);
+    
+    // Keying nodes
+    this.nodeRegistry.set('ChromaKey', ChromaKeyNode as any);
   }
 
   /**
