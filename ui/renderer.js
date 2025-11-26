@@ -54,8 +54,13 @@ class NodeGraphUI {
   }
 
   createNode(type, x, y) {
+    // Generate unique ID using counter to avoid collisions
+    if (!this.nodeIdCounter) {
+      this.nodeIdCounter = 1;
+    }
+    
     const node = {
-      id: `node_${Date.now()}`,
+      id: `node_${type}_${this.nodeIdCounter++}`,
       type,
       x,
       y,

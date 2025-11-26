@@ -95,7 +95,7 @@ export class TransformNode extends Node {
         const outIdx = (y * width + x) * channels;
         
         // Sample from source image with bilinear interpolation
-        if (newX >= 0 && newX < width - 1 && newY >= 0 && newY < height - 1) {
+        if (newX >= 0 && newX <= width - 1 && newY >= 0 && newY <= height - 1) {
           const x0 = Math.floor(newX);
           const x1 = x0 + 1;
           const y0 = Math.floor(newY);

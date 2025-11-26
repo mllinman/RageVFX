@@ -108,7 +108,12 @@ export class NoiseNode extends Node {
   }
 
   private hash(n: number): number {
-    // Simple hash function
+    /**
+     * Integer hash function for noise generation
+     * Uses a multiplicative hash with prime numbers for good distribution
+     * Based on traditional noise hash functions used in procedural generation
+     * Returns a pseudo-random value in range [0, 2^31-1]
+     */
     n = (n << 13) ^ n;
     return (n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff;
   }

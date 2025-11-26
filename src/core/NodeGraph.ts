@@ -178,22 +178,22 @@ export class NodeGraph {
       this.calculateExecutionOrder();
     }
 
-    // Transfer data between connected nodes
-    this.connections.forEach(conn => {
-      const sourceNode = this.nodes.get(conn.sourceNodeId);
-      const targetNode = this.nodes.get(conn.targetNodeId);
-      
-      if (sourceNode && targetNode) {
-        const outputValue = sourceNode.getOutput(conn.sourceOutputId);
-        targetNode.setInput(conn.targetInputId, outputValue);
-      }
-    });
-
-    // Execute nodes in order
+    // Execute nodes in order, transferring data after each execution
     for (const nodeId of this.executionOrder) {
       const node = this.nodes.get(nodeId);
       if (node && node.isDirty()) {
         await node.process();
+        
+        // Transfer data from this node to connected nodes immediately after processing
+        this.connections.forEach(conn => {
+          if (conn.sourceNodeId === nodeId) {
+            const targetNode = this.nodes.get(conn.targetNodeId);
+            if (targetNode) {
+              const outputValue = node.getOutput(conn.sourceOutputId);
+              targetNode.setInput(conn.targetInputId, outputValue);
+            }
+          }
+        });
       }
     }
   }

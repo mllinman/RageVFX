@@ -15,9 +15,10 @@ function createWindow() {
     height: 1080,
     title: 'RageVFX - Professional Visual Effects Software',
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      webgl: true
+      nodeIntegration: false,
+      contextIsolation: true,
+      webgl: true,
+      preload: path.join(__dirname, 'preload.js')
     },
     backgroundColor: '#1a1a1a',
     show: false
