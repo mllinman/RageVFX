@@ -46,7 +46,8 @@ export class ParticleSystemNode extends Node {
   }
 
   async process(): Promise<void> {
-    this.time += 0.016; // Assuming 60fps
+    const deltaTime = 0.016; // Default 60fps, TODO: Make configurable or calculate from actual frame time
+    this.time += deltaTime;
 
     const width = this.getParameter('width');
     const height = this.getParameter('height');
@@ -61,7 +62,7 @@ export class ParticleSystemNode extends Node {
     const colorEnd = this.getParameter('colorEnd');
 
     // Emit new particles
-    const particlesToEmit = Math.floor(emissionRate * 0.016);
+    const particlesToEmit = Math.floor(emissionRate * deltaTime);
     for (let i = 0; i < particlesToEmit && this.particles.length < maxParticles; i++) {
       this.particles.push({
         x: width / 2,
@@ -77,13 +78,13 @@ export class ParticleSystemNode extends Node {
 
     // Update particles
     this.particles = this.particles.filter(p => {
-      p.life -= 0.016;
+      p.life -= deltaTime;
       if (p.life <= 0) return false;
 
-      p.vx += gravity.x * 0.016;
-      p.vy += gravity.y * 0.016;
-      p.x += p.vx * 0.016;
-      p.y += p.vy * 0.016;
+      p.vx += gravity.x * deltaTime;
+      p.vy += gravity.y * deltaTime;
+      p.x += p.vx * deltaTime;
+      p.y += p.vy * deltaTime;
 
       // Interpolate color
       const t = 1 - (p.life / p.maxLife);

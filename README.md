@@ -4,7 +4,7 @@
 
 RageVFX is a next-generation visual effects software that combines the power of node-based compositing with modern GPU-accelerated rendering. Built with cutting-edge web technologies and designed to rival industry-standard tools, RageVFX provides a comprehensive solution for creating award-winning visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-1.0.0-orange)
+![RageVFX](https://img.shields.io/badge/version-1.2.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
@@ -25,8 +25,8 @@ RageVFX is a next-generation visual effects software that combines the power of 
 ### 🎬 Professional VFX Nodes
 
 #### Input/Output
-- **Image Input**: Load images from files or memory
-- **Output**: Export rendered results in various formats
+- **Image Input**: Load images from files or memory (supports 8/16/32-bit, EXR)
+- **Output**: Export rendered results in various formats (PNG, JPEG, EXR, TIFF)
 
 #### Color Operations
 - **Color Correct**: Adjust brightness, contrast, saturation, and hue
@@ -45,6 +45,33 @@ RageVFX is a next-generation visual effects software that combines the power of 
 - **Transform 2D**: Scale, rotate, translate with pivot control
 - **Lens Distortion**: Barrel and pincushion distortion
 - **Perspective Transform**: 4-point perspective warping
+
+#### 3D Nodes (v1.1)
+- **Geometry 3D**: Create and manipulate 3D primitives (box, sphere, plane, cylinder, torus)
+- **Mesh**: Apply materials and textures to 3D geometry
+- **Camera**: 3D perspective camera with position and look-at controls
+- **Light**: Scene lighting (point, directional, spot, ambient)
+
+#### Particle Systems (v1.1)
+- **Particle System**: GPU-accelerated particle generation and rendering
+- **Particle Emitter**: Control emission shape, rate, and properties
+- **Particle Force**: Apply physics forces (gravity, wind, vortex, turbulence, drag)
+
+#### Tracking Nodes (v1.1)
+- **Motion Vectors**: Visualize optical flow as motion vectors
+- **Tracking Data**: Store and manage tracking information with interpolation
+
+#### Scripting Nodes (v1.2)
+- **Python Script**: Execute custom Python scripts for image processing
+- **Custom Logic**: Implement complex algorithms via scripting
+
+#### Color Management (v1.2)
+- **OCIO Color Space**: OpenColorIO color space conversion (Linear, sRGB, ACEScg)
+- **OCIO Look**: Apply OCIO look transforms with adjustable strength
+
+#### Network Rendering (v1.2)
+- **Render Farm**: Coordinate distributed rendering across multiple machines
+- **Network Client**: Render client with auto-discovery and load balancing
 
 ### 💼 Project Management
 - **Save/Load Projects**: Preserve your node graphs and settings

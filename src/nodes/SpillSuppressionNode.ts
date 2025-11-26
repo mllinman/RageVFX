@@ -40,9 +40,9 @@ export class SpillSuppressionNode extends Node {
     const inputData = inputCtx.getImageData(0, 0, width, height);
     const outputData = new ImageData(width, height);
 
-    // Determine spill channel
-    const spillChannel = spillColor.g > spillColor.r && spillColor.g > spillColor.b ? 1 :
-                        spillColor.b > spillColor.r && spillColor.b > spillColor.g ? 2 : 0;
+    // Determine spill channel (with tie-breaking: green > blue > red in case of equal values)
+    const spillChannel = spillColor.g >= spillColor.r && spillColor.g >= spillColor.b ? 1 :
+                        spillColor.b > spillColor.r ? 2 : 0;
 
     for (let i = 0; i < inputData.data.length; i += 4) {
       const r = inputData.data[i];

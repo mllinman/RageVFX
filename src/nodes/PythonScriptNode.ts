@@ -52,11 +52,20 @@ export class PythonScriptNode extends Node {
     try {
       // Placeholder for Python execution
       // In production, this would use a Python bridge like python-shell or pyodide
+      // TODO: Add proper error handling and validation for Python execution
       console.log('Python script execution (placeholder):', script);
       
       // For now, just pass through the input
-      context.output_image = context.input_image;
-      context.result = { status: 'Python execution not yet implemented' } as any;
+      if (context.input_image) {
+        context.output_image = context.input_image;
+        context.result = { 
+          status: 'success', 
+          message: 'Python execution not yet implemented - passthrough mode',
+          warning: 'Install python-shell or pyodide for actual Python execution'
+        } as any;
+      } else {
+        throw new Error('No input image provided for Python script processing');
+      }
 
       const imageOutput = this.outputs.get('image');
       if (imageOutput) {
