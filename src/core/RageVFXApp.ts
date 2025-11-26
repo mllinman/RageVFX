@@ -4,16 +4,77 @@
 
 import { NodeGraph } from './NodeGraph';
 import { Node } from './Node';
+
+// Input/Output nodes
 import { ImageInputNode } from '../nodes/ImageInputNode';
-import { BlurNode } from '../nodes/BlurNode';
-import { ColorCorrectNode } from '../nodes/ColorCorrectNode';
-import { MergeNode } from '../nodes/MergeNode';
-import { TransformNode } from '../nodes/TransformNode';
 import { OutputNode } from '../nodes/OutputNode';
+
+// Generator nodes
 import { NoiseNode } from '../nodes/NoiseNode';
 import { GradientNode } from '../nodes/GradientNode';
-import { ChromaKeyNode } from '../nodes/ChromaKeyNode';
+
+// Filter nodes
+import { BlurNode } from '../nodes/BlurNode';
 import { EdgeDetectNode } from '../nodes/EdgeDetectNode';
+import { SharpenNode } from '../nodes/SharpenNode';
+import { GlowNode } from '../nodes/GlowNode';
+import { MotionBlurNode } from '../nodes/MotionBlurNode';
+import { DepthOfFieldNode } from '../nodes/DepthOfFieldNode';
+import { ChromaticAberrationNode } from '../nodes/ChromaticAberrationNode';
+import { VignetteNode } from '../nodes/VignetteNode';
+import { FilmGrainNode } from '../nodes/FilmGrainNode';
+
+// Color nodes
+import { ColorCorrectNode } from '../nodes/ColorCorrectNode';
+import { GradeNode } from '../nodes/GradeNode';
+import { CurvesNode } from '../nodes/CurvesNode';
+import { LevelsNode } from '../nodes/LevelsNode';
+import { HSLNode } from '../nodes/HSLNode';
+
+// Composite nodes
+import { MergeNode } from '../nodes/MergeNode';
+import { ScreenNode } from '../nodes/ScreenNode';
+import { OverlayNode } from '../nodes/OverlayNode';
+
+// Transform nodes
+import { TransformNode } from '../nodes/TransformNode';
+import { CornerPinNode } from '../nodes/CornerPinNode';
+
+// Keying nodes
+import { ChromaKeyNode } from '../nodes/ChromaKeyNode';
+import { LuminanceKeyNode } from '../nodes/LuminanceKeyNode';
+import { DifferenceNode } from '../nodes/DifferenceNode';
+
+// VFX Effect nodes
+import { FireNode } from '../nodes/FireNode';
+import { WaterNode } from '../nodes/WaterNode';
+import { RainNode } from '../nodes/RainNode';
+import { SnowNode } from '../nodes/SnowNode';
+import { SmokeNode } from '../nodes/SmokeNode';
+import { CloudsNode } from '../nodes/CloudsNode';
+import { ExplosionNode } from '../nodes/ExplosionNode';
+import { TornadoNode } from '../nodes/TornadoNode';
+import { FogNode } from '../nodes/FogNode';
+import { LightningNode } from '../nodes/LightningNode';
+import { SparkNode } from '../nodes/SparkNode';
+import { DissolveNode } from '../nodes/DissolveNode';
+import { LensFlareNode } from '../nodes/LensFlareNode';
+
+// Tracker nodes
+import { PointTrackerNode } from '../nodes/PointTrackerNode';
+import { PlanarTrackerNode } from '../nodes/PlanarTrackerNode';
+import { CornerDetectorNode } from '../nodes/CornerDetectorNode';
+import { OpticalFlowNode } from '../nodes/OpticalFlowNode';
+import { StabilizerNode } from '../nodes/StabilizerNode';
+
+// Utility nodes
+import { TimeNode } from '../nodes/TimeNode';
+import { MathNode } from '../nodes/MathNode';
+import { SwitchNode } from '../nodes/SwitchNode';
+import { DotNode } from '../nodes/DotNode';
+import { FrameHoldNode } from '../nodes/FrameHoldNode';
+import { TimeOffsetNode } from '../nodes/TimeOffsetNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -44,18 +105,64 @@ export class RageVFXApp {
     // Filter nodes
     this.nodeRegistry.set('Blur', BlurNode as any);
     this.nodeRegistry.set('EdgeDetect', EdgeDetectNode as any);
+    this.nodeRegistry.set('Sharpen', SharpenNode as any);
+    this.nodeRegistry.set('Glow', GlowNode as any);
+    this.nodeRegistry.set('MotionBlur', MotionBlurNode as any);
+    this.nodeRegistry.set('DepthOfField', DepthOfFieldNode as any);
+    this.nodeRegistry.set('ChromaticAberration', ChromaticAberrationNode as any);
+    this.nodeRegistry.set('Vignette', VignetteNode as any);
+    this.nodeRegistry.set('FilmGrain', FilmGrainNode as any);
     
     // Color nodes
     this.nodeRegistry.set('ColorCorrect', ColorCorrectNode as any);
+    this.nodeRegistry.set('Grade', GradeNode as any);
+    this.nodeRegistry.set('Curves', CurvesNode as any);
+    this.nodeRegistry.set('Levels', LevelsNode as any);
+    this.nodeRegistry.set('HSL', HSLNode as any);
     
     // Composite nodes
     this.nodeRegistry.set('Merge', MergeNode as any);
+    this.nodeRegistry.set('Screen', ScreenNode as any);
+    this.nodeRegistry.set('Overlay', OverlayNode as any);
     
     // Transform nodes
     this.nodeRegistry.set('Transform', TransformNode as any);
+    this.nodeRegistry.set('CornerPin', CornerPinNode as any);
     
     // Keying nodes
     this.nodeRegistry.set('ChromaKey', ChromaKeyNode as any);
+    this.nodeRegistry.set('LuminanceKey', LuminanceKeyNode as any);
+    this.nodeRegistry.set('Difference', DifferenceNode as any);
+    
+    // VFX Effect nodes
+    this.nodeRegistry.set('Fire', FireNode as any);
+    this.nodeRegistry.set('Water', WaterNode as any);
+    this.nodeRegistry.set('Rain', RainNode as any);
+    this.nodeRegistry.set('Snow', SnowNode as any);
+    this.nodeRegistry.set('Smoke', SmokeNode as any);
+    this.nodeRegistry.set('Clouds', CloudsNode as any);
+    this.nodeRegistry.set('Explosion', ExplosionNode as any);
+    this.nodeRegistry.set('Tornado', TornadoNode as any);
+    this.nodeRegistry.set('Fog', FogNode as any);
+    this.nodeRegistry.set('Lightning', LightningNode as any);
+    this.nodeRegistry.set('Spark', SparkNode as any);
+    this.nodeRegistry.set('Dissolve', DissolveNode as any);
+    this.nodeRegistry.set('LensFlare', LensFlareNode as any);
+    
+    // Tracker nodes
+    this.nodeRegistry.set('PointTracker', PointTrackerNode as any);
+    this.nodeRegistry.set('PlanarTracker', PlanarTrackerNode as any);
+    this.nodeRegistry.set('CornerDetector', CornerDetectorNode as any);
+    this.nodeRegistry.set('OpticalFlow', OpticalFlowNode as any);
+    this.nodeRegistry.set('Stabilizer', StabilizerNode as any);
+    
+    // Utility nodes
+    this.nodeRegistry.set('Time', TimeNode as any);
+    this.nodeRegistry.set('Math', MathNode as any);
+    this.nodeRegistry.set('Switch', SwitchNode as any);
+    this.nodeRegistry.set('Dot', DotNode as any);
+    this.nodeRegistry.set('FrameHold', FrameHoldNode as any);
+    this.nodeRegistry.set('TimeOffset', TimeOffsetNode as any);
   }
 
   /**
