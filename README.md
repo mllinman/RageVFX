@@ -4,7 +4,7 @@
 
 RageVFX is a next-generation visual effects software that combines the power of node-based compositing with modern GPU-accelerated rendering. Built with cutting-edge web technologies and designed to rival industry-standard tools, RageVFX provides a comprehensive solution for creating award-winning visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-2.1.0-orange)
+![RageVFX](https://img.shields.io/badge/version-2.2.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
@@ -162,7 +162,7 @@ Download the Windows installer or portable version from the [Releases](https://g
 ## Installation
 
 ### Prerequisites
-- Node.js 18.0.0 or higher
+- Node.js 20.0.0 or higher
 - npm or yarn package manager
 
 ### Quick Start (Development)

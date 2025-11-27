@@ -108,7 +108,6 @@ export class CornerPinNode extends Node {
     return { x, y };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private calculateInverseMatrix(
     _corners: { tl: { x: number; y: number }; tr: { x: number; y: number }; bl: { x: number; y: number }; br: { x: number; y: number } },
     _width: number,

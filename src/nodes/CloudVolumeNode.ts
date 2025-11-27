@@ -123,7 +123,7 @@ export class CloudVolumeNode extends Node {
         const normRayZ = rayDirZ / rayLen;
         
         // Ray march through cloud layer
-        let cloudDensity = 0;
+        // cloudDensity is accumulated during ray marching
         let lightEnergy = 1.0;
         let transmittance = 1.0;
         let cloudHitDepth = 10000;

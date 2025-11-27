@@ -52,7 +52,8 @@ export class VolumetricFogNode extends Node {
     const depthInput = this.inputs.get('depth');
     
     const density = this.getParameter('density');
-    const height = this.getParameter('height');
+    // height parameter reserved for future height-based fog effects
+    this.getParameter('height');
     const falloff = this.getParameter('falloff');
     const fogColor = this.getParameter('color');
     const near = this.getParameter('near');
