@@ -52,17 +52,49 @@ if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D
   };
 }
 
+// Define node categories that should have glow effects
+const VFX_NODE_TYPES = new Set([
+  'Fire', 'Water', 'Rain', 'Snow', 'Smoke', 'Clouds', 'Explosion', 'Tornado',
+  'Fog', 'Lightning', 'Spark', 'Dissolve', 'LensFlare', 'Glow', 'VolumetricFog',
+  'VolumetricLight', 'VolumeRender', 'CloudVolume', 'ParticleSystem', 'ParticleEmitter'
+]);
+
+// Category colors for visual distinction
+const CATEGORY_COLORS: Record<string, { primary: string; secondary: string; glow: string }> = {
+  'VFX': { primary: '#ff4444', secondary: '#ff8866', glow: 'rgba(255, 68, 68, 0.6)' },
+  'Filter': { primary: '#4488ff', secondary: '#66aaff', glow: 'rgba(68, 136, 255, 0.4)' },
+  'Color': { primary: '#44cc88', secondary: '#66ddaa', glow: 'rgba(68, 204, 136, 0.4)' },
+  'Composite': { primary: '#aa44ff', secondary: '#cc66ff', glow: 'rgba(170, 68, 255, 0.4)' },
+  '3D': { primary: '#ff8844', secondary: '#ffaa66', glow: 'rgba(255, 136, 68, 0.4)' },
+  'ML': { primary: '#44dddd', secondary: '#66ffff', glow: 'rgba(68, 221, 221, 0.4)' },
+  'Physics': { primary: '#dd4488', secondary: '#ff66aa', glow: 'rgba(221, 68, 136, 0.4)' },
+  'Default': { primary: '#ff6b35', secondary: '#f7931e', glow: 'rgba(255, 107, 53, 0.3)' }
+};
+
+interface NodeSocket {
+  id: string;
+  name: string;
+  x: number;
+  y: number;
+  connected: boolean;
+  dataType: string;
+  customPosition?: boolean;
+}
+
 interface UINode {
   id: string;
   type: string;
+  category: string;
   x: number;
   y: number;
   width: number;
   height: number;
-  inputs: { name: string; x: number; y: number; connected: boolean }[];
-  outputs: { name: string; x: number; y: number; connected: boolean }[];
+  inputs: NodeSocket[];
+  outputs: NodeSocket[];
   selected: boolean;
   disabled: boolean;
+  collapsed: boolean;
+  color?: { primary: string; secondary: string; glow: string };
 }
 
 interface UIConnection {
@@ -75,6 +107,11 @@ interface UIConnection {
   fromY: number;
   toX: number;
   toY: number;
+  color: string;
+  style: 'bezier' | 'linear' | 'step';
+  animated: boolean;
+  selected: boolean;
+  controlPoints?: { x: number; y: number }[];
 }
 
 class NodeGraphUI {
@@ -83,10 +120,14 @@ class NodeGraphUI {
   private nodes: UINode[] = [];
   private connections: UIConnection[] = [];
   private selectedNodes: Set<string> = new Set();
+  private selectedConnections: Set<string> = new Set();
   private offset = { x: 0, y: 0 };
   private scale = 1.0;
   private isDragging = false;
   private isPanning = false;
+  private isResizingNode = false;
+  private isDraggingSocket = false;
+  private isDraggingConnection = false;
   private dragOffset = { x: 0, y: 0 };
   private panStart = { x: 0, y: 0 };
   private nodeIdCounter = 1;
@@ -101,6 +142,14 @@ class NodeGraphUI {
   private fps = 0;
   private animationId: number | null = null;
   private app: RageVFXApp;
+  private glowAnimation = 0;
+  private hoveredNode: UINode | null = null;
+  private hoveredSocket: { node: UINode; type: 'input' | 'output'; index: number } | null = null;
+  private hoveredConnection: UIConnection | null = null;
+  private draggedSocket: { node: UINode; type: 'input' | 'output'; index: number } | null = null;
+  private connectionStyle: 'bezier' | 'linear' | 'step' = 'bezier';
+  private showNodeShadows = true;
+  private showConnectionFlow = true;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -119,6 +168,9 @@ class NodeGraphUI {
       const now = performance.now();
       this.fps = Math.round(1000 / (now - this.lastFrameTime));
       this.lastFrameTime = now;
+      
+      // Animate glow effect
+      this.glowAnimation = (this.glowAnimation + 0.02) % (Math.PI * 2);
       
       this.render();
       this.updatePerformanceIndicator();
@@ -272,17 +324,27 @@ class NodeGraphUI {
       y = Math.round(y / this.gridSize) * this.gridSize;
     }
     
+    // Determine category and colors
+    const category = this.getNodeCategory(type);
+    const colors = CATEGORY_COLORS[category] || CATEGORY_COLORS['Default'];
+    
+    // Create dynamic sockets based on node type
+    const sockets = this.getNodeSockets(type);
+    
     const node: UINode = {
       id: nodeId,
       type,
+      category,
       x,
       y,
-      width: 180,
-      height: 120,
-      inputs: [{ name: 'Input', x: 0, y: 50, connected: false }],
-      outputs: [{ name: 'Output', x: 180, y: 50, connected: false }],
+      width: 200,
+      height: Math.max(120, 50 + Math.max(sockets.inputs.length, sockets.outputs.length) * 25),
+      inputs: sockets.inputs,
+      outputs: sockets.outputs,
       selected: false,
-      disabled: false
+      disabled: false,
+      collapsed: false,
+      color: colors
     };
     
     this.nodes.push(node);
@@ -290,6 +352,124 @@ class NodeGraphUI {
     this.updateStatusCounts();
     this.showToast(`Created ${type} node`, 'success');
     this.render();
+  }
+
+  private getNodeCategory(type: string): string {
+    if (VFX_NODE_TYPES.has(type)) return 'VFX';
+    if (['Blur', 'Sharpen', 'EdgeDetect', 'MotionBlur', 'DepthOfField', 'ChromaticAberration', 'Vignette', 'FilmGrain', 'Glow'].includes(type)) return 'Filter';
+    if (['ColorCorrect', 'Grade', 'Curves', 'Levels', 'HSL', 'OCIOColorSpace', 'OCIOLook'].includes(type)) return 'Color';
+    if (['Merge', 'Screen', 'Overlay', 'ChromaKey', 'LuminanceKey', 'Difference', 'Rotoscope', 'SpillSuppression', 'EdgeMatte'].includes(type)) return 'Composite';
+    if (['Scene', 'Renderer3D', 'Geometry3D', 'Mesh', 'Material', 'Camera', 'Light', 'EnvironmentMap', 'ShadowMap'].includes(type)) return '3D';
+    if (['StyleTransfer', 'Upscale', 'Denoise', 'ObjectDetection', 'Inpaint', 'DepthEstimation'].includes(type)) return 'ML';
+    if (['RigidBody', 'SoftBody', 'FluidSim', 'ClothSim', 'Collision'].includes(type)) return 'Physics';
+    return 'Default';
+  }
+
+  private getNodeSockets(type: string): { inputs: NodeSocket[]; outputs: NodeSocket[] } {
+    // Define sockets based on node type - these can be dynamically modified
+    const defaultInputs: NodeSocket[] = [{ id: 'input_0', name: 'Input', x: 0, y: 50, connected: false, dataType: 'image' }];
+    const defaultOutputs: NodeSocket[] = [{ id: 'output_0', name: 'Output', x: 200, y: 50, connected: false, dataType: 'image' }];
+    
+    // Special socket configurations for different node types
+    const socketConfigs: Record<string, { inputs: NodeSocket[]; outputs: NodeSocket[] }> = {
+      'Merge': {
+        inputs: [
+          { id: 'input_0', name: 'A', x: 0, y: 50, connected: false, dataType: 'image' },
+          { id: 'input_1', name: 'B', x: 0, y: 75, connected: false, dataType: 'image' },
+          { id: 'input_2', name: 'Mask', x: 0, y: 100, connected: false, dataType: 'image' }
+        ],
+        outputs: defaultOutputs
+      },
+      'ColorCorrect': {
+        inputs: [
+          { id: 'input_0', name: 'Image', x: 0, y: 50, connected: false, dataType: 'image' },
+          { id: 'input_1', name: 'Mask', x: 0, y: 75, connected: false, dataType: 'image' }
+        ],
+        outputs: defaultOutputs
+      },
+      'Scene': {
+        inputs: [
+          { id: 'input_0', name: 'Objects', x: 0, y: 50, connected: false, dataType: 'geometry' },
+          { id: 'input_1', name: 'Camera', x: 0, y: 75, connected: false, dataType: 'camera' },
+          { id: 'input_2', name: 'Lights', x: 0, y: 100, connected: false, dataType: 'light' }
+        ],
+        outputs: [{ id: 'output_0', name: 'Scene', x: 200, y: 50, connected: false, dataType: 'scene' }]
+      },
+      'Math': {
+        inputs: [
+          { id: 'input_0', name: 'A', x: 0, y: 50, connected: false, dataType: 'number' },
+          { id: 'input_1', name: 'B', x: 0, y: 75, connected: false, dataType: 'number' }
+        ],
+        outputs: [{ id: 'output_0', name: 'Result', x: 200, y: 50, connected: false, dataType: 'number' }]
+      },
+      'Switch': {
+        inputs: [
+          { id: 'input_0', name: 'A', x: 0, y: 50, connected: false, dataType: 'any' },
+          { id: 'input_1', name: 'B', x: 0, y: 75, connected: false, dataType: 'any' },
+          { id: 'input_2', name: 'Switch', x: 0, y: 100, connected: false, dataType: 'number' }
+        ],
+        outputs: defaultOutputs
+      },
+      'ParticleSystem': {
+        inputs: [
+          { id: 'input_0', name: 'Emitter', x: 0, y: 50, connected: false, dataType: 'emitter' },
+          { id: 'input_1', name: 'Forces', x: 0, y: 75, connected: false, dataType: 'force' }
+        ],
+        outputs: [
+          { id: 'output_0', name: 'Particles', x: 200, y: 50, connected: false, dataType: 'particles' },
+          { id: 'output_1', name: 'Image', x: 200, y: 75, connected: false, dataType: 'image' }
+        ]
+      }
+    };
+    
+    return socketConfigs[type] || { inputs: defaultInputs, outputs: defaultOutputs };
+  }
+
+  addSocketToNode(nodeId: string, type: 'input' | 'output', name: string, dataType: string): void {
+    const node = this.nodes.find(n => n.id === nodeId);
+    if (!node) return;
+    
+    const sockets = type === 'input' ? node.inputs : node.outputs;
+    const newSocket: NodeSocket = {
+      id: `${type}_${sockets.length}`,
+      name,
+      x: type === 'input' ? 0 : node.width,
+      y: 50 + sockets.length * 25,
+      connected: false,
+      dataType
+    };
+    
+    sockets.push(newSocket);
+    node.height = Math.max(120, 50 + Math.max(node.inputs.length, node.outputs.length) * 25);
+    this.render();
+    this.showToast(`Added ${type} socket: ${name}`, 'info');
+  }
+
+  removeSocketFromNode(nodeId: string, type: 'input' | 'output', index: number): void {
+    const node = this.nodes.find(n => n.id === nodeId);
+    if (!node) return;
+    
+    const sockets = type === 'input' ? node.inputs : node.outputs;
+    if (index >= 0 && index < sockets.length) {
+      // Remove any connections to this socket
+      this.connections = this.connections.filter(conn => {
+        if (type === 'input' && conn.toNodeId === nodeId && conn.toInputIndex === index) return false;
+        if (type === 'output' && conn.fromNodeId === nodeId && conn.fromOutputIndex === index) return false;
+        return true;
+      });
+      
+      sockets.splice(index, 1);
+      
+      // Recalculate positions
+      sockets.forEach((s, i) => {
+        s.y = 50 + i * 25;
+      });
+      
+      node.height = Math.max(120, 50 + Math.max(node.inputs.length, node.outputs.length) * 25);
+      this.updateConnectionPositions();
+      this.render();
+      this.showToast(`Removed ${type} socket`, 'info');
+    }
   }
 
   private onMouseDown(e: MouseEvent): void {
@@ -395,7 +575,105 @@ class NodeGraphUI {
       this.offset.x = e.clientX - this.panStart.x;
       this.offset.y = e.clientY - this.panStart.y;
       this.render();
+      return;
     }
+    
+    // Update hover states
+    this.updateHoverStates(this.mousePos.x, this.mousePos.y);
+  }
+
+  private updateHoverStates(x: number, y: number): void {
+    // Check for hovered node
+    this.hoveredNode = null;
+    this.hoveredSocket = null;
+    this.hoveredConnection = null;
+    
+    // Check sockets first (higher priority)
+    for (let i = this.nodes.length - 1; i >= 0; i--) {
+      const node = this.nodes[i];
+      
+      // Check output sockets
+      for (let j = 0; j < node.outputs.length; j++) {
+        const output = node.outputs[j];
+        const socketX = node.x + output.x;
+        const socketY = node.y + output.y;
+        
+        if (Math.hypot(x - socketX, y - socketY) < 12) {
+          this.hoveredSocket = { node, type: 'output', index: j };
+          this.canvas.style.cursor = 'crosshair';
+          return;
+        }
+      }
+      
+      // Check input sockets
+      for (let j = 0; j < node.inputs.length; j++) {
+        const input = node.inputs[j];
+        const socketX = node.x + input.x;
+        const socketY = node.y + input.y;
+        
+        if (Math.hypot(x - socketX, y - socketY) < 12) {
+          this.hoveredSocket = { node, type: 'input', index: j };
+          this.canvas.style.cursor = 'crosshair';
+          return;
+        }
+      }
+    }
+    
+    // Check for hovered nodes
+    for (let i = this.nodes.length - 1; i >= 0; i--) {
+      const node = this.nodes[i];
+      if (x >= node.x && x <= node.x + node.width &&
+          y >= node.y && y <= node.y + node.height) {
+        this.hoveredNode = node;
+        
+        // Check if hovering over resize handle
+        const handleSize = 10;
+        if (x >= node.x + node.width - handleSize && 
+            y >= node.y + node.height - handleSize &&
+            node.selected) {
+          this.canvas.style.cursor = 'nwse-resize';
+        } else {
+          this.canvas.style.cursor = 'move';
+        }
+        return;
+      }
+    }
+    
+    // Check for hovered connections
+    for (const conn of this.connections) {
+      if (this.isPointNearConnection(x, y, conn)) {
+        this.hoveredConnection = conn;
+        this.canvas.style.cursor = 'pointer';
+        return;
+      }
+    }
+    
+    this.canvas.style.cursor = 'grab';
+  }
+
+  private isPointNearConnection(x: number, y: number, conn: UIConnection): boolean {
+    // Simple distance check to bezier curve
+    const { fromX, fromY, toX, toY } = conn;
+    const controlDist = Math.min(150, Math.abs(toX - fromX) * 0.5);
+    
+    // Sample points along the bezier curve
+    for (let t = 0; t <= 1; t += 0.05) {
+      const oneMinusT = 1 - t;
+      const p0 = { x: fromX, y: fromY };
+      const p1 = { x: fromX + controlDist, y: fromY };
+      const p2 = { x: toX - controlDist, y: toY };
+      const p3 = { x: toX, y: toY };
+      
+      const bx = Math.pow(oneMinusT, 3) * p0.x + 3 * Math.pow(oneMinusT, 2) * t * p1.x + 
+                 3 * oneMinusT * t * t * p2.x + Math.pow(t, 3) * p3.x;
+      const by = Math.pow(oneMinusT, 3) * p0.y + 3 * Math.pow(oneMinusT, 2) * t * p1.y + 
+                 3 * oneMinusT * t * t * p2.y + Math.pow(t, 3) * p3.y;
+      
+      if (Math.hypot(x - bx, y - by) < 8) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private onMouseUp(e: MouseEvent): void {
@@ -438,6 +716,19 @@ class NodeGraphUI {
     
     if (!fromNode || !toNode) return;
     
+    // Determine connection color based on data type
+    const dataType = fromNode.outputs[fromOutput]?.dataType || 'image';
+    const connectionColors: Record<string, string> = {
+      'image': '#4a9eff',
+      'number': '#ffcc00',
+      'geometry': '#ff8844',
+      'particles': '#ff44aa',
+      'scene': '#44ff88',
+      'camera': '#aa88ff',
+      'light': '#ffff44',
+      'any': '#888888'
+    };
+    
     const conn: UIConnection = {
       id: `conn_${this.connectionIdCounter++}`,
       fromNodeId,
@@ -447,7 +738,11 @@ class NodeGraphUI {
       fromX: fromNode.x + fromNode.outputs[fromOutput].x,
       fromY: fromNode.y + fromNode.outputs[fromOutput].y,
       toX: toNode.x + toNode.inputs[toInput].x,
-      toY: toNode.y + toNode.inputs[toInput].y
+      toY: toNode.y + toNode.inputs[toInput].y,
+      color: connectionColors[dataType] || '#4a9eff',
+      style: this.connectionStyle,
+      animated: true,
+      selected: false
     };
     
     this.connections.push(conn);
@@ -716,9 +1011,100 @@ class NodeGraphUI {
   }
 
   private drawConnections(): void {
+    // Draw connections with their individual colors and styles
     this.connections.forEach(conn => {
-      this.drawConnectionLine(conn.fromX, conn.fromY, conn.toX, conn.toY);
+      const isSelected = this.selectedConnections.has(conn.id);
+      const isHovered = this.hoveredConnection?.id === conn.id;
+      this.drawConnectionCurve(conn, isSelected, isHovered);
     });
+  }
+
+  private drawConnectionCurve(conn: UIConnection, isSelected: boolean, isHovered: boolean): void {
+    const ctx = this.ctx;
+    const { fromX, fromY, toX, toY, color, style, animated } = conn;
+    
+    // Draw glow for selected/hovered connections
+    if (isSelected || isHovered) {
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 15;
+    }
+    
+    ctx.strokeStyle = isHovered ? '#ffffff' : (isSelected ? '#ffcc00' : color);
+    ctx.lineWidth = (isSelected ? 3 : 2) / this.scale;
+    
+    ctx.beginPath();
+    
+    if (style === 'bezier') {
+      const controlDist = Math.min(150, Math.abs(toX - fromX) * 0.5);
+      ctx.moveTo(fromX, fromY);
+      ctx.bezierCurveTo(
+        fromX + controlDist, fromY,
+        toX - controlDist, toY,
+        toX, toY
+      );
+    } else if (style === 'step') {
+      const midX = (fromX + toX) / 2;
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(midX, fromY);
+      ctx.lineTo(midX, toY);
+      ctx.lineTo(toX, toY);
+    } else {
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+    }
+    
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    
+    // Draw animated flow dots for active connections
+    if (animated && this.showConnectionFlow) {
+      this.drawConnectionFlow(fromX, fromY, toX, toY, color, style);
+    }
+    
+    // Draw arrow at end
+    const angle = Math.atan2(toY - (fromY + (toY - fromY) * 0.9), toX - (fromX + (toX - fromX) * 0.9));
+    const arrowSize = 8 / this.scale;
+    
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(toX, toY);
+    ctx.lineTo(toX - arrowSize * Math.cos(angle - 0.4), toY - arrowSize * Math.sin(angle - 0.4));
+    ctx.lineTo(toX - arrowSize * Math.cos(angle + 0.4), toY - arrowSize * Math.sin(angle + 0.4));
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  private drawConnectionFlow(fromX: number, fromY: number, toX: number, toY: number, color: string, style: string): void {
+    const ctx = this.ctx;
+    const numDots = 3;
+    const animPhase = (performance.now() / 1000) % 1;
+    
+    ctx.fillStyle = color;
+    
+    for (let i = 0; i < numDots; i++) {
+      const t = ((animPhase + i / numDots) % 1);
+      let dotX: number, dotY: number;
+      
+      if (style === 'bezier') {
+        const controlDist = Math.min(150, Math.abs(toX - fromX) * 0.5);
+        // Bezier curve interpolation
+        const p0 = { x: fromX, y: fromY };
+        const p1 = { x: fromX + controlDist, y: fromY };
+        const p2 = { x: toX - controlDist, y: toY };
+        const p3 = { x: toX, y: toY };
+        
+        const oneMinusT = 1 - t;
+        dotX = Math.pow(oneMinusT, 3) * p0.x + 3 * Math.pow(oneMinusT, 2) * t * p1.x + 3 * oneMinusT * t * t * p2.x + Math.pow(t, 3) * p3.x;
+        dotY = Math.pow(oneMinusT, 3) * p0.y + 3 * Math.pow(oneMinusT, 2) * t * p1.y + 3 * oneMinusT * t * t * p2.y + Math.pow(t, 3) * p3.y;
+      } else {
+        dotX = fromX + (toX - fromX) * t;
+        dotY = fromY + (toY - fromY) * t;
+      }
+      
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, 3 / this.scale, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   private drawConnectionLine(x1: number, y1: number, x2: number, y2: number, isTemp = false): void {
@@ -726,6 +1112,10 @@ class NodeGraphUI {
     
     ctx.strokeStyle = isTemp ? 'rgba(74, 158, 255, 0.5)' : '#4a9eff';
     ctx.lineWidth = 2 / this.scale;
+    
+    if (isTemp) {
+      ctx.setLineDash([5, 5]);
+    }
     
     // Draw bezier curve
     const controlDist = Math.min(100, Math.abs(x2 - x1) * 0.5);
@@ -738,6 +1128,7 @@ class NodeGraphUI {
       x2, y2
     );
     ctx.stroke();
+    ctx.setLineDash([]);
     
     // Draw arrow at end
     if (!isTemp) {
@@ -756,107 +1147,315 @@ class NodeGraphUI {
 
   private drawNode(node: UINode): void {
     const ctx = this.ctx;
-    const { x, y, width, height, type, selected, disabled } = node;
+    const { x, y, width, height, type, selected, disabled, category, color } = node;
+    const isVFX = VFX_NODE_TYPES.has(type);
+    const isHovered = this.hoveredNode?.id === node.id;
+    const nodeColor = color || CATEGORY_COLORS[category] || CATEGORY_COLORS['Default'];
     
-    // Node shadow
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    // Glow effect for VFX nodes (animated)
+    if (isVFX && !disabled) {
+      const glowIntensity = 0.5 + 0.3 * Math.sin(this.glowAnimation + node.id.length * 0.5);
+      ctx.shadowColor = nodeColor.glow;
+      ctx.shadowBlur = 20 + 10 * glowIntensity;
+      
+      // Draw outer glow
+      ctx.fillStyle = 'transparent';
+      ctx.beginPath();
+      ctx.roundRect(x - 2, y - 2, width + 4, height + 4, 10);
+      ctx.fill();
+    }
+    
+    // Node shadow (professional depth effect)
+    if (this.showNodeShadows) {
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetX = 4;
+      ctx.shadowOffsetY = 4;
+    }
+    
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.beginPath();
-    ctx.roundRect(x + 4, y + 4, width, height, 8);
+    ctx.roundRect(x + 3, y + 3, width, height, 10);
     ctx.fill();
     
-    // Node background
-    ctx.fillStyle = disabled ? '#1a1a1a' : '#2c2c2c';
-    ctx.strokeStyle = selected ? '#ff6b35' : '#555555';
-    ctx.lineWidth = selected ? 3 / this.scale : 2 / this.scale;
+    // Reset shadow for main node
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    
+    // Node background with gradient
+    const bgGradient = ctx.createLinearGradient(x, y, x, y + height);
+    if (disabled) {
+      bgGradient.addColorStop(0, '#1a1a1a');
+      bgGradient.addColorStop(1, '#151515');
+    } else {
+      bgGradient.addColorStop(0, '#2e2e2e');
+      bgGradient.addColorStop(1, '#252525');
+    }
+    ctx.fillStyle = bgGradient;
+    
+    // Border with category color
+    if (selected) {
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3 / this.scale;
+    } else if (isHovered) {
+      ctx.strokeStyle = nodeColor.primary;
+      ctx.lineWidth = 2.5 / this.scale;
+    } else {
+      ctx.strokeStyle = '#444444';
+      ctx.lineWidth = 1.5 / this.scale;
+    }
     
     ctx.beginPath();
-    ctx.roundRect(x, y, width, height, 8);
+    ctx.roundRect(x, y, width, height, 10);
     ctx.fill();
     ctx.stroke();
     
-    // Node header
-    const headerGradient = ctx.createLinearGradient(x, y, x + width, y);
-    headerGradient.addColorStop(0, '#ff6b35');
-    headerGradient.addColorStop(1, '#f7931e');
-    ctx.fillStyle = disabled ? '#444444' : headerGradient;
+    // Node header with category-specific gradient
+    const headerGradient = ctx.createLinearGradient(x, y, x + width, y + 36);
+    headerGradient.addColorStop(0, disabled ? '#333333' : nodeColor.primary);
+    headerGradient.addColorStop(1, disabled ? '#2a2a2a' : nodeColor.secondary);
+    ctx.fillStyle = headerGradient;
     
     ctx.beginPath();
-    ctx.roundRect(x, y, width, 32, [8, 8, 0, 0]);
+    ctx.roundRect(x, y, width, 36, [10, 10, 0, 0]);
     ctx.fill();
     
-    // Node title
-    ctx.fillStyle = disabled ? '#888888' : '#ffffff';
-    ctx.font = `bold ${14 / this.scale > 10 ? 14 : 10}px sans-serif`;
+    // Add subtle highlight at top of header
+    if (!disabled) {
+      const highlightGradient = ctx.createLinearGradient(x, y, x, y + 12);
+      highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
+      highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = highlightGradient;
+      ctx.beginPath();
+      ctx.roundRect(x, y, width, 12, [10, 10, 0, 0]);
+      ctx.fill();
+    }
+    
+    // VFX badge/icon for FX nodes
+    if (isVFX && !disabled) {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.beginPath();
+      ctx.arc(x + width - 20, y + 18, 8, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Sparkle icon
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `10px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('✦', x + width - 20, y + 18);
+    }
+    
+    // Category indicator line
+    ctx.fillStyle = nodeColor.primary;
+    ctx.fillRect(x, y + 36, width, 2);
+    
+    // Node title with shadow for readability
+    ctx.fillStyle = disabled ? '#666666' : '#ffffff';
+    ctx.font = `bold ${14}px 'Segoe UI', sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(type, x + width / 2, y + 16);
     
-    // Node ID (smaller)
+    // Text shadow for better readability
+    if (!disabled) {
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowBlur = 2;
+      ctx.shadowOffsetX = 1;
+      ctx.shadowOffsetY = 1;
+    }
+    ctx.fillText(type, x + width / 2, y + 18);
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    
+    // Category label
     ctx.fillStyle = '#888888';
-    ctx.font = `${10 / this.scale > 8 ? 10 : 8}px sans-serif`;
-    ctx.fillText(node.id.split('_').pop() || '', x + width / 2, y + height - 10);
+    ctx.font = `10px 'Segoe UI', sans-serif`;
+    ctx.fillText(category, x + width / 2, y + height - 12);
     
     // Draw sockets
     this.drawSockets(node);
     
-    // Disabled overlay
+    // Disabled overlay with diagonal stripes
     if (disabled) {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
       ctx.beginPath();
-      ctx.roundRect(x, y, width, height, 8);
+      ctx.roundRect(x, y, width, height, 10);
       ctx.fill();
+      
+      // Diagonal stripes pattern
+      ctx.save();
+      ctx.clip();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 2;
+      for (let i = -height; i < width + height; i += 10) {
+        ctx.beginPath();
+        ctx.moveTo(x + i, y);
+        ctx.lineTo(x + i + height, y + height);
+        ctx.stroke();
+      }
+      ctx.restore();
     }
+    
+    // Selection handles for resizing
+    if (selected) {
+      this.drawResizeHandles(node);
+    }
+  }
+
+  private drawResizeHandles(node: UINode): void {
+    const ctx = this.ctx;
+    const handleSize = 6 / this.scale;
+    const { x, y, width, height } = node;
+    
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#333333';
+    ctx.lineWidth = 1 / this.scale;
+    
+    // Bottom-right resize handle
+    ctx.beginPath();
+    ctx.rect(x + width - handleSize, y + height - handleSize, handleSize, handleSize);
+    ctx.fill();
+    ctx.stroke();
   }
 
   private drawSockets(node: UINode): void {
     const ctx = this.ctx;
     
+    // Data type colors for sockets
+    const socketColors: Record<string, string> = {
+      'image': '#4a9eff',
+      'number': '#ffcc00',
+      'geometry': '#ff8844',
+      'particles': '#ff44aa',
+      'scene': '#44ff88',
+      'camera': '#aa88ff',
+      'light': '#ffff44',
+      'emitter': '#ff6688',
+      'force': '#88ff66',
+      'any': '#888888'
+    };
+    
     // Input sockets
     node.inputs.forEach((input, i) => {
       const socketX = node.x + input.x;
       const socketY = node.y + input.y;
+      const isHovered = this.hoveredSocket?.node.id === node.id && 
+                        this.hoveredSocket?.type === 'input' && 
+                        this.hoveredSocket?.index === i;
       
-      // Socket background
-      ctx.fillStyle = input.connected ? '#4a9eff' : '#666666';
+      const baseColor = socketColors[input.dataType] || '#666666';
+      
+      // Socket glow on hover
+      if (isHovered) {
+        ctx.shadowColor = baseColor;
+        ctx.shadowBlur = 10;
+      }
+      
+      // Socket outer ring
+      ctx.fillStyle = input.connected ? baseColor : '#333333';
       ctx.beginPath();
-      ctx.arc(socketX, socketY, 6, 0, Math.PI * 2);
+      ctx.arc(socketX, socketY, isHovered ? 9 : 7, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Socket inner
+      ctx.fillStyle = input.connected ? '#ffffff' : (isHovered ? baseColor : '#555555');
+      ctx.beginPath();
+      ctx.arc(socketX, socketY, isHovered ? 5 : 4, 0, Math.PI * 2);
       ctx.fill();
       
       // Socket border
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 1 / this.scale;
+      ctx.strokeStyle = isHovered ? '#ffffff' : '#888888';
+      ctx.lineWidth = 1.5 / this.scale;
+      ctx.beginPath();
+      ctx.arc(socketX, socketY, isHovered ? 9 : 7, 0, Math.PI * 2);
       ctx.stroke();
       
-      // Label
-      ctx.fillStyle = '#aaaaaa';
-      ctx.font = `${10}px sans-serif`;
+      ctx.shadowBlur = 0;
+      
+      // Label with background for readability
+      ctx.font = `11px 'Segoe UI', sans-serif`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
-      ctx.fillText(input.name, socketX + 10, socketY);
+      
+      const labelX = socketX + 12;
+      const textWidth = ctx.measureText(input.name).width;
+      
+      // Label background
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillRect(labelX - 2, socketY - 7, textWidth + 4, 14);
+      
+      // Label text
+      ctx.fillStyle = input.connected ? '#ffffff' : '#aaaaaa';
+      ctx.fillText(input.name, labelX, socketY);
+      
+      // Data type indicator (small dot)
+      ctx.fillStyle = baseColor;
+      ctx.beginPath();
+      ctx.arc(labelX + textWidth + 6, socketY, 2, 0, Math.PI * 2);
+      ctx.fill();
     });
     
     // Output sockets
     node.outputs.forEach((output, i) => {
       const socketX = node.x + output.x;
       const socketY = node.y + output.y;
+      const isHovered = this.hoveredSocket?.node.id === node.id && 
+                        this.hoveredSocket?.type === 'output' && 
+                        this.hoveredSocket?.index === i;
       
-      // Socket background
-      ctx.fillStyle = output.connected ? '#4a9eff' : '#666666';
+      const baseColor = socketColors[output.dataType] || '#666666';
+      
+      // Socket glow on hover
+      if (isHovered) {
+        ctx.shadowColor = baseColor;
+        ctx.shadowBlur = 10;
+      }
+      
+      // Socket outer ring
+      ctx.fillStyle = output.connected ? baseColor : '#333333';
       ctx.beginPath();
-      ctx.arc(socketX, socketY, 6, 0, Math.PI * 2);
+      ctx.arc(socketX, socketY, isHovered ? 9 : 7, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Socket inner
+      ctx.fillStyle = output.connected ? '#ffffff' : (isHovered ? baseColor : '#555555');
+      ctx.beginPath();
+      ctx.arc(socketX, socketY, isHovered ? 5 : 4, 0, Math.PI * 2);
       ctx.fill();
       
       // Socket border
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 1 / this.scale;
+      ctx.strokeStyle = isHovered ? '#ffffff' : '#888888';
+      ctx.lineWidth = 1.5 / this.scale;
+      ctx.beginPath();
+      ctx.arc(socketX, socketY, isHovered ? 9 : 7, 0, Math.PI * 2);
       ctx.stroke();
       
-      // Label
-      ctx.fillStyle = '#aaaaaa';
-      ctx.font = `${10}px sans-serif`;
+      ctx.shadowBlur = 0;
+      
+      // Label with background for readability
+      ctx.font = `11px 'Segoe UI', sans-serif`;
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
-      ctx.fillText(output.name, socketX - 10, socketY);
+      
+      const textWidth = ctx.measureText(output.name).width;
+      const labelX = socketX - 12;
+      
+      // Label background
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillRect(labelX - textWidth - 2, socketY - 7, textWidth + 4, 14);
+      
+      // Label text
+      ctx.fillStyle = output.connected ? '#ffffff' : '#aaaaaa';
+      ctx.fillText(output.name, labelX, socketY);
+      
+      // Data type indicator (small dot)
+      ctx.fillStyle = baseColor;
+      ctx.beginPath();
+      ctx.arc(labelX - textWidth - 6, socketY, 2, 0, Math.PI * 2);
+      ctx.fill();
     });
   }
 
@@ -925,16 +1524,27 @@ class NodeGraphUI {
     const panel = document.getElementById('properties-panel');
     if (!panel) return;
     
+    const isVFX = VFX_NODE_TYPES.has(node.type);
+    const nodeColor = node.color || CATEGORY_COLORS[node.category] || CATEGORY_COLORS['Default'];
+    
     panel.innerHTML = `
       <div class="property-group">
-        <h4>${node.type}</h4>
+        <h4 style="color: ${nodeColor.primary}">${node.type} ${isVFX ? '✦' : ''}</h4>
         <div class="property-row">
           <label>ID:</label>
           <span class="property-value">${node.id}</span>
         </div>
         <div class="property-row">
+          <label>Category:</label>
+          <span class="property-value" style="color: ${nodeColor.primary}">${node.category}</span>
+        </div>
+        <div class="property-row">
           <label>Position:</label>
           <span class="property-value">X: ${Math.round(node.x)}, Y: ${Math.round(node.y)}</span>
+        </div>
+        <div class="property-row">
+          <label>Size:</label>
+          <span class="property-value">${node.width} × ${node.height}</span>
         </div>
         <div class="property-row">
           <label>Disabled:</label>
@@ -942,14 +1552,101 @@ class NodeGraphUI {
         </div>
       </div>
       <div class="property-group">
-        <h4>Parameters</h4>
-        <p class="empty-message">Parameters will appear here based on node type</p>
+        <h4>🔌 Sockets</h4>
+        <div style="margin-bottom: 8px;">
+          <strong>Inputs (${node.inputs.length}):</strong>
+          ${node.inputs.map((inp, i) => `
+            <div class="property-row" style="font-size: 12px;">
+              <span>• ${inp.name} <span style="color: #888;">(${inp.dataType})</span></span>
+              <button class="remove-socket-btn" data-type="input" data-index="${i}" style="background: #f44336; border: none; color: white; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 10px;">✕</button>
+            </div>
+          `).join('')}
+        </div>
+        <div style="margin-bottom: 8px;">
+          <strong>Outputs (${node.outputs.length}):</strong>
+          ${node.outputs.map((out, i) => `
+            <div class="property-row" style="font-size: 12px;">
+              <span>• ${out.name} <span style="color: #888;">(${out.dataType})</span></span>
+              <button class="remove-socket-btn" data-type="output" data-index="${i}" style="background: #f44336; border: none; color: white; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 10px;">✕</button>
+            </div>
+          `).join('')}
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button id="add-input-btn" class="tool-btn" style="flex: 1; font-size: 11px; padding: 4px;">+ Input</button>
+          <button id="add-output-btn" class="tool-btn" style="flex: 1; font-size: 11px; padding: 4px;">+ Output</button>
+        </div>
+      </div>
+      <div class="property-group">
+        <h4>🎨 Appearance</h4>
+        <div class="property-row">
+          <label>Connection Style:</label>
+          <select id="connection-style" style="background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); padding: 4px; border-radius: 4px;">
+            <option value="bezier" ${this.connectionStyle === 'bezier' ? 'selected' : ''}>Bezier</option>
+            <option value="linear" ${this.connectionStyle === 'linear' ? 'selected' : ''}>Linear</option>
+            <option value="step" ${this.connectionStyle === 'step' ? 'selected' : ''}>Step</option>
+          </select>
+        </div>
+        <div class="property-row">
+          <label>Show Flow Animation:</label>
+          <input type="checkbox" id="show-flow" ${this.showConnectionFlow ? 'checked' : ''}>
+        </div>
+        <div class="property-row">
+          <label>Node Shadows:</label>
+          <input type="checkbox" id="show-shadows" ${this.showNodeShadows ? 'checked' : ''}>
+        </div>
+      </div>
+      <div class="property-group">
+        <h4>⚙️ Parameters</h4>
+        <p class="empty-message">Node parameters will appear here</p>
       </div>
     `;
     
+    // Event listeners
     document.getElementById('node-disabled')?.addEventListener('change', (e) => {
       node.disabled = (e.target as HTMLInputElement).checked;
       this.render();
+    });
+    
+    document.getElementById('connection-style')?.addEventListener('change', (e) => {
+      this.connectionStyle = (e.target as HTMLSelectElement).value as 'bezier' | 'linear' | 'step';
+      // Update all connections
+      this.connections.forEach(conn => conn.style = this.connectionStyle);
+      this.render();
+    });
+    
+    document.getElementById('show-flow')?.addEventListener('change', (e) => {
+      this.showConnectionFlow = (e.target as HTMLInputElement).checked;
+    });
+    
+    document.getElementById('show-shadows')?.addEventListener('change', (e) => {
+      this.showNodeShadows = (e.target as HTMLInputElement).checked;
+      this.render();
+    });
+    
+    document.getElementById('add-input-btn')?.addEventListener('click', () => {
+      const name = prompt('Enter input socket name:', 'New Input');
+      if (name) {
+        this.addSocketToNode(node.id, 'input', name, 'any');
+      }
+    });
+    
+    document.getElementById('add-output-btn')?.addEventListener('click', () => {
+      const name = prompt('Enter output socket name:', 'New Output');
+      if (name) {
+        this.addSocketToNode(node.id, 'output', name, 'any');
+      }
+    });
+    
+    document.querySelectorAll('.remove-socket-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const type = target.dataset.type as 'input' | 'output';
+        const index = parseInt(target.dataset.index || '0');
+        if (confirm(`Remove this ${type} socket?`)) {
+          this.removeSocketFromNode(node.id, type, index);
+          this.updatePropertiesPanel(node);
+        }
+      });
     });
   }
 
