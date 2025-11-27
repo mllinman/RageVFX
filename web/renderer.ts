@@ -56,7 +56,10 @@ if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D
 const VFX_NODE_TYPES = new Set([
   'Fire', 'Water', 'Rain', 'Snow', 'Smoke', 'Clouds', 'Explosion', 'Tornado',
   'Fog', 'Lightning', 'Spark', 'Dissolve', 'LensFlare', 'Glow', 'VolumetricFog',
-  'VolumetricLight', 'VolumeRender', 'CloudVolume', 'ParticleSystem', 'ParticleEmitter'
+  'VolumetricLight', 'VolumeRender', 'CloudVolume', 'ParticleSystem', 'ParticleEmitter',
+  // Version 2.3 - Advanced VFX nodes
+  'AnamorphicFlare', 'Nebula', 'Shockwave', 'Plasma', 'Portal', 'Hologram',
+  'Caustics', 'Aurora', 'HeatDistortion', 'Debris'
 ]);
 
 // Category colors for visual distinction
@@ -68,6 +71,13 @@ const CATEGORY_COLORS: Record<string, { primary: string; secondary: string; glow
   '3D': { primary: '#ff8844', secondary: '#ffaa66', glow: 'rgba(255, 136, 68, 0.4)' },
   'ML': { primary: '#44dddd', secondary: '#66ffff', glow: 'rgba(68, 221, 221, 0.4)' },
   'Physics': { primary: '#dd4488', secondary: '#ff66aa', glow: 'rgba(221, 68, 136, 0.4)' },
+  'Tracker': { primary: '#ffdd44', secondary: '#ffee88', glow: 'rgba(255, 221, 68, 0.4)' },
+  'Utility': { primary: '#888888', secondary: '#aaaaaa', glow: 'rgba(136, 136, 136, 0.3)' },
+  'Keying': { primary: '#00cc66', secondary: '#33ff99', glow: 'rgba(0, 204, 102, 0.4)' },
+  'Transform': { primary: '#ff6699', secondary: '#ff99bb', glow: 'rgba(255, 102, 153, 0.4)' },
+  'Generator': { primary: '#66aaff', secondary: '#99ccff', glow: 'rgba(102, 170, 255, 0.4)' },
+  'Output': { primary: '#ff9944', secondary: '#ffbb77', glow: 'rgba(255, 153, 68, 0.4)' },
+  'Camera': { primary: '#cc99ff', secondary: '#ddbbff', glow: 'rgba(204, 153, 255, 0.4)' },
   'Default': { primary: '#ff6b35', secondary: '#f7931e', glow: 'rgba(255, 107, 53, 0.3)' }
 };
 
@@ -357,11 +367,17 @@ class NodeGraphUI {
   private getNodeCategory(type: string): string {
     if (VFX_NODE_TYPES.has(type)) return 'VFX';
     if (['Blur', 'Sharpen', 'EdgeDetect', 'MotionBlur', 'DepthOfField', 'ChromaticAberration', 'Vignette', 'FilmGrain', 'Glow'].includes(type)) return 'Filter';
-    if (['ColorCorrect', 'Grade', 'Curves', 'Levels', 'HSL', 'OCIOColorSpace', 'OCIOLook'].includes(type)) return 'Color';
-    if (['Merge', 'Screen', 'Overlay', 'ChromaKey', 'LuminanceKey', 'Difference', 'Rotoscope', 'SpillSuppression', 'EdgeMatte'].includes(type)) return 'Composite';
+    if (['ColorCorrect', 'Grade', 'Curves', 'Levels', 'HSL', 'OCIOColorSpace', 'OCIOLook', 'LUTLoader', 'CDL'].includes(type)) return 'Color';
+    if (['Merge', 'Screen', 'Overlay', 'ChromaKey', 'LuminanceKey', 'Difference', 'Rotoscope', 'SpillSuppression', 'EdgeMatte', 'DeepComposite', 'Cryptomatte', 'AOVManager'].includes(type)) return 'Composite';
     if (['Scene', 'Renderer3D', 'Geometry3D', 'Mesh', 'Material', 'Camera', 'Light', 'EnvironmentMap', 'ShadowMap'].includes(type)) return '3D';
     if (['StyleTransfer', 'Upscale', 'Denoise', 'ObjectDetection', 'Inpaint', 'DepthEstimation'].includes(type)) return 'ML';
     if (['RigidBody', 'SoftBody', 'FluidSim', 'ClothSim', 'Collision'].includes(type)) return 'Physics';
+    if (['PointTracker', 'PlanarTracker', 'CornerDetector', 'OpticalFlow', 'Stabilizer', 'MotionVectors', 'TrackingData'].includes(type)) return 'Tracker';
+    if (['Time', 'Math', 'Switch', 'Dot', 'FrameHold', 'TimeOffset'].includes(type)) return 'Utility';
+    if (['Transform', 'CornerPin'].includes(type)) return 'Transform';
+    if (['Noise', 'Gradient'].includes(type)) return 'Generator';
+    if (['Output', 'ImageSequenceOutput', 'VideoSequenceOutput', 'CameraFormatOutput'].includes(type)) return 'Output';
+    if (['CameraPreset', 'CameraLens', 'LensDistortionCorrection'].includes(type)) return 'Camera';
     return 'Default';
   }
 

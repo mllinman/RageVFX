@@ -4,7 +4,7 @@
 
 RageVFX is a next-generation visual effects software that combines the power of node-based compositing with modern GPU-accelerated rendering. Built with cutting-edge web technologies and designed to rival industry-standard tools, RageVFX provides a comprehensive solution for creating award-winning visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-2.2.0-orange)
+![RageVFX](https://img.shields.io/badge/version-2.3.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
@@ -147,6 +147,27 @@ Download the Windows installer or portable version from the [Releases](https://g
   - Brown-Conrady, fisheye, anamorphic models
   - GoPro, DJI, cinema lens profiles
   - ST Map generation
+
+#### Advanced VFX Effects (v2.3)
+- **Anamorphic Flare**: Professional anamorphic lens flares with horizontal streaks
+- **Nebula**: Procedural space nebula with star fields and dust lanes
+- **Shockwave**: Expanding radial distortion effects with chromatic aberration
+- **Plasma**: Dynamic energy and plasma effects with color cycling
+- **Portal**: Dimensional portals with vortex and particle effects
+- **Hologram**: Sci-fi holographic displays with scan lines and glitches
+- **Caustics**: Water caustic lighting patterns with refraction
+- **Aurora**: Northern lights with animated curtains
+- **Heat Distortion**: Realistic heat shimmer effects
+- **Debris**: Particle debris for destruction effects
+
+#### Professional Compositing (v2.3)
+- **Deep Composite**: Depth-aware compositing with per-pixel depth
+- **Cryptomatte**: ID matte extraction for object isolation
+- **AOV Manager**: Combine and manipulate render passes
+
+#### Professional Color Grading (v2.3)
+- **LUT Loader**: Load and apply 3D LUTs with 11 built-in presets
+- **CDL**: ASC Color Decision List with slope, offset, power controls
 
 ### 💼 Project Management
 - **Save/Load Projects**: Preserve your node graphs and settings
