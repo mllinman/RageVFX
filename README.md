@@ -8,7 +8,7 @@ RageVFX is a next-generation visual effects software designed to rival industry 
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-110%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-120%2B-green)
 
 ## 🏆 Industry Competition
 
@@ -25,6 +25,10 @@ RageVFX 3.1 introduces features that directly compete with industry-standard too
 | Path tracing | - | ✅ | ✅ | ✅ 3.0 |
 | Light mixing | - | - | ✅ | ✅ 3.0 |
 | **Built-in Physics Engine** | - | ✅ | - | ✅ 3.1 |
+| **USD/Alembic Support** | ✅ | ✅ | ✅ | ✅ 3.1 |
+| **Pipeline Integration** | ✅ | ✅ | - | ✅ 3.1 |
+| **CopyCat-like Training** | ✅ | - | - | ✅ 3.1 |
+| **AI Segmentation** | - | - | - | ✅ 3.1 |
 | ML-powered tools | ✅ | - | - | ✅ |
 
 ## 🆕 What's New in Version 3.1
@@ -39,6 +43,24 @@ RageVFX 3.1 introduces a comprehensive physics engine with easy-to-use controls:
 - **Constraints**: Fixed, hinge, slider, ball, distance, and spring joints
 - **Parenting**: Hierarchical object relationships with velocity inheritance
 - **Easy Controls**: 70+ sliders and checkboxes for intuitive physics tuning
+
+### Pipeline & Collaboration
+Professional VFX pipeline integration for team workflows:
+
+- **USD Support**: Universal Scene Description import/export (usda, usdc, usdz)
+- **Alembic Cache**: Geometry caching with streaming and compression
+- **Pipeline Manager**: Shot/asset management with ShotGrid, ftrack, Kitsu integration
+- **Review Tool**: Frame-accurate annotation, comparison, and approval workflow
+- **Version Control**: Git-based versioning with LFS support for large files
+
+### Extended Machine Learning
+AI-powered tools that push the boundaries of VFX:
+
+- **Neural Net Trainer**: Train custom AI models like Nuke's CopyCat
+- **Segment Anything**: Instant AI segmentation with point/box prompts
+- **Background Removal**: One-click background removal with edge refinement
+- **Face Enhancement**: AI face restoration, retouching, and beautification
+- **Motion Prediction**: Frame interpolation and slow motion generation
 
 ## 🚀 Try It Now
 
@@ -162,6 +184,71 @@ Download the Windows installer or portable version from the [Releases](https://g
 - **Constraints**: Fixed, hinge, slider, ball, distance, spring joints
 - **Parenting**: Hierarchical object relationships with velocity inheritance
 - **Sleep System**: Automatic sleep detection for performance optimization
+
+#### Pipeline & Collaboration (v3.1) 🆕
+- **USD Node**: Universal Scene Description import/export
+  - USD file formats: usda (ASCII), usdc (crate), usdz (package)
+  - Stage and layer composition
+  - Variant sets and asset resolution
+  - Time sampling for animation
+  - Reference and payload support
+- **Alembic Node**: Geometry caching for VFX pipelines
+  - Ogawa and HDF5 archive formats
+  - Mesh, points, curves, camera export
+  - Streaming for large caches
+  - LFS-friendly compression
+- **Pipeline Manager**: Shot and asset management integration
+  - ShotGrid, ftrack, Kitsu integration-ready
+  - Shot versioning and status tracking
+  - Task management with assignments
+  - Path templates for work/publish
+  - Dependency tracking
+- **Review Tool**: Collaborative review and annotation
+  - Frame-accurate drawing tools (brush, line, shape, text)
+  - Version comparison (A/B, wipe, onion skin, difference)
+  - Comment threading and resolution tracking
+  - Approval workflow with multi-approver support
+  - Export annotations (JSON, PDF, HTML, video burn-in)
+- **Version Control**: Git-based project versioning
+  - Full git integration with branch management
+  - Commit history and visual diff
+  - LFS support for large VFX files
+  - Remote sync (push, pull, fetch)
+  - Conflict detection and resolution
+
+#### Extended Machine Learning (v3.1) 🆕
+- **Neural Net Trainer**: Train custom AI models (CopyCat-like)
+  - Architectures: UNet, ResNet, Autoencoder, GAN
+  - Data augmentation (flip, rotate, crop, color jitter)
+  - Training visualization with loss graphs
+  - Transfer learning from pretrained models
+  - Export to ONNX, TensorFlow, PyTorch
+  - Hyperparameter tuning with schedules
+- **Segment Anything**: AI-powered instant segmentation
+  - Point-based prompting for interactive selection
+  - Box-based prompting for region selection
+  - Automatic mask generation for full image
+  - Multi-mask output with confidence scores
+  - Real-time preview during annotation
+- **Background Removal**: One-click background removal
+  - Multiple AI models (rembg, u2net, modnet, isnet)
+  - Edge refinement with defringing
+  - Alpha matte with transparency handling
+  - Temporal stability for video
+  - Background replacement support
+- **Face Enhancement**: AI face restoration and beautification
+  - Face detection with landmark extraction
+  - Super resolution for faces
+  - Skin retouching (smoothing, blemish, wrinkle)
+  - Eye and teeth enhancement
+  - Age modification (younger/older)
+  - Expression transfer and makeup
+- **Motion Prediction**: AI-powered motion interpolation
+  - Frame interpolation (RIFE, FILM, IFRNet)
+  - Slow motion generation (2x-16x)
+  - Forward motion prediction
+  - Optical flow with occlusion handling
+  - Temporal consistency for video
 
 #### Machine Learning Powered Tools (v2.0)
 - **Style Transfer**: Neural style transfer for artistic effects
