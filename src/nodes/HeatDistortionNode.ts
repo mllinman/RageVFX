@@ -168,10 +168,10 @@ export class HeatDistortionNode extends Node {
             outData[idx + 1] = this.sampleWithBlur(inputImage, sampleX, sampleY, 1, blur * distortionMask);
             outData[idx + 2] = this.sampleWithBlur(inputImage, sampleX, sampleY, 2, blur * distortionMask);
             
-            const srcIdx = (sampleY * inputImage.width + sampleX) * inputImage.channels;
+            const srcIdx = (sampleY * width + sampleX) * inputImage.channels;
             outData[idx + 3] = inputImage.channels === 4 ? inputImage.data[srcIdx + 3] : 255;
           } else {
-            const srcIdx = (sampleY * inputImage.width + sampleX) * inputImage.channels;
+            const srcIdx = (sampleY * width + sampleX) * inputImage.channels;
             outData[idx] = inputImage.data[srcIdx];
             outData[idx + 1] = inputImage.data[srcIdx + 1];
             outData[idx + 2] = inputImage.data[srcIdx + 2];

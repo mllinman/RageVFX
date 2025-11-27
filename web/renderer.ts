@@ -368,7 +368,7 @@ class NodeGraphUI {
     if (VFX_NODE_TYPES.has(type)) return 'VFX';
     if (['Blur', 'Sharpen', 'EdgeDetect', 'MotionBlur', 'DepthOfField', 'ChromaticAberration', 'Vignette', 'FilmGrain', 'Glow'].includes(type)) return 'Filter';
     if (['ColorCorrect', 'Grade', 'Curves', 'Levels', 'HSL', 'OCIOColorSpace', 'OCIOLook', 'LUTLoader', 'CDL'].includes(type)) return 'Color';
-    if (['Merge', 'Screen', 'Overlay', 'ChromaKey', 'LuminanceKey', 'Difference', 'Rotoscope', 'SpillSuppression', 'EdgeMatte', 'DeepComposite', 'Cryptomatte', 'AOVManager'].includes(type)) return 'Composite';
+    if (['Merge', 'Screen', 'Overlay', 'Difference', 'DeepComposite', 'Cryptomatte', 'AOVManager'].includes(type)) return 'Composite';
     if (['Scene', 'Renderer3D', 'Geometry3D', 'Mesh', 'Material', 'Camera', 'Light', 'EnvironmentMap', 'ShadowMap'].includes(type)) return '3D';
     if (['StyleTransfer', 'Upscale', 'Denoise', 'ObjectDetection', 'Inpaint', 'DepthEstimation'].includes(type)) return 'ML';
     if (['RigidBody', 'SoftBody', 'FluidSim', 'ClothSim', 'Collision'].includes(type)) return 'Physics';
@@ -378,6 +378,7 @@ class NodeGraphUI {
     if (['Noise', 'Gradient'].includes(type)) return 'Generator';
     if (['Output', 'ImageSequenceOutput', 'VideoSequenceOutput', 'CameraFormatOutput'].includes(type)) return 'Output';
     if (['CameraPreset', 'CameraLens', 'LensDistortionCorrection'].includes(type)) return 'Camera';
+    if (['ChromaKey', 'LuminanceKey', 'Rotoscope', 'SpillSuppression', 'EdgeMatte'].includes(type)) return 'Keying';
     return 'Default';
   }
 

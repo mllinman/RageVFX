@@ -189,10 +189,21 @@ export class PlasmaNode extends Node {
     }
   }
 
+  /**
+   * Generate noise for electric arc patterns
+   * Uses multi-frequency sine wave combination to create organic arc patterns
+   * Returns value in 0-1 range
+   */
   private arcNoise(x: number, y: number, t: number): number {
+    // Spatial frequency for arc patterns - higher = finer arcs
     const scale = 0.01;
+    // Primary arc pattern: crossed sine waves with time-based animation
+    // Time multipliers (2, 1.5) create asymmetric movement for organic feel
     let val = Math.sin(x * scale + t * 2) * Math.cos(y * scale + t * 1.5);
+    // Secondary pattern: diagonal wave at half frequency with faster animation
+    // Adds variation and prevents too regular patterns
     val += Math.sin((x + y) * scale * 0.5 + t * 3) * 0.5;
+    // Normalize from [-1.5, 1.5] range to [0, 1]
     return (val + 1.5) / 3;
   }
 }
