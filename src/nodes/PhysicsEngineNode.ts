@@ -585,7 +585,7 @@ export class PhysicsEngineNode extends Node {
   }
 
   private solveConstraint(obj: PhysicsObject, constraint: PhysicsConstraint): void {
-    const target = constraint.targetId ? this.objects.get(constraint.targetId) : null;
+    const target = constraint.targetId ? (this.objects.get(constraint.targetId) ?? null) : null;
     
     switch (constraint.type) {
       case 'fixed':
@@ -603,7 +603,7 @@ export class PhysicsEngineNode extends Node {
     }
   }
 
-  private solveFixedConstraint(obj: PhysicsObject, constraint: PhysicsConstraint, target: PhysicsObject | null | undefined): void {
+  private solveFixedConstraint(obj: PhysicsObject, constraint: PhysicsConstraint, target: PhysicsObject | null): void {
     if (!target) {
       // Fixed to world
       obj.position.x = constraint.targetAnchor.x;
@@ -622,7 +622,7 @@ export class PhysicsEngineNode extends Node {
     }
   }
 
-  private solveDistanceConstraint(obj: PhysicsObject, constraint: PhysicsConstraint, target: PhysicsObject | null | undefined): void {
+  private solveDistanceConstraint(obj: PhysicsObject, constraint: PhysicsConstraint, target: PhysicsObject | null): void {
     const targetPos = target ? target.position : constraint.targetAnchor;
     
     const dx = obj.position.x - targetPos.x;
@@ -653,7 +653,7 @@ export class PhysicsEngineNode extends Node {
     }
   }
 
-  private solveSpringConstraint(obj: PhysicsObject, constraint: PhysicsConstraint, target: PhysicsObject | null | undefined): void {
+  private solveSpringConstraint(obj: PhysicsObject, constraint: PhysicsConstraint, target: PhysicsObject | null): void {
     const targetPos = target ? target.position : constraint.targetAnchor;
     
     const dx = obj.position.x - targetPos.x;
@@ -683,7 +683,7 @@ export class PhysicsEngineNode extends Node {
     obj.velocity.z += (dz / dist) * totalForce / obj.mass * this.fixedDeltaTime;
   }
 
-  private solveHingeConstraint(obj: PhysicsObject, constraint: PhysicsConstraint, target: PhysicsObject | null | undefined): void {
+  private solveHingeConstraint(obj: PhysicsObject, constraint: PhysicsConstraint, target: PhysicsObject | null): void {
     // Simplified hinge - constrain position to target with rotational freedom around axis
     const targetPos = target ? target.position : constraint.targetAnchor;
     
