@@ -905,6 +905,486 @@ body {
   background: var(--border-color);
 }
 
+/* ============================================
+   Viewport System Styles
+   ============================================ */
+
+/* Viewport Mode Selector */
+.viewport-mode-select {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.viewport-mode-select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+/* Viewport Views */
+.viewport-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.viewport-view.hidden {
+  display: none !important;
+}
+
+.viewport-view.active {
+  display: flex !important;
+}
+
+/* Viewport Container */
+#viewport-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3D Viewport Container */
+.viewport-3d-container {
+  flex: 1;
+  min-height: 200px;
+  background: #0d0d0d;
+  position: relative;
+}
+
+.viewport-3d-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Render Canvas */
+.render-canvas {
+  flex: 1;
+  min-height: 200px;
+  background: repeating-conic-gradient(
+    var(--bg-tertiary) 0% 25%,
+    var(--bg-secondary) 0% 50%
+  ) 50% / 20px 20px;
+}
+
+/* Viewport Controls */
+.viewport-controls {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+.viewport-tool {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s ease;
+}
+
+.viewport-tool:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+.viewport-info {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-family: monospace;
+  padding: 0 8px;
+}
+
+/* 3D Camera Tools */
+.viewport-3d-controls {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.camera-tools {
+  display: flex;
+  gap: 4px;
+}
+
+.camera-tool {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.camera-tool:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+.camera-tool.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}
+
+.camera-presets {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.camera-preset-select {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.camera-preset-select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.viewport-options {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.viewport-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.viewport-checkbox input {
+  cursor: pointer;
+}
+
+/* Render View Controls */
+.render-view-controls {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.render-channel-buttons {
+  display: flex;
+  gap: 2px;
+}
+
+.channel-btn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.channel-btn:hover {
+  background: var(--bg-hover);
+}
+
+.channel-btn.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}
+
+.render-adjustments {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.adjustment-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.adjustment-label input[type="range"] {
+  width: 60px;
+  height: 4px;
+  -webkit-appearance: none;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.adjustment-label input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* ============================================
+   Timeline System Styles
+   ============================================ */
+
+.timeline-panel {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  height: 200px;
+  min-height: 120px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.timeline-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.timeline-btn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+.timeline-btn.primary {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+  padding: 5px 15px;
+}
+
+.timeline-btn.primary:hover {
+  background: var(--accent-secondary);
+}
+
+.timeline-btn.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}
+
+.timeline-separator {
+  color: var(--border-color);
+  margin: 0 4px;
+}
+
+.timeline-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Consolas', monospace;
+}
+
+.timeline-timecode {
+  background: var(--bg-primary);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-primary);
+  border: 1px solid var(--border-color);
+  min-width: 60px;
+  text-align: center;
+}
+
+.timeline-divider {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.timeline-fps {
+  color: var(--text-secondary);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timeline-fps input {
+  width: 40px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  padding: 2px 6px;
+  color: var(--text-primary);
+  font-size: 12px;
+  text-align: center;
+}
+
+.timeline-fps input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.timeline-range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timeline-range-display {
+  color: var(--text-secondary);
+  font-size: 11px;
+  padding: 0 6px;
+}
+
+.timeline-zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.timeline-zoom-slider {
+  width: 80px;
+  height: 4px;
+  -webkit-appearance: none;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.timeline-zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.timeline-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.timeline-body {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.timeline-canvas-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.timeline-canvas-container canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.timeline-resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  cursor: ns-resize;
+  background: transparent;
+  z-index: 100;
+}
+
+.timeline-resize-handle:hover {
+  background: var(--accent-primary);
+}
+
+/* Timeline Canvas */
+.timeline-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ============================================
+   Additional UI Components
+   ============================================ */
+
+/* Maximized viewport modal */
+.viewport-maximized {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 9999 !important;
+  background: var(--bg-primary);
+}
+
+/* Drag overlay for resizing */
+.resize-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  cursor: ns-resize;
+}
+
+.resize-overlay.ew {
+  cursor: ew-resize;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .sidebar.left {
@@ -914,10 +1394,33 @@ body {
   .sidebar.right {
     width: 280px;
   }
+  
+  .timeline-header {
+    gap: 8px;
+    padding: 6px 10px;
+  }
+  
+  .timeline-zoom-controls {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 900px) {
   .sidebar {
+    display: none;
+  }
+  
+  .timeline-panel {
+    height: 150px;
+  }
+  
+  .timeline-header {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  .timeline-zoom-controls,
+  .timeline-actions {
     display: none;
   }
 }

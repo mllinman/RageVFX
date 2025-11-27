@@ -4,6 +4,8 @@
  */
 
 import { initializeApp, RageVFXApp } from './app';
+import { Viewport, Viewport3D, RenderView, CameraMode, ViewportMode } from './viewport';
+import { Timeline, PlaybackState } from './timeline';
 
 // Polyfill for roundRect if not available
 if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D.prototype.roundRect) {
@@ -2012,15 +2014,481 @@ class NodeGraphUI {
   }
 }
 
+/**
+ * Viewport Manager - Handles 2D/3D/Render viewport switching and controls
+ */
+class ViewportManager {
+  private viewport2D: Viewport | null = null;
+  private viewport3D: Viewport3D | null = null;
+  private renderView: RenderView | null = null;
+  private currentMode: ViewportMode = ViewportMode.MODE_2D;
+  private currentCameraMode: CameraMode = CameraMode.ROTATE;
+
+  constructor() {
+    this.initialize();
+    this.setupEventListeners();
+  }
+
+  private initialize(): void {
+    // Initialize 2D Viewport
+    const previewCanvas = document.getElementById('preview-canvas') as HTMLCanvasElement;
+    if (previewCanvas) {
+      this.viewport2D = new Viewport(previewCanvas);
+    }
+
+    // Initialize 3D Viewport
+    const viewport3DContainer = document.getElementById('viewport-3d-canvas');
+    if (viewport3DContainer) {
+      this.viewport3D = new Viewport3D(viewport3DContainer);
+    }
+
+    // Initialize Render View
+    const renderCanvas = document.getElementById('render-canvas') as HTMLCanvasElement;
+    if (renderCanvas) {
+      this.renderView = new RenderView(renderCanvas);
+    }
+  }
+
+  private setupEventListeners(): void {
+    // Viewport mode selector
+    const modeSelector = document.getElementById('viewport-mode') as HTMLSelectElement;
+    if (modeSelector) {
+      modeSelector.addEventListener('change', () => {
+        this.setViewportMode(modeSelector.value as ViewportMode);
+      });
+    }
+
+    // 2D viewport controls
+    document.getElementById('viewport-fit')?.addEventListener('click', () => {
+      if (this.viewport2D) this.viewport2D.fitToWindow();
+    });
+
+    document.getElementById('viewport-zoom-in')?.addEventListener('click', () => {
+      // Zoom implementation handled in viewport class
+    });
+
+    document.getElementById('viewport-zoom-out')?.addEventListener('click', () => {
+      // Zoom implementation handled in viewport class
+    });
+
+    // 3D camera tool buttons
+    document.querySelectorAll('.camera-tool').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const mode = target.dataset.mode as CameraMode;
+        if (mode) {
+          this.setCameraMode(mode);
+          
+          // Update active state
+          document.querySelectorAll('.camera-tool').forEach(b => b.classList.remove('active'));
+          target.classList.add('active');
+        }
+      });
+    });
+
+    // Camera preset selector
+    const presetSelector = document.getElementById('camera-preset') as HTMLSelectElement;
+    if (presetSelector) {
+      presetSelector.addEventListener('change', () => {
+        if (this.viewport3D) {
+          this.viewport3D.applyCameraPreset(presetSelector.value);
+        }
+      });
+    }
+
+    // Camera reset button
+    document.getElementById('camera-reset')?.addEventListener('click', () => {
+      if (this.viewport3D) {
+        this.viewport3D.resetCamera();
+      }
+    });
+
+    // Grid and axes toggles
+    document.getElementById('show-grid')?.addEventListener('change', (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      if (this.viewport3D) {
+        this.viewport3D.toggleGrid(checked);
+      }
+    });
+
+    document.getElementById('show-axes')?.addEventListener('change', (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      if (this.viewport3D) {
+        this.viewport3D.toggleAxes(checked);
+      }
+    });
+
+    // Render view channel buttons
+    document.querySelectorAll('.channel-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const channel = target.dataset.channel as 'rgb' | 'r' | 'g' | 'b' | 'a';
+        if (channel && this.renderView) {
+          this.renderView.setChannelView(channel);
+          
+          // Update active state
+          document.querySelectorAll('.channel-btn').forEach(b => b.classList.remove('active'));
+          target.classList.add('active');
+        }
+      });
+    });
+
+    // Render adjustments
+    document.getElementById('render-exposure')?.addEventListener('input', (e) => {
+      const value = parseFloat((e.target as HTMLInputElement).value);
+      if (this.renderView) {
+        this.renderView.setExposure(value);
+      }
+    });
+
+    document.getElementById('render-gamma')?.addEventListener('input', (e) => {
+      const value = parseFloat((e.target as HTMLInputElement).value);
+      if (this.renderView) {
+        this.renderView.setGamma(value);
+      }
+    });
+
+    // Maximize viewport button
+    document.getElementById('maximize-preview')?.addEventListener('click', () => {
+      this.toggleMaximize();
+    });
+  }
+
+  setViewportMode(mode: ViewportMode): void {
+    this.currentMode = mode;
+
+    // Hide all viewports
+    document.getElementById('viewport-2d')?.classList.remove('active');
+    document.getElementById('viewport-2d')?.classList.add('hidden');
+    document.getElementById('viewport-3d')?.classList.remove('active');
+    document.getElementById('viewport-3d')?.classList.add('hidden');
+    document.getElementById('viewport-render')?.classList.remove('active');
+    document.getElementById('viewport-render')?.classList.add('hidden');
+
+    // Show selected viewport
+    switch (mode) {
+      case ViewportMode.MODE_2D:
+        document.getElementById('viewport-2d')?.classList.remove('hidden');
+        document.getElementById('viewport-2d')?.classList.add('active');
+        if (this.viewport2D) this.viewport2D.resize();
+        break;
+      case ViewportMode.MODE_3D:
+        document.getElementById('viewport-3d')?.classList.remove('hidden');
+        document.getElementById('viewport-3d')?.classList.add('active');
+        if (this.viewport3D) this.viewport3D.resize();
+        break;
+      case ViewportMode.RENDER:
+        document.getElementById('viewport-render')?.classList.remove('hidden');
+        document.getElementById('viewport-render')?.classList.add('active');
+        if (this.renderView) this.renderView.resize();
+        break;
+    }
+  }
+
+  setCameraMode(mode: CameraMode): void {
+    this.currentCameraMode = mode;
+    if (this.viewport3D) {
+      this.viewport3D.setCameraMode(mode);
+    }
+  }
+
+  toggleMaximize(): void {
+    const container = document.getElementById('viewport-container');
+    if (container) {
+      container.classList.toggle('viewport-maximized');
+      
+      // Resize viewports after toggle
+      setTimeout(() => {
+        if (this.viewport2D) this.viewport2D.resize();
+        if (this.viewport3D) this.viewport3D.resize();
+        if (this.renderView) this.renderView.resize();
+      }, 100);
+    }
+  }
+
+  setImage(imageData: ImageData): void {
+    if (this.viewport2D) {
+      this.viewport2D.setImageData(imageData);
+    }
+    if (this.renderView) {
+      this.renderView.setFrame(imageData);
+    }
+  }
+
+  dispose(): void {
+    if (this.viewport2D) this.viewport2D.dispose();
+    if (this.viewport3D) this.viewport3D.dispose();
+    if (this.renderView) this.renderView.dispose();
+  }
+}
+
+/**
+ * Timeline Manager - Handles timeline and playback controls
+ */
+class TimelineManager {
+  private timeline: Timeline | null = null;
+  private isLooping: boolean = true;
+
+  constructor() {
+    this.initialize();
+    this.setupEventListeners();
+  }
+
+  private initialize(): void {
+    const container = document.getElementById('timeline-container');
+    if (container) {
+      this.timeline = new Timeline(container);
+      
+      // Set up callbacks
+      this.timeline.setOnFrameChange((frame) => {
+        this.updateFrameDisplay(frame);
+      });
+      
+      this.timeline.setOnPlaybackStateChange((state) => {
+        this.updatePlayButton(state);
+      });
+      
+      // Add some demo tracks
+      this.addDemoTracks();
+    }
+  }
+
+  private addDemoTracks(): void {
+    if (!this.timeline) return;
+    
+    // Add demo tracks for testing
+    const track1 = this.timeline.addTrack('node1', 'transform.x', 'Position X');
+    const track2 = this.timeline.addTrack('node1', 'transform.y', 'Position Y');
+    const track3 = this.timeline.addTrack('node1', 'opacity', 'Opacity');
+    
+    // Add some demo keyframes
+    if (track1) {
+      this.timeline.addKeyframe(track1.id, 0, 0);
+      this.timeline.addKeyframe(track1.id, 50, 100);
+      this.timeline.addKeyframe(track1.id, 100, 200);
+    }
+    if (track2) {
+      this.timeline.addKeyframe(track2.id, 0, 0);
+      this.timeline.addKeyframe(track2.id, 75, 150);
+    }
+    if (track3) {
+      this.timeline.addKeyframe(track3.id, 0, 1);
+      this.timeline.addKeyframe(track3.id, 150, 0.5);
+      this.timeline.addKeyframe(track3.id, 300, 1);
+    }
+  }
+
+  private setupEventListeners(): void {
+    // Playback controls
+    document.getElementById('timeline-play')?.addEventListener('click', () => {
+      this.timeline?.togglePlayback();
+    });
+    
+    document.getElementById('timeline-goto-start')?.addEventListener('click', () => {
+      this.timeline?.stop();
+    });
+    
+    document.getElementById('timeline-goto-end')?.addEventListener('click', () => {
+      if (this.timeline) {
+        const state = this.timeline.getState();
+        this.timeline.setCurrentFrame(state.outPoint);
+      }
+    });
+    
+    document.getElementById('timeline-step-back')?.addEventListener('click', () => {
+      if (this.timeline) {
+        const state = this.timeline.getState();
+        this.timeline.setCurrentFrame(state.currentFrame - 1);
+      }
+    });
+    
+    document.getElementById('timeline-step-forward')?.addEventListener('click', () => {
+      if (this.timeline) {
+        const state = this.timeline.getState();
+        this.timeline.setCurrentFrame(state.currentFrame + 1);
+      }
+    });
+    
+    document.getElementById('timeline-loop')?.addEventListener('click', (e) => {
+      this.isLooping = !this.isLooping;
+      (e.target as HTMLElement).classList.toggle('active', this.isLooping);
+    });
+
+    // In/Out points
+    document.getElementById('timeline-set-in')?.addEventListener('click', () => {
+      if (this.timeline) {
+        const state = this.timeline.getState();
+        this.timeline.setInPoint(state.currentFrame);
+        this.updateRangeDisplay();
+      }
+    });
+    
+    document.getElementById('timeline-set-out')?.addEventListener('click', () => {
+      if (this.timeline) {
+        const state = this.timeline.getState();
+        this.timeline.setOutPoint(state.currentFrame);
+        this.updateRangeDisplay();
+      }
+    });
+
+    // FPS input
+    document.getElementById('timeline-fps')?.addEventListener('change', (e) => {
+      const fps = parseInt((e.target as HTMLInputElement).value);
+      if (this.timeline && fps > 0) {
+        this.timeline.setFPS(fps);
+      }
+    });
+
+    // Zoom controls
+    document.getElementById('timeline-zoom')?.addEventListener('input', (e) => {
+      // Zoom handled by timeline internally
+    });
+    
+    document.getElementById('timeline-zoom-in')?.addEventListener('click', () => {
+      const slider = document.getElementById('timeline-zoom') as HTMLInputElement;
+      if (slider) {
+        slider.value = String(Math.min(5, parseFloat(slider.value) + 0.5));
+        slider.dispatchEvent(new Event('input'));
+      }
+    });
+    
+    document.getElementById('timeline-zoom-out')?.addEventListener('click', () => {
+      const slider = document.getElementById('timeline-zoom') as HTMLInputElement;
+      if (slider) {
+        slider.value = String(Math.max(0.1, parseFloat(slider.value) - 0.5));
+        slider.dispatchEvent(new Event('input'));
+      }
+    });
+
+    // Keyframe controls
+    document.getElementById('timeline-add-keyframe')?.addEventListener('click', () => {
+      // Add keyframe at current frame for selected track
+    });
+    
+    document.getElementById('timeline-delete-keyframe')?.addEventListener('click', () => {
+      this.timeline?.deleteSelectedKeyframes();
+    });
+    
+    document.getElementById('timeline-add-marker')?.addEventListener('click', () => {
+      if (this.timeline) {
+        const state = this.timeline.getState();
+        this.timeline.addMarker(state.currentFrame, `Marker ${state.currentFrame}`);
+      }
+    });
+
+    // Timeline resize handle
+    this.setupResizeHandle();
+
+    // Keyboard shortcuts for timeline
+    document.addEventListener('keydown', (e) => {
+      // Space to play/pause
+      if (e.code === 'Space' && !this.isInputFocused()) {
+        e.preventDefault();
+        this.timeline?.togglePlayback();
+      }
+    });
+  }
+
+  private setupResizeHandle(): void {
+    const handle = document.getElementById('timeline-resize-handle');
+    const panel = document.getElementById('timeline-panel');
+    
+    if (!handle || !panel) return;
+    
+    let isResizing = false;
+    let startY = 0;
+    let startHeight = 0;
+    
+    handle.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      startY = e.clientY;
+      startHeight = panel.offsetHeight;
+      
+      document.body.style.cursor = 'ns-resize';
+      document.body.style.userSelect = 'none';
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      
+      const deltaY = startY - e.clientY;
+      const newHeight = Math.min(400, Math.max(120, startHeight + deltaY));
+      panel.style.height = `${newHeight}px`;
+    });
+    
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    });
+  }
+
+  private isInputFocused(): boolean {
+    const focused = document.activeElement;
+    return focused instanceof HTMLInputElement || 
+           focused instanceof HTMLTextAreaElement ||
+           focused instanceof HTMLSelectElement;
+  }
+
+  private updateFrameDisplay(frame: number): void {
+    const display = document.getElementById('timeline-current-frame');
+    if (display) {
+      display.textContent = String(frame);
+    }
+  }
+
+  private updatePlayButton(state: PlaybackState): void {
+    const button = document.getElementById('timeline-play');
+    if (button) {
+      button.textContent = state === PlaybackState.PLAYING ? '⏸' : '▶';
+    }
+  }
+
+  private updateRangeDisplay(): void {
+    if (!this.timeline) return;
+    
+    const state = this.timeline.getState();
+    const display = document.getElementById('timeline-range-display');
+    if (display) {
+      display.textContent = `${state.inPoint} - ${state.outPoint}`;
+    }
+  }
+
+  getCurrentFrame(): number {
+    return this.timeline?.getCurrentFrame() ?? 0;
+  }
+
+  setCurrentFrame(frame: number): void {
+    this.timeline?.setCurrentFrame(frame);
+  }
+
+  dispose(): void {
+    this.timeline?.dispose();
+  }
+}
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   const nodeCanvas = document.getElementById('node-canvas') as HTMLCanvasElement;
   if (nodeCanvas) {
     const graphUI = new NodeGraphUI(nodeCanvas);
     
+    // Initialize viewport manager
+    const viewportManager = new ViewportManager();
+    
+    // Initialize timeline manager
+    const timelineManager = new TimelineManager();
+    
     // Expose for debugging
-    (window as any).graphUI = graphUI;
+    (window as unknown as Record<string, unknown>).graphUI = graphUI;
+    (window as unknown as Record<string, unknown>).viewportManager = viewportManager;
+    (window as unknown as Record<string, unknown>).timelineManager = timelineManager;
     
     console.log('RageVFX Web initialized successfully!');
+    console.log('- Node Graph Editor');
+    console.log('- 2D/3D/Render Viewports');
+    console.log('- Professional Timeline');
   }
 });
