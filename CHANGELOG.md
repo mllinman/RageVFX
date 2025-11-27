@@ -2,6 +2,88 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.1.0] - 2025-11-27
+
+### Added - Version 3.1 Advanced Physics Engine Release
+
+RageVFX 3.1 introduces a comprehensive built-in physics engine for handling static and dynamic objects with real-world forces and easy-to-use controls.
+
+#### Built-in Physics Engine (2 new nodes)
+- **PhysicsEngineNode**: Complete physics simulation engine
+  - Static/Dynamic object toggle - any object can switch between static and dynamic
+  - Dynamic objects interact, bounce off, and are affected by static objects
+  - Static objects do not react to physics unless made dynamic
+  - Easy-to-use sliders and checkboxes for all controls
+
+- **PhysicsWorldNode**: Global physics world management
+  - World-wide physics settings
+  - Global gravity, time scale, and solver controls
+  - Debug visualization options
+  - Performance tuning parameters
+
+#### Real-World Forces
+- **Gravity**: Configurable XYZ gravity with multiplier slider (0-5x)
+- **Wind**: Directional wind with:
+  - Wind direction (X, Y, Z sliders)
+  - Wind strength slider (0-50)
+  - Turbulence slider (0-1)
+  - Frequency slider (0.1-10)
+  - Enable/disable checkbox
+- **Inertia**: Object inertia with enable/disable checkbox
+- **Momentum**: Conservation of momentum in collisions with enable/disable checkbox
+- **Drag**: Air resistance with linear damping slider (0-1)
+- **Angular Drag**: Rotational resistance with angular damping slider (0-1)
+
+#### Volumetrics & Buoyancy
+- Volumetric object properties
+- Buoyancy simulation with enable/disable checkbox
+- Fluid density slider (0-2000 kg/m³)
+- Automatic volume calculation
+
+#### Boundaries
+- World bounds with enable/disable checkbox
+- Configurable min/max bounds for X, Y, Z axes
+- Custom boundary shapes: plane, box, sphere, cylinder
+- Boundary friction and restitution sliders
+- Per-boundary enable/disable
+
+#### Constraints
+- Constraint system with enable/disable checkbox
+- Constraint types:
+  - Fixed: Lock objects together
+  - Hinge: Rotational joint around axis
+  - Slider: Linear movement along axis
+  - Ball: Free rotation around point
+  - Distance: Maintain fixed distance
+  - Spring: Elastic connection with stiffness/damping sliders
+- Constraint limits (min/max)
+- Constraint iteration slider (1-16)
+
+#### Parenting System
+- Object parenting with enable/disable checkbox
+- Velocity inheritance with checkbox
+- Hierarchical transform propagation
+- Child object following
+
+#### Sleep & Performance
+- Sleep detection with enable/disable checkbox
+- Sleep threshold slider (0.001-0.1)
+- Sleep time threshold slider (0.1-2.0)
+- Automatic wake on collision or force
+
+#### Easy-to-Use Controls
+All physics settings are exposed as sliders and checkboxes for intuitive control:
+- 30+ checkbox controls for feature toggling
+- 40+ slider controls for precise tuning
+- Grouped parameters for organized UI
+
+### Changed
+- Version bump from 3.0.0 to 3.1.0
+- Updated package description to include physics engine
+- Expanded node registry with 2 new physics nodes
+- Total node count now exceeds 110 nodes
+- Updated ROADMAP.md with 5 new future versions (3.2-3.6)
+
 ## [3.0.0] - 2025-11-27
 
 ### Added - Version 3.0 Industry Competition Release
