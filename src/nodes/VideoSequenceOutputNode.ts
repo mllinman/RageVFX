@@ -176,7 +176,16 @@ export class VideoSequenceOutputNode extends Node {
     
     // Bilinear interpolation scaling
     const channels = image.channels;
-    const outData = new Uint8Array(targetWidth * targetHeight * channels);
+    
+    // Preserve the data type based on format
+    let outData: Uint8Array | Uint16Array | Float32Array;
+    if (image.format === 'rgba32f' || image.format === 'float' || image.format === 'exr') {
+      outData = new Float32Array(targetWidth * targetHeight * channels);
+    } else if (image.format === 'rgba16') {
+      outData = new Uint16Array(targetWidth * targetHeight * channels);
+    } else {
+      outData = new Uint8Array(targetWidth * targetHeight * channels);
+    }
     
     const xRatio = image.width / targetWidth;
     const yRatio = image.height / targetHeight;
@@ -205,7 +214,12 @@ export class VideoSequenceOutputNode extends Node {
                         v01 * (1 - fx) * fy +
                         v11 * fx * fy;
           
-          outData[(y * targetWidth + x) * channels + c] = Math.round(value);
+          // For integer formats, round the value
+          if (outData instanceof Float32Array) {
+            outData[(y * targetWidth + x) * channels + c] = value;
+          } else {
+            outData[(y * targetWidth + x) * channels + c] = Math.round(value);
+          }
         }
       }
     }

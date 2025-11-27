@@ -369,13 +369,19 @@ export class CameraPresetNode extends Node {
     // Near and far focus limits
     const nearFocus = (focusDistance * 1000 * (hyperfocal - focalLength)) / 
                       (hyperfocal + focusDistance * 1000 - 2 * focalLength);
-    const farFocus = (focusDistance * 1000 * (hyperfocal - focalLength)) / 
+    const farFocusRaw = (focusDistance * 1000 * (hyperfocal - focalLength)) / 
                      (hyperfocal - focusDistance * 1000);
+    
+    // Handle infinity case explicitly
+    const farFocus = farFocusRaw > 0 ? farFocusRaw / 1000 : Infinity;
+    const totalDOF = Number.isFinite(farFocus) 
+      ? farFocus - (nearFocus / 1000)
+      : Infinity;
     
     return {
       nearFocus: nearFocus / 1000, // Convert back to meters
-      farFocus: farFocus > 0 ? farFocus / 1000 : Infinity,
-      totalDOF: (farFocus > 0 ? farFocus : Infinity) - nearFocus
+      farFocus,
+      totalDOF
     };
   }
 

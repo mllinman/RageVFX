@@ -303,7 +303,7 @@ export class CameraFormatOutputNode extends Node {
   /**
    * Get camera format details
    */
-  getCameraFormatDetails(): Record<string, any> {
+  getCameraFormatDetails(): Record<string, unknown> {
     const format = this.getParameter('cameraFormat');
     
     switch (format) {

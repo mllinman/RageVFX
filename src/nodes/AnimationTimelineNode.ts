@@ -321,7 +321,7 @@ export class AnimationTimelineNode extends Node {
   /**
    * Serialize timeline data
    */
-  serialize(): any {
+  serialize(): Record<string, unknown> {
     return {
       ...super.serialize(),
       tracks: Array.from(this.tracks.entries()),

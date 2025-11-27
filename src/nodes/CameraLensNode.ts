@@ -379,22 +379,25 @@ export class CameraLensNode extends Node {
     const cx = width / 2;
     const cy = height / 2;
     const maxRadius = Math.sqrt(cx * cx + cy * cy);
+    const invMaxRadius = 1 / maxRadius; // Pre-calculate inverse to avoid repeated division
     
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         const dx = x - cx;
         const dy = y - cy;
-        const r = Math.sqrt(dx * dx + dy * dy) / maxRadius;
+        const r = Math.sqrt(dx * dx + dy * dy) * invMaxRadius;
         
         // Calculate offsets for each channel
         const redOffset = caAmount * r * 3;
         const blueOffset = -caAmount * r * 3;
         
         // Sample each channel at different positions
-        const redX = Math.max(0, Math.min(width - 1, x + dx / maxRadius * redOffset));
-        const redY = Math.max(0, Math.min(height - 1, y + dy / maxRadius * redOffset));
-        const blueX = Math.max(0, Math.min(width - 1, x + dx / maxRadius * blueOffset));
-        const blueY = Math.max(0, Math.min(height - 1, y + dy / maxRadius * blueOffset));
+        const normalizedDx = dx * invMaxRadius;
+        const normalizedDy = dy * invMaxRadius;
+        const redX = Math.max(0, Math.min(width - 1, x + normalizedDx * redOffset));
+        const redY = Math.max(0, Math.min(height - 1, y + normalizedDy * redOffset));
+        const blueX = Math.max(0, Math.min(width - 1, x + normalizedDx * blueOffset));
+        const blueY = Math.max(0, Math.min(height - 1, y + normalizedDy * blueOffset));
         
         const outIdx = (y * width + x) * 4;
         const srcIdx = (y * width + x) * channels;
@@ -420,7 +423,7 @@ export class CameraLensNode extends Node {
   /**
    * Get lens data for output
    */
-  getLensData(): Record<string, any> {
+  getLensData(): Record<string, unknown> {
     const focalLength = this.getParameter('focalLength');
     const sensorWidth = this.getParameter('sensorWidth');
     const sensorHeight = this.getParameter('sensorHeight');

@@ -131,6 +131,7 @@ export class LensDistortionCorrectionNode extends Node {
   private lookupTableV: Float32Array | null = null;
   private lastWidth: number = 0;
   private lastHeight: number = 0;
+  private lastAppliedProfile: string = '';
 
   constructor(id: string) {
     super(id, 'LensDistortionCorrection', 'Lens Distortion Correction');
@@ -214,10 +215,16 @@ export class LensDistortionCorrectionNode extends Node {
   }
 
   /**
-   * Apply profile settings if selected
+   * Apply profile settings if selected and changed
    */
   private applyProfileIfNeeded(): void {
     const profileId = this.getParameter('profile');
+    
+    // Skip if profile hasn't changed
+    if (profileId === this.lastAppliedProfile) {
+      return;
+    }
+    
     if (profileId !== 'custom' && DISTORTION_PROFILES[profileId]) {
       const profile = DISTORTION_PROFILES[profileId];
       this.setParameter('model', profile.model);
@@ -230,6 +237,8 @@ export class LensDistortionCorrectionNode extends Node {
       this.setParameter('cy', profile.cy);
       this.setParameter('squeeze', profile.squeeze);
     }
+    
+    this.lastAppliedProfile = profileId;
   }
 
   /**
@@ -564,13 +573,18 @@ export class LensDistortionCorrectionNode extends Node {
   /**
    * Override setParameter to invalidate lookup table
    */
-  setParameter(key: string, value: any): void {
+  setParameter(key: string, value: unknown): void {
     super.setParameter(key, value);
     
     // Invalidate lookup table if distortion parameters changed
     const distortionParams = ['k1', 'k2', 'k3', 'p1', 'p2', 'cx', 'cy', 'squeeze', 'model', 'mode'];
     if (distortionParams.includes(key)) {
       this.invalidateLookupTable();
+    }
+    
+    // Reset lastAppliedProfile when profile changes to allow reapplication
+    if (key === 'profile') {
+      this.lastAppliedProfile = '';
     }
   }
 }
