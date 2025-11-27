@@ -2,6 +2,115 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.2.0] - 2025-11-27
+
+### Added - Version 3.2 Complete Feature Release
+
+RageVFX 3.2 introduces comprehensive projection mapping and painting, fluid physics, 3D camera tracking, model import/export, and a robust settings system.
+
+#### Projection Mapping & Painting System (Mari-like) (1 node)
+- **ProjectionPaintNode**: Complete projection painting system for 3D texturing
+  - Multi-layer painting with 16+ blend modes (normal, multiply, screen, overlay, etc.)
+  - Projection modes: perspective, orthographic, cylindrical, spherical, planar, triplanar
+  - Brush system with pressure sensitivity, size dynamics, hardness, flow, spacing
+  - Paint modes: paint, project, clone, fill, erase
+  - UV/UDIM support with multiple channels
+  - Normal map and displacement map generation
+  - Undo/redo with configurable history
+  - Up to 4K/8K texture resolution support
+  - Real-time preview and GPU acceleration
+  - Symmetry modes: X, Y, Z, radial
+
+#### 3D Object Import/Export System (2 nodes)
+- **ModelImportNode**: Import 3D models from various formats
+  - Formats: OBJ, FBX, glTF/GLB, USD/USDA/USDC, Alembic, DAE, 3DS, STL, PLY
+  - Import options: materials, animations, skeleton, cameras, lights
+  - Geometry processing: normal computation, tangent generation, vertex merging
+  - Transform options: scale, up axis conversion, center pivot
+  - LOD generation support
+  - UV channel management
+
+- **ModelExportNode**: Export 3D models and textures
+  - Export formats: glTF/GLB, OBJ, FBX, USD, STL, PLY, DAE
+  - DRACO/Meshopt compression for glTF
+  - Material and texture embedding
+  - Animation baking
+  - LOD export
+
+#### 3D Camera Tracking and Creation (3DSMax/Maya-like) (2 nodes)
+- **Camera3DTrackingNode**: 3D camera tracking from footage
+  - Automatic feature detection (SIFT, ORB, AKAZE, Harris, Shi-Tomasi)
+  - Feature tracking with bidirectional verification
+  - Camera model support: perspective, fisheye, spherical
+  - Lens distortion models: Brown-Conrady, fisheye
+  - Bundle adjustment optimization
+  - Ground plane detection and scene orientation
+  - Point cloud generation
+  - Camera path smoothing
+  - Solve quality reporting with recommendations
+  - Export to FBX, Alembic, Maya, Nuke
+
+- **RealWorldCameraNode**: Create camera based on real-world camera and lens
+  - 14 camera body presets: ARRI ALEXA 35, ARRI ALEXA LF, RED V-RAPTOR XL 8K, RED KOMODO 6K, Sony VENICE 2 8K, Sony FX6, Blackmagic URSA Mini Pro 12K, Canon EOS C70, Canon EOS C500 Mark II, Full Frame 35mm, Super 35mm, APS-C, Micro Four Thirds
+  - 10 lens presets: ARRI Signature Prime (35mm, 50mm), Zeiss Master Prime (25mm, 75mm), Cooke Anamorphic 40mm, Panavision Primo 70mm, Atlas Orion 1.33x 40mm, Generic Prime (24mm, 85mm), Generic Zoom 24-70mm
+  - Complete lens characteristics: distortion coefficients, chromatic aberration, vignette, blade count/curvature
+  - Exposure control: aperture, shutter angle/speed, ISO, exposure compensation
+  - Depth of field calculation with circle of confusion
+  - Focus settings with hyperfocal distance calculation
+  - Physical camera motion simulation: handheld, breathing
+  - Film back settings with gate presets
+
+#### Fluid Physics System (Maya-like) (2 nodes)
+- **FluidPhysicsNode**: Complete Eulerian fluid dynamics
+  - Fluid types: smoke, fire, liquid, pyro
+  - Solver types: Eulerian, FLIP, hybrid
+  - Grid resolution up to 256³
+  - Navier-Stokes based pressure solver
+  - Vorticity confinement for turbulent detail
+  - Combustion system for fire with fuel, burn rate, heat generation
+  - Advection for density, velocity, temperature, smoke
+  - Buoyancy forces (temperature and density based)
+  - Turbulence with noise parameters
+  - Configurable boundaries: solid, open, periodic
+  - Emitter system with position, size, velocity, temperature
+  - Time scaling and substeps control
+  - Real-time preview
+
+- **FluidCacheNode**: File caching for fluid simulations
+  - Cache formats: OpenVDB, Field3D, raw binary
+  - Compression: none, BLOSC, ZIP, LZ4
+  - Per-channel caching: density, velocity, temperature, smoke, fuel
+  - Memory cache with configurable frame count
+  - Background async read/write
+  - Cache validation and statistics
+  - Max cache size management
+  - Frame range and offset support
+  - Version control for cache files
+
+#### Robust Settings Tab
+- **Comprehensive Settings Modal** on main menu bar
+  - 13 settings categories with extensive customization:
+    - **General**: Language, time format, auto-save, undo history
+    - **Appearance**: Theme, accent color, UI scale, font size, node editor style
+    - **Performance**: GPU settings, memory limits, threading, preview quality
+    - **Project**: Resolution presets, frame rate, bit depth, frame range
+    - **Rendering**: Output format, quality presets, anti-aliasing, path tracing settings
+    - **Physics**: Fluid resolution, substeps, time scale, cache settings, gravity
+    - **Camera**: Default camera/lens, tracking quality, lens profiles
+    - **Viewport**: Grid, axes, shadows, camera control speeds
+    - **Timeline**: Playback settings, keyframe interpolation, auto-key
+    - **Caching**: Disk/memory cache settings, cache management
+    - **Color Management**: Working/display color space, OCIO config, view transform
+    - **Shortcuts**: Customizable keyboard shortcuts
+    - **Advanced**: Debug mode, experimental features, reset options
+  - Settings persistence and import/export
+  - Apply/Save/Cancel functionality
+
+#### UI/UX Improvements
+- New node categories in Node Library: Projection & Painting, Camera & Tracking, 3D Import/Export
+- Updated node category colors with Projection category
+- Enhanced settings button in menu bar
+
 ## [3.1.0] - 2025-11-27
 
 ### Added - Version 3.1 Complete Feature Release

@@ -198,6 +198,21 @@ import { BackgroundRemovalNode } from '../nodes/BackgroundRemovalNode';
 import { FaceEnhancementNode } from '../nodes/FaceEnhancementNode';
 import { MotionPredictionNode } from '../nodes/MotionPredictionNode';
 
+// Version 3.2 - Projection Mapping & Painting System (Mari-like)
+import { ProjectionPaintNode } from '../nodes/ProjectionPaintNode';
+
+// Version 3.2 - 3D Object Import/Export System
+import { ModelImportNode } from '../nodes/ModelImportNode';
+import { ModelExportNode } from '../nodes/ModelExportNode';
+
+// Version 3.2 - 3D Camera Tracking and Creation (3DSMax/Maya-like)
+import { Camera3DTrackingNode } from '../nodes/Camera3DTrackingNode';
+import { RealWorldCameraNode } from '../nodes/RealWorldCameraNode';
+
+// Version 3.2 - Fluid Physics System (Maya-like)
+import { FluidPhysicsNode } from '../nodes/FluidPhysicsNode';
+import { FluidCacheNode } from '../nodes/FluidCacheNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -409,6 +424,21 @@ export class RageVFXApp {
     this.nodeRegistry.set('BackgroundRemoval', BackgroundRemovalNode as any);
     this.nodeRegistry.set('FaceEnhancement', FaceEnhancementNode as any);
     this.nodeRegistry.set('MotionPrediction', MotionPredictionNode as any);
+    
+    // Version 3.2 - Projection Mapping & Painting System (Mari-like)
+    this.nodeRegistry.set('ProjectionPaint', ProjectionPaintNode as any);
+    
+    // Version 3.2 - 3D Object Import/Export System
+    this.nodeRegistry.set('ModelImport', ModelImportNode as any);
+    this.nodeRegistry.set('ModelExport', ModelExportNode as any);
+    
+    // Version 3.2 - 3D Camera Tracking and Creation (3DSMax/Maya-like)
+    this.nodeRegistry.set('Camera3DTracking', Camera3DTrackingNode as any);
+    this.nodeRegistry.set('RealWorldCamera', RealWorldCameraNode as any);
+    
+    // Version 3.2 - Fluid Physics System (Maya-like)
+    this.nodeRegistry.set('FluidPhysics', FluidPhysicsNode as any);
+    this.nodeRegistry.set('FluidCache', FluidCacheNode as any);
   }
 
   /**
