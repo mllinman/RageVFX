@@ -2,6 +2,117 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [2.0.0] - 2025-11-26
+
+### Added - Version 2.0 Features
+
+#### Full 3D Rendering Pipeline
+- **SceneNode**: Scene graph management for 3D rendering
+  - Organize 3D objects, lights, and cameras in a scene graph
+  - Background color and fog support
+  - Ambient light configuration
+- **Renderer3DNode**: Advanced 3D scene renderer
+  - ACES filmic tone mapping
+  - Configurable anti-aliasing with MSAA
+  - Shadow map support (Basic, PCF, PCF Soft, VSM)
+  - Depth and normal output passes
+- **MaterialNode**: Advanced PBR material system
+  - Standard, Physical, Basic, Lambert, Phong, and Toon materials
+  - Full PBR properties (metalness, roughness, clearcoat, sheen)
+  - Texture map support (albedo, normal, roughness, metalness, AO, emissive, displacement)
+- **EnvironmentMapNode**: HDR environment mapping
+  - Equirectangular and cube map support
+  - Procedural gradient environment with sun
+  - Irradiance map output for IBL
+- **ShadowMapNode**: Dynamic shadow mapping
+  - Per-light shadow configuration
+  - Directional, spot, and point light shadows
+  - Shadow bias and normal bias controls
+
+#### Volumetric Effects
+- **VolumetricFogNode**: Atmospheric fog rendering
+  - Ray-marched volumetric fog
+  - Height-based density falloff
+  - Scattering and absorption controls
+  - Animation support with wind
+- **VolumetricLightNode**: God rays and light shaft effects
+  - Radial light scattering from light source
+  - Configurable samples, density, and decay
+  - Multiple blend modes (add, screen, overlay)
+- **VolumeRenderNode**: 3D volume data rendering
+  - Ray casting, MIP, average, and isosurface render modes
+  - Multiple color maps (grayscale, rainbow, hot, cool)
+  - Window/level controls for medical imaging
+  - Point cloud output for 3D visualization
+- **CloudVolumeNode**: Procedural volumetric clouds
+  - Ray-marched volumetric cloud rendering
+  - Multi-octave noise for cloud shapes
+  - Sun lighting with silver lining effect
+  - Wind animation and turbulence
+
+#### Physics Simulation
+- **RigidBodyNode**: Rigid body physics simulation
+  - Euler integration with Verlet
+  - Multiple collision shapes (box, sphere, capsule, cylinder, mesh)
+  - Sleep detection for performance
+  - External force application
+- **SoftBodyNode**: Soft body and deformable physics
+  - Mass-spring system with position-based dynamics
+  - Structural, shear, and bending springs
+  - Ground and collider collision
+  - Stress map output for visualization
+- **FluidSimNode**: SPH fluid dynamics simulation
+  - Smoothed Particle Hydrodynamics (SPH) method
+  - Density and pressure computation
+  - Viscosity and boundary collision
+  - Density and velocity field outputs
+- **ClothSimNode**: Cloth and fabric simulation
+  - Verlet integration for stability
+  - Wind force with turbulence
+  - Pinning modes (top edge, corners, custom)
+  - Self-collision detection
+- **CollisionNode**: Collision detection system
+  - AABB broad phase collision
+  - Sphere-sphere, sphere-box, box-box narrow phase
+  - Trigger and collision event outputs
+
+#### Machine Learning Powered Tools
+- **StyleTransferNode**: Neural style transfer
+  - Content and style image blending
+  - Histogram and luminance color transfer modes
+  - Edge-aware stylization
+  - Style map output
+- **UpscaleNode**: AI-powered image upscaling
+  - Bicubic interpolation with enhancement
+  - Configurable scale (2x, 4x, 8x)
+  - Denoising and sharpening
+  - Edge enhancement for detail preservation
+- **DenoiseNode**: AI-powered denoising
+  - Non-local means filtering
+  - Adaptive strength based on noise estimation
+  - Detail and color preservation
+  - Noise mask output
+- **ObjectDetectionNode**: Object detection and segmentation
+  - Bounding box and mask detection
+  - Non-max suppression (NMS)
+  - Configurable confidence threshold
+  - Segmentation mask and matte outputs
+- **InpaintNode**: Content-aware inpainting
+  - PatchMatch-based texture synthesis
+  - Mask dilation and feathering
+  - Distance-based fill ordering
+- **DepthEstimationNode**: Monocular depth estimation
+  - Multi-cue depth estimation
+  - Multiple color maps (turbo, magma, viridis, inferno)
+  - Hole filling and smoothing
+  - Point cloud generation
+
+### Changed
+- Updated package version from 1.2.0 to 2.0.0
+- Enhanced DataType enum to support new node types
+- Updated README.md with Version 2.0 features and roadmap
+- Added 20 new nodes expanding the total node count to 87
+
 ## [1.2.0] - 2025-11-26
 
 ### Added - Version 1.2 Features

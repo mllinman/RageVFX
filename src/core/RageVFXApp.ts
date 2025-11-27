@@ -106,6 +106,34 @@ import { OCIOLookNode } from '../nodes/OCIOLookNode';
 import { RenderFarmNode } from '../nodes/RenderFarmNode';
 import { NetworkClientNode } from '../nodes/NetworkClientNode';
 
+// Version 2.0 - Full 3D Rendering Pipeline
+import { SceneNode } from '../nodes/SceneNode';
+import { Renderer3DNode } from '../nodes/Renderer3DNode';
+import { MaterialNode } from '../nodes/MaterialNode';
+import { EnvironmentMapNode } from '../nodes/EnvironmentMapNode';
+import { ShadowMapNode } from '../nodes/ShadowMapNode';
+
+// Version 2.0 - Volumetric Effects
+import { VolumetricFogNode } from '../nodes/VolumetricFogNode';
+import { VolumetricLightNode } from '../nodes/VolumetricLightNode';
+import { VolumeRenderNode } from '../nodes/VolumeRenderNode';
+import { CloudVolumeNode } from '../nodes/CloudVolumeNode';
+
+// Version 2.0 - Physics Simulation
+import { RigidBodyNode } from '../nodes/RigidBodyNode';
+import { SoftBodyNode } from '../nodes/SoftBodyNode';
+import { FluidSimNode } from '../nodes/FluidSimNode';
+import { ClothSimNode } from '../nodes/ClothSimNode';
+import { CollisionNode } from '../nodes/CollisionNode';
+
+// Version 2.0 - Machine Learning Powered Tools
+import { StyleTransferNode } from '../nodes/StyleTransferNode';
+import { UpscaleNode } from '../nodes/UpscaleNode';
+import { DenoiseNode } from '../nodes/DenoiseNode';
+import { ObjectDetectionNode } from '../nodes/ObjectDetectionNode';
+import { InpaintNode } from '../nodes/InpaintNode';
+import { DepthEstimationNode } from '../nodes/DepthEstimationNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -225,6 +253,34 @@ export class RageVFXApp {
     // Version 1.2 - Network rendering nodes
     this.nodeRegistry.set('RenderFarm', RenderFarmNode as any);
     this.nodeRegistry.set('NetworkClient', NetworkClientNode as any);
+    
+    // Version 2.0 - Full 3D Rendering Pipeline
+    this.nodeRegistry.set('Scene', SceneNode as any);
+    this.nodeRegistry.set('Renderer3D', Renderer3DNode as any);
+    this.nodeRegistry.set('Material', MaterialNode as any);
+    this.nodeRegistry.set('EnvironmentMap', EnvironmentMapNode as any);
+    this.nodeRegistry.set('ShadowMap', ShadowMapNode as any);
+    
+    // Version 2.0 - Volumetric Effects
+    this.nodeRegistry.set('VolumetricFog', VolumetricFogNode as any);
+    this.nodeRegistry.set('VolumetricLight', VolumetricLightNode as any);
+    this.nodeRegistry.set('VolumeRender', VolumeRenderNode as any);
+    this.nodeRegistry.set('CloudVolume', CloudVolumeNode as any);
+    
+    // Version 2.0 - Physics Simulation
+    this.nodeRegistry.set('RigidBody', RigidBodyNode as any);
+    this.nodeRegistry.set('SoftBody', SoftBodyNode as any);
+    this.nodeRegistry.set('FluidSim', FluidSimNode as any);
+    this.nodeRegistry.set('ClothSim', ClothSimNode as any);
+    this.nodeRegistry.set('Collision', CollisionNode as any);
+    
+    // Version 2.0 - Machine Learning Powered Tools
+    this.nodeRegistry.set('StyleTransfer', StyleTransferNode as any);
+    this.nodeRegistry.set('Upscale', UpscaleNode as any);
+    this.nodeRegistry.set('Denoise', DenoiseNode as any);
+    this.nodeRegistry.set('ObjectDetection', ObjectDetectionNode as any);
+    this.nodeRegistry.set('Inpaint', InpaintNode as any);
+    this.nodeRegistry.set('DepthEstimation', DepthEstimationNode as any);
   }
 
   /**
