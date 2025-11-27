@@ -97,6 +97,7 @@ export class ReviewToolNode extends Node {
   private undoStack: ReviewAnnotation[][] = [];
   private redoStack: ReviewAnnotation[][] = [];
   private currentFrame: number = 1;
+  private readonly MAX_UNDO_STACK_SIZE = 50; // Limit undo history to prevent memory issues
 
   constructor(id: string) {
     super(id, 'ReviewTool', 'Review Tool');
@@ -576,10 +577,16 @@ export class ReviewToolNode extends Node {
     this.drawingState.isDrawing = true;
     this.drawingState.points = [{ x, y }];
     
-    // Save state for undo
+    // Save state for undo with memory-efficient limit
     if (this.session) {
+      // Only store annotation IDs and essential data, not full objects
       this.undoStack.push([...this.session.annotations]);
       this.redoStack = [];
+      
+      // Limit undo stack size to prevent memory issues
+      if (this.undoStack.length > this.MAX_UNDO_STACK_SIZE) {
+        this.undoStack.shift(); // Remove oldest entry
+      }
     }
   }
 

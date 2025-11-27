@@ -37,7 +37,7 @@ export interface ModelArchitecture {
 // Layer interface
 export interface ModelLayer {
   name: string;
-  type: 'conv2d' | 'deconv2d' | 'dense' | 'dropout' | 'batchnorm' | 'relu' | 'sigmoid' | 'tanh' | 'leakyrelu' | 'maxpool' | 'upsample' | 'concat' | 'skip';
+  type: 'conv2d' | 'deconv2d' | 'dense' | 'dropout' | 'batchnorm' | 'relu' | 'sigmoid' | 'tanh' | 'leakyrelu' | 'elu' | 'swish' | 'maxpool' | 'upsample' | 'concat' | 'skip';
   config: Record<string, unknown>;
   trainable: boolean;
 }

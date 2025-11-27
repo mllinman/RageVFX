@@ -366,7 +366,7 @@ export class VersionControlNode extends Node {
     const ext = filePath.split('.').pop()?.toLowerCase() || '';
     
     return patterns.some(pattern => {
-      const cleanPattern = pattern.trim().replace('*', '');
+      const cleanPattern = pattern.trim().replace(/\*/g, '');
       return filePath.endsWith(cleanPattern) || ext === cleanPattern.replace('.', '');
     });
   }
@@ -382,9 +382,10 @@ export class VersionControlNode extends Node {
     const template = this.getParameter('commitMessageTemplate');
     const formattedMessage = template.replace('{message}', message).replace('{type}', 'commit');
     
+    const hash = this.generateHash();
     const commit: VCSCommit = {
-      hash: this.generateHash(),
-      shortHash: '',
+      hash,
+      shortHash: hash.substring(0, 7),
       author: this.config.userName,
       email: this.config.userEmail,
       date: new Date().toISOString(),
@@ -394,8 +395,6 @@ export class VersionControlNode extends Node {
       tags: [],
       branch: this.currentStatus.currentBranch
     };
-    
-    commit.shortHash = commit.hash.substring(0, 7);
     
     // Store commit
     this.commits.set(commit.hash, commit);

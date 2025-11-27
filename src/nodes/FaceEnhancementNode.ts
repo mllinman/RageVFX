@@ -334,22 +334,76 @@ export class FaceEnhancementNode extends Node {
 
   private applySkinRetouching(image: ImageData): void {
     const smoothness = this.getParameter('skinSmoothness');
+    const blemishRemoval = this.getParameter('blemishRemoval');
     
     // Simplified skin smoothing using bilateral-like filter
     const width = image.width;
     const height = image.height;
     const radius = Math.ceil(smoothness * 5);
     
-    // This is a simplified implementation
-    // Real implementation would use proper bilateral filtering
+    // Apply simplified bilateral filter for skin smoothing
+    // In production, would use proper edge-preserving smoothing
+    if (smoothness > 0) {
+      for (let y = radius; y < height - radius; y++) {
+        for (let x = radius; x < width - radius; x++) {
+          const idx = (y * width + x) * 4;
+          
+          // Compute local smoothing based on color similarity
+          let sumR = 0, sumG = 0, sumB = 0, weight = 0;
+          
+          for (let dy = -radius; dy <= radius; dy++) {
+            for (let dx = -radius; dx <= radius; dx++) {
+              const nIdx = ((y + dy) * width + (x + dx)) * 4;
+              const spatialWeight = Math.exp(-(dx * dx + dy * dy) / (2 * radius * radius));
+              
+              // Color similarity weight
+              const colorDiff = Math.abs(image.data[idx] - image.data[nIdx]) +
+                              Math.abs(image.data[idx + 1] - image.data[nIdx + 1]) +
+                              Math.abs(image.data[idx + 2] - image.data[nIdx + 2]);
+              const colorWeight = Math.exp(-colorDiff / (255 * 3 * smoothness));
+              
+              const w = spatialWeight * colorWeight;
+              sumR += image.data[nIdx] * w;
+              sumG += image.data[nIdx + 1] * w;
+              sumB += image.data[nIdx + 2] * w;
+              weight += w;
+            }
+          }
+          
+          // Apply smoothing with blend based on blemish removal strength
+          if (weight > 0) {
+            const blend = blemishRemoval * smoothness;
+            image.data[idx] = Math.round(image.data[idx] * (1 - blend) + (sumR / weight) * blend);
+            image.data[idx + 1] = Math.round(image.data[idx + 1] * (1 - blend) + (sumG / weight) * blend);
+            image.data[idx + 2] = Math.round(image.data[idx + 2] * (1 - blend) + (sumB / weight) * blend);
+          }
+        }
+      }
+    }
   }
 
   private applyEyeEnhancement(image: ImageData): void {
     const clarity = this.getParameter('eyeClarity');
     const brightening = this.getParameter('eyeBrightening');
     
-    // Simulated eye enhancement
+    // Apply subtle enhancement to the image
     // In production, would detect eye regions and enhance specifically
+    if (clarity > 0 || brightening > 0) {
+      const brightenFactor = 1 + brightening * 0.1;
+      const contrastFactor = 1 + clarity * 0.1;
+      
+      for (let i = 0; i < image.data.length; i += 4) {
+        // Apply brightening
+        image.data[i] = Math.min(255, Math.round(image.data[i] * brightenFactor));
+        image.data[i + 1] = Math.min(255, Math.round(image.data[i + 1] * brightenFactor));
+        image.data[i + 2] = Math.min(255, Math.round(image.data[i + 2] * brightenFactor));
+        
+        // Apply contrast (center around mid-gray)
+        image.data[i] = Math.min(255, Math.max(0, Math.round(128 + (image.data[i] - 128) * contrastFactor)));
+        image.data[i + 1] = Math.min(255, Math.max(0, Math.round(128 + (image.data[i + 1] - 128) * contrastFactor)));
+        image.data[i + 2] = Math.min(255, Math.max(0, Math.round(128 + (image.data[i + 2] - 128) * contrastFactor)));
+      }
+    }
   }
 
   private blendFaces(original: ImageData, enhancedPatches: { face: FaceDetection; patch: ImageData }[]): ImageData {
