@@ -4,15 +4,15 @@
 
 RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-3.0.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.1.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-105%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-110%2B-green)
 
 ## 🏆 Industry Competition
 
-RageVFX 3.0 introduces features that directly compete with industry-standard tools:
+RageVFX 3.1 introduces features that directly compete with industry-standard tools:
 
 | Feature | Nuke | Houdini | Redshift/V-Ray | RageVFX |
 |---------|------|---------|----------------|---------|
@@ -24,8 +24,21 @@ RageVFX 3.0 introduces features that directly compete with industry-standard too
 | Crowd simulation | - | ✅ | - | ✅ 3.0 |
 | Path tracing | - | ✅ | ✅ | ✅ 3.0 |
 | Light mixing | - | - | ✅ | ✅ 3.0 |
-| Physics simulation | - | ✅ | - | ✅ |
+| **Built-in Physics Engine** | - | ✅ | - | ✅ 3.1 |
 | ML-powered tools | ✅ | - | - | ✅ |
+
+## 🆕 What's New in Version 3.1
+
+### Built-in Physics Engine
+RageVFX 3.1 introduces a comprehensive physics engine with easy-to-use controls:
+
+- **Static/Dynamic Toggle**: Any object can switch between static and dynamic states
+- **Real-World Forces**: Gravity, wind, inertia, momentum with slider controls
+- **Volumetrics**: Buoyancy simulation in fluid environments
+- **Boundaries**: World bounds and custom collision boundaries
+- **Constraints**: Fixed, hinge, slider, ball, distance, and spring joints
+- **Parenting**: Hierarchical object relationships with velocity inheritance
+- **Easy Controls**: 70+ sliders and checkboxes for intuitive physics tuning
 
 ## 🚀 Try It Now
 
@@ -127,6 +140,28 @@ Download the Windows installer or portable version from the [Releases](https://g
 - **Fluid Sim**: SPH-based fluid dynamics simulation
 - **Cloth Sim**: Realistic cloth and fabric simulation with wind forces
 - **Collision**: Advanced collision detection (AABB, sphere, box)
+
+#### Built-in Physics Engine (v3.1) 🆕
+- **Physics Engine**: Unified physics simulation engine
+  - Static/Dynamic object toggle - any object can be static or dynamic
+  - Dynamic objects interact with and bounce off static objects
+  - Static objects don't react to physics unless made dynamic
+  - 70+ slider and checkbox controls for intuitive physics tuning
+- **Physics World**: Global physics world management
+  - World-wide physics settings and solver configuration
+  - Debug visualization for collision shapes, velocities, forces
+  - Performance tuning with sleep detection and optimization
+- **Real-World Forces**:
+  - Gravity: XYZ configurable with strength multiplier
+  - Wind: Direction, strength, turbulence, frequency controls
+  - Inertia: Object resistance to motion
+  - Momentum: Conservation of momentum in collisions
+  - Drag: Air resistance and angular damping
+- **Volumetrics**: Buoyancy simulation with configurable fluid density
+- **Boundaries**: World bounds, plane, box, sphere, cylinder colliders
+- **Constraints**: Fixed, hinge, slider, ball, distance, spring joints
+- **Parenting**: Hierarchical object relationships with velocity inheritance
+- **Sleep System**: Automatic sleep detection for performance optimization
 
 #### Machine Learning Powered Tools (v2.0)
 - **Style Transfer**: Neural style transfer for artistic effects

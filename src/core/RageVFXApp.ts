@@ -180,6 +180,10 @@ import { CrowdSimNode } from '../nodes/CrowdSimNode';
 import { PathTracerNode } from '../nodes/PathTracerNode';
 import { LightMixerNode } from '../nodes/LightMixerNode';
 
+// Version 3.1 - Advanced Physics Engine
+import { PhysicsEngineNode } from '../nodes/PhysicsEngineNode';
+import { PhysicsWorldNode } from '../nodes/PhysicsWorldNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -373,6 +377,10 @@ export class RageVFXApp {
     // Version 3.0 - Redshift/V-Ray-Rivaling Rendering nodes
     this.nodeRegistry.set('PathTracer', PathTracerNode as any);
     this.nodeRegistry.set('LightMixer', LightMixerNode as any);
+    
+    // Version 3.1 - Advanced Physics Engine
+    this.nodeRegistry.set('PhysicsEngine', PhysicsEngineNode as any);
+    this.nodeRegistry.set('PhysicsWorld', PhysicsWorldNode as any);
   }
 
   /**
