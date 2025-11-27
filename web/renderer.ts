@@ -2481,10 +2481,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize timeline manager
     const timelineManager = new TimelineManager();
     
-    // Expose for debugging
-    (window as unknown as Record<string, unknown>).graphUI = graphUI;
-    (window as unknown as Record<string, unknown>).viewportManager = viewportManager;
-    (window as unknown as Record<string, unknown>).timelineManager = timelineManager;
+    // Expose for debugging via single namespace object
+    const RageVFXDebug = {
+      graphUI,
+      viewportManager,
+      timelineManager
+    };
+    (window as unknown as Record<string, unknown>).RageVFXDebug = RageVFXDebug;
     
     console.log('RageVFX Web initialized successfully!');
     console.log('- Node Graph Editor');

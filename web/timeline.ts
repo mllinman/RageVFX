@@ -421,12 +421,16 @@ export class Timeline {
         this.deleteSelectedKeyframes();
         break;
       case 'i':
-        e.preventDefault();
-        this.setInPoint(this.state.currentFrame);
+        if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+          e.preventDefault();
+          this.setInPoint(this.state.currentFrame);
+        }
         break;
       case 'o':
-        e.preventDefault();
-        this.setOutPoint(this.state.currentFrame);
+        if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+          e.preventDefault();
+          this.setOutPoint(this.state.currentFrame);
+        }
         break;
       case 'a':
         if (e.ctrlKey || e.metaKey) {
@@ -650,7 +654,7 @@ export class Timeline {
   // Track management
   addTrack(nodeId: string, propertyPath: string, name: string): Track {
     const track: Track = {
-      id: `track_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `track_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
       name,
       propertyPath,
       nodeId,
@@ -691,7 +695,7 @@ export class Timeline {
     }
     
     const keyframe: Keyframe = {
-      id: `kf_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `kf_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
       frame,
       value,
       easing: EasingType.EASE_IN_OUT,

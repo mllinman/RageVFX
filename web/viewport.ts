@@ -70,6 +70,9 @@ export class Viewport {
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
+    if (!this.ctx) {
+      console.warn('Failed to create 2D context for viewport canvas');
+    }
     this.resize();
     this.setupEventListeners();
   }
@@ -440,6 +443,7 @@ export class CameraControls {
   private isDragging: boolean = false;
   private lastMousePos: { x: number; y: number } = { x: 0, y: 0 };
   private spherical: THREE.Spherical = new THREE.Spherical();
+  private savedMode: CameraMode | null = null; // For restoring mode after mouse button override
   
   // Control speeds
   private panSpeed: number = 0.01;
@@ -481,14 +485,17 @@ export class CameraControls {
     this.isDragging = true;
     this.lastMousePos = { x: e.clientX, y: e.clientY };
     
-    // Auto-detect mode based on mouse button
+    // Auto-detect mode based on mouse button, preserving original mode
     if (e.button === 0) {
-      // Left click - current mode
+      // Left click - use current mode (no change needed)
+      this.savedMode = null;
     } else if (e.button === 1) {
-      // Middle click - pan
+      // Middle click - temporarily switch to pan
+      this.savedMode = this.mode;
       this.mode = CameraMode.PAN;
     } else if (e.button === 2) {
-      // Right click - rotate
+      // Right click - temporarily switch to rotate
+      this.savedMode = this.mode;
       this.mode = CameraMode.ROTATE;
     }
   }
@@ -528,6 +535,11 @@ export class CameraControls {
 
   private onMouseUp(): void {
     this.isDragging = false;
+    // Restore the original mode if it was temporarily changed
+    if (this.savedMode !== null) {
+      this.mode = this.savedMode;
+      this.savedMode = null;
+    }
   }
 
   private onWheel(e: WheelEvent): void {
