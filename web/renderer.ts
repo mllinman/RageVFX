@@ -1553,34 +1553,34 @@ class NodeGraphUI {
       </div>
       <div class="property-group">
         <h4>🔌 Sockets</h4>
-        <div style="margin-bottom: 8px;">
+        <div class="socket-list">
           <strong>Inputs (${node.inputs.length}):</strong>
           ${node.inputs.map((inp, i) => `
-            <div class="property-row" style="font-size: 12px;">
-              <span>• ${inp.name} <span style="color: #888;">(${inp.dataType})</span></span>
-              <button class="remove-socket-btn" data-type="input" data-index="${i}" style="background: #f44336; border: none; color: white; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 10px;">✕</button>
+            <div class="property-row socket-row">
+              <span>• ${inp.name} <span class="socket-type">(${inp.dataType})</span></span>
+              <button class="remove-socket-btn" data-type="input" data-index="${i}">✕</button>
             </div>
           `).join('')}
         </div>
-        <div style="margin-bottom: 8px;">
+        <div class="socket-list">
           <strong>Outputs (${node.outputs.length}):</strong>
           ${node.outputs.map((out, i) => `
-            <div class="property-row" style="font-size: 12px;">
-              <span>• ${out.name} <span style="color: #888;">(${out.dataType})</span></span>
-              <button class="remove-socket-btn" data-type="output" data-index="${i}" style="background: #f44336; border: none; color: white; padding: 2px 6px; border-radius: 3px; cursor: pointer; font-size: 10px;">✕</button>
+            <div class="property-row socket-row">
+              <span>• ${out.name} <span class="socket-type">(${out.dataType})</span></span>
+              <button class="remove-socket-btn" data-type="output" data-index="${i}">✕</button>
             </div>
           `).join('')}
         </div>
-        <div style="display: flex; gap: 8px; margin-top: 8px;">
-          <button id="add-input-btn" class="tool-btn" style="flex: 1; font-size: 11px; padding: 4px;">+ Input</button>
-          <button id="add-output-btn" class="tool-btn" style="flex: 1; font-size: 11px; padding: 4px;">+ Output</button>
+        <div class="socket-actions">
+          <button id="add-input-btn" class="tool-btn">+ Input</button>
+          <button id="add-output-btn" class="tool-btn">+ Output</button>
         </div>
       </div>
       <div class="property-group">
         <h4>🎨 Appearance</h4>
         <div class="property-row">
           <label>Connection Style:</label>
-          <select id="connection-style" style="background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); padding: 4px; border-radius: 4px;">
+          <select id="connection-style" class="property-select">
             <option value="bezier" ${this.connectionStyle === 'bezier' ? 'selected' : ''}>Bezier</option>
             <option value="linear" ${this.connectionStyle === 'linear' ? 'selected' : ''}>Linear</option>
             <option value="step" ${this.connectionStyle === 'step' ? 'selected' : ''}>Step</option>
