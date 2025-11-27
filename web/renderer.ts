@@ -3,7 +3,54 @@
  * Modern browser-based node graph visualization and interaction
  */
 
-import { initializeApp, getApp, RageVFXApp } from './app';
+import { initializeApp, RageVFXApp } from './app';
+
+// Polyfill for roundRect if not available
+if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(
+    x: number, 
+    y: number, 
+    width: number, 
+    height: number, 
+    radii?: number | number[]
+  ): CanvasRenderingContext2D {
+    let r: number[];
+    if (typeof radii === 'undefined') {
+      r = [0, 0, 0, 0];
+    } else if (typeof radii === 'number') {
+      r = [radii, radii, radii, radii];
+    } else if (Array.isArray(radii)) {
+      if (radii.length === 1) {
+        r = [radii[0], radii[0], radii[0], radii[0]];
+      } else if (radii.length === 2) {
+        r = [radii[0], radii[1], radii[0], radii[1]];
+      } else if (radii.length === 3) {
+        r = [radii[0], radii[1], radii[2], radii[1]];
+      } else {
+        r = [radii[0], radii[1], radii[2], radii[3]];
+      }
+    } else {
+      r = [0, 0, 0, 0];
+    }
+    
+    // Clamp radii to half of the smallest dimension
+    const maxRadius = Math.min(width / 2, height / 2);
+    r = r.map(radius => Math.min(radius, maxRadius));
+    
+    this.moveTo(x + r[0], y);
+    this.lineTo(x + width - r[1], y);
+    this.arcTo(x + width, y, x + width, y + r[1], r[1]);
+    this.lineTo(x + width, y + height - r[2]);
+    this.arcTo(x + width, y + height, x + width - r[2], y + height, r[2]);
+    this.lineTo(x + r[3], y + height);
+    this.arcTo(x, y + height, x, y + height - r[3], r[3]);
+    this.lineTo(x, y + r[0]);
+    this.arcTo(x, y, x + r[0], y, r[0]);
+    this.closePath();
+    
+    return this;
+  };
+}
 
 interface UINode {
   id: string;
