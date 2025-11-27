@@ -186,7 +186,6 @@ export class ObjectDetectionNode extends Node {
         
         for (let y = by + 1; y < by + blockSize - 1; y += 2) {
           for (let x = bx + 1; x < bx + blockSize - 1; x += 2) {
-            // Calculate index positions for edge detection
             const iL = ((y) * width + (x - 1)) * 4;
             const iR = ((y) * width + (x + 1)) * 4;
             const iT = ((y - 1) * width + x) * 4;
