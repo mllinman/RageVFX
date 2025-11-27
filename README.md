@@ -6,7 +6,24 @@ RageVFX is a next-generation visual effects software that combines the power of 
 
 ![RageVFX](https://img.shields.io/badge/version-2.0.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
+
+## 🚀 Try It Now
+
+### Web Version (No Installation Required)
+Try RageVFX directly in your browser - no download, no installation, just start creating!
+
+```bash
+# Clone and run the web version locally
+git clone https://github.com/mllinman/RageVFX.git
+cd RageVFX
+npm install
+npm run dev:web
+```
+
+### Desktop Version
+Download the Windows installer or portable version from the [Releases](https://github.com/mllinman/RageVFX/releases) page.
 
 ## Features
 
@@ -118,7 +135,7 @@ RageVFX is a next-generation visual effects software that combines the power of 
 - Node.js 18.0.0 or higher
 - npm or yarn package manager
 
-### Quick Start
+### Quick Start (Development)
 
 1. **Clone the repository**
    ```bash
@@ -140,6 +157,71 @@ RageVFX is a next-generation visual effects software that combines the power of 
    ```bash
    npm start
    ```
+
+### 🌐 Web Version (No Installation Required)
+
+Try RageVFX directly in your browser without any installation:
+
+1. **Development server**
+   ```bash
+   npm run dev:web
+   ```
+   Opens at http://localhost:3000
+
+2. **Build for production**
+   ```bash
+   npm run build:web
+   ```
+   Creates optimized files in `dist-web/`
+
+3. **Preview production build**
+   ```bash
+   npm run preview:web
+   ```
+
+### 💿 Windows Installation
+
+Download and install RageVFX on Windows:
+
+#### Option 1: Installer (Recommended)
+1. Download the latest `.exe` installer from [Releases](https://github.com/mllinman/RageVFX/releases)
+2. Run the installer and follow the prompts
+3. Launch RageVFX from the Start Menu or Desktop shortcut
+
+#### Option 2: Portable Version
+1. Download the portable `.exe` from [Releases](https://github.com/mllinman/RageVFX/releases)
+2. Run directly - no installation required
+
+#### Building Windows Installer from Source
+```bash
+# Install dependencies
+npm install
+
+# Build Windows installer (NSIS + Portable)
+npm run dist:win
+```
+Output files will be in the `release/` directory.
+
+### 🍎 macOS Installation
+
+```bash
+# Build macOS installer
+npm run dist:mac
+```
+
+### 🐧 Linux Installation
+
+```bash
+# Build Linux packages (AppImage, deb, rpm)
+npm run dist:linux
+```
+
+### Building for All Platforms
+
+```bash
+# Build for Windows, macOS, and Linux
+npm run dist:all
+```
 
 ## Usage
 

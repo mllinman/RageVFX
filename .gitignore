@@ -1,5 +1,7 @@
 node_modules/
 dist/
+dist-web/
+release/
 *.log
 .DS_Store
 .env
@@ -10,3 +12,8 @@ coverage/
 *.swp
 *.swo
 *~
+
+# Build artifacts
+*.ico
+*.icns
+build/icons/

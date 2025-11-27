@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RageVFX Web - Professional Node-Based Visual Effects Software. Create stunning VFX directly in your browser.">
+  <meta name="keywords" content="vfx, visual effects, compositing, node-based, 3d, gpu-accelerated, web">
+  <meta name="theme-color" content="#ff6b35">
+  <title>RageVFX Web - Professional Visual Effects</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Top Menu Bar -->
+    <header class="menu-bar">
+      <div class="menu-section">
+        <div class="dropdown">
+          <button class="menu-btn" id="file-menu-btn">File</button>
+          <div class="dropdown-content" id="file-dropdown">
+            <a href="#" id="new-project">New Project</a>
+            <a href="#" id="open-project">Open Project...</a>
+            <a href="#" id="save-project">Save Project</a>
+            <a href="#" id="export-output">Export Output...</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" id="import-image">Import Image...</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="menu-btn" id="edit-menu-btn">Edit</button>
+          <div class="dropdown-content" id="edit-dropdown">
+            <a href="#" id="undo">Undo <span class="shortcut">Ctrl+Z</span></a>
+            <a href="#" id="redo">Redo <span class="shortcut">Ctrl+Y</span></a>
+            <div class="dropdown-divider"></div>
+            <a href="#" id="select-all">Select All <span class="shortcut">Ctrl+A</span></a>
+            <a href="#" id="delete-selected">Delete Selected <span class="shortcut">Del</span></a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="menu-btn" id="node-menu-btn">Node</button>
+          <div class="dropdown-content" id="node-dropdown">
+            <a href="#" id="add-node">Add Node...</a>
+            <a href="#" id="duplicate-node">Duplicate <span class="shortcut">Ctrl+D</span></a>
+            <a href="#" id="disable-node">Disable Node</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="menu-btn" id="view-menu-btn">View</button>
+          <div class="dropdown-content" id="view-dropdown">
+            <a href="#" id="zoom-in">Zoom In <span class="shortcut">Ctrl++</span></a>
+            <a href="#" id="zoom-out">Zoom Out <span class="shortcut">Ctrl+-</span></a>
+            <a href="#" id="fit-to-window">Fit to Window <span class="shortcut">F</span></a>
+            <div class="dropdown-divider"></div>
+            <a href="#" id="toggle-grid">Toggle Grid</a>
+            <a href="#" id="toggle-minimap">Toggle Minimap</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="menu-btn" id="help-menu-btn">Help</button>
+          <div class="dropdown-content" id="help-dropdown">
+            <a href="#" id="keyboard-shortcuts">Keyboard Shortcuts</a>
+            <a href="https://github.com/mllinman/RageVFX" target="_blank">Documentation</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" id="about">About RageVFX</a>
+          </div>
+        </div>
+      </div>
+      <div class="app-title">
+        <h1>🎬 RageVFX <span class="web-badge">WEB</span></h1>
+        <span class="subtitle">Professional Visual Effects Software</span>
+      </div>
+      <div class="menu-section right">
+        <button class="icon-btn" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</button>
+        <button class="icon-btn" id="fullscreen-btn" title="Fullscreen">⛶</button>
+        <button class="icon-btn" id="settings-btn" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <!-- Left Sidebar - Node Library -->
+      <aside class="sidebar left" id="left-sidebar">
+        <div class="sidebar-header">
+          <h3>📚 Node Library</h3>
+          <input type="text" class="search-box" id="node-search" placeholder="Search nodes...">
+        </div>
+        <div class="node-categories" id="node-categories">
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Input/Output
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="ImageInput">
+                📷 Image Input
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Output">
+                🎬 Output
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Generator
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="Noise">
+                🌊 Noise
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Gradient">
+                🌈 Gradient
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> VFX Effects
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="Fire">
+                🔥 Fire
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Water">
+                💧 Water
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Rain">
+                🌧️ Rain
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Snow">
+                ❄️ Snow
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Smoke">
+                💨 Smoke
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Clouds">
+                ☁️ Clouds
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Explosion">
+                💥 Explosion
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Tornado">
+                🌪️ Tornado
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Fog">
+                🌫️ Fog
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Lightning">
+                ⚡ Lightning
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Spark">
+                ✨ Spark
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Dissolve">
+                🔀 Dissolve
+              </div>
+              <div class="node-item" draggable="true" data-node-type="LensFlare">
+                ☀️ Lens Flare
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Color
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="ColorCorrect">
+                🎨 Color Correct
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Grade">
+                🎭 Grade
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Curves">
+                📈 Curves
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Levels">
+                📊 Levels
+              </div>
+              <div class="node-item" draggable="true" data-node-type="HSL">
+                🌡️ HSL
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Filter
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="Blur">
+                🌫️ Blur
+              </div>
+              <div class="node-item" draggable="true" data-node-type="EdgeDetect">
+                📐 Edge Detect
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Sharpen">
+                🔪 Sharpen
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Glow">
+                ✨ Glow
+              </div>
+              <div class="node-item" draggable="true" data-node-type="MotionBlur">
+                💨 Motion Blur
+              </div>
+              <div class="node-item" draggable="true" data-node-type="DepthOfField">
+                📷 Depth of Field
+              </div>
+              <div class="node-item" draggable="true" data-node-type="ChromaticAberration">
+                🌈 Chromatic Aberration
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Vignette">
+                ⬛ Vignette
+              </div>
+              <div class="node-item" draggable="true" data-node-type="FilmGrain">
+                🎞️ Film Grain
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Composite
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="Merge">
+                🔗 Merge
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Screen">
+                📺 Screen
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Overlay">
+                📋 Overlay
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Transform
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="Transform">
+                ↔️ Transform 2D
+              </div>
+              <div class="node-item" draggable="true" data-node-type="CornerPin">
+                📌 Corner Pin
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Keying
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="ChromaKey">
+                🔑 Chroma Key
+              </div>
+              <div class="node-item" draggable="true" data-node-type="LuminanceKey">
+                💡 Luminance Key
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Difference">
+                ➖ Difference Key
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Tracker
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="PointTracker">
+                🎯 Point Tracker
+              </div>
+              <div class="node-item" draggable="true" data-node-type="PlanarTracker">
+                📐 Planar Tracker
+              </div>
+              <div class="node-item" draggable="true" data-node-type="CornerDetector">
+                🔍 Corner Detector
+              </div>
+              <div class="node-item" draggable="true" data-node-type="OpticalFlow">
+                🌊 Optical Flow
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Stabilizer">
+                📹 Stabilizer
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> 3D Pipeline
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="Scene">
+                🎬 Scene
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Renderer3D">
+                🖥️ Renderer 3D
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Geometry3D">
+                🔷 Geometry 3D
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Mesh">
+                🔶 Mesh
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Material">
+                🎨 Material
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Camera">
+                📹 Camera
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Light">
+                💡 Light
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Volumetric
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="VolumetricFog">
+                🌫️ Volumetric Fog
+              </div>
+              <div class="node-item" draggable="true" data-node-type="VolumetricLight">
+                💡 Volumetric Light
+              </div>
+              <div class="node-item" draggable="true" data-node-type="VolumeRender">
+                📦 Volume Render
+              </div>
+              <div class="node-item" draggable="true" data-node-type="CloudVolume">
+                ☁️ Cloud Volume
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Physics
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="RigidBody">
+                🧱 Rigid Body
+              </div>
+              <div class="node-item" draggable="true" data-node-type="SoftBody">
+                🔮 Soft Body
+              </div>
+              <div class="node-item" draggable="true" data-node-type="FluidSim">
+                💧 Fluid Sim
+              </div>
+              <div class="node-item" draggable="true" data-node-type="ClothSim">
+                🧵 Cloth Sim
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Collision">
+                💥 Collision
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> ML Tools
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="StyleTransfer">
+                🎨 Style Transfer
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Upscale">
+                🔍 Upscale
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Denoise">
+                ✨ Denoise
+              </div>
+              <div class="node-item" draggable="true" data-node-type="ObjectDetection">
+                🔲 Object Detection
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Inpaint">
+                🖌️ Inpaint
+              </div>
+              <div class="node-item" draggable="true" data-node-type="DepthEstimation">
+                📏 Depth Estimation
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Utility
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="Time">
+                ⏱️ Time
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Math">
+                🔢 Math
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Switch">
+                🔀 Switch
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Dot">
+                ⚫ Dot
+              </div>
+              <div class="node-item" draggable="true" data-node-type="FrameHold">
+                ⏸️ Frame Hold
+              </div>
+              <div class="node-item" draggable="true" data-node-type="TimeOffset">
+                ⏰ Time Offset
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-resize-handle" id="left-resize-handle"></div>
+      </aside>
+
+      <!-- Center - Node Graph Editor -->
+      <main class="node-editor">
+        <div class="editor-toolbar">
+          <button class="tool-btn primary" id="execute-btn" title="Execute Graph (Ctrl+Enter)">▶️ Execute</button>
+          <button class="tool-btn" id="clear-btn" title="Clear All Nodes">🗑️ Clear</button>
+          <span class="separator">|</span>
+          <button class="tool-btn" id="zoom-in-btn" title="Zoom In">🔍+</button>
+          <button class="tool-btn" id="zoom-out-btn" title="Zoom Out">🔍-</button>
+          <button class="tool-btn" id="fit-btn" title="Fit to Window (F)">⊡ Fit</button>
+          <span class="separator">|</span>
+          <button class="tool-btn" id="snap-btn" title="Toggle Grid Snap">📐 Snap</button>
+          <button class="tool-btn" id="minimap-btn" title="Toggle Minimap">🗺️ Minimap</button>
+          <div class="zoom-indicator" id="zoom-indicator">100%</div>
+        </div>
+        <div class="canvas-container">
+          <canvas id="node-canvas" class="node-canvas"></canvas>
+          <div id="minimap" class="minimap hidden">
+            <canvas id="minimap-canvas"></canvas>
+          </div>
+        </div>
+        <div class="status-bar">
+          <span id="status-text">Ready - Drag nodes from the library to start</span>
+          <span class="status-right">
+            <span id="node-count">Nodes: 0</span>
+            <span class="separator">|</span>
+            <span id="connection-count">Connections: 0</span>
+            <span class="separator">|</span>
+            <span id="performance-indicator">FPS: --</span>
+          </span>
+        </div>
+      </main>
+
+      <!-- Right Sidebar - Properties & Preview -->
+      <aside class="sidebar right" id="right-sidebar">
+        <div class="sidebar-resize-handle" id="right-resize-handle"></div>
+        <div class="panel">
+          <div class="panel-header">
+            <h3>🔧 Node Properties</h3>
+          </div>
+          <div class="panel-content" id="properties-panel">
+            <p class="empty-message">Select a node to view and edit its properties</p>
+          </div>
+        </div>
+        <div class="panel viewport-panel">
+          <div class="panel-header">
+            <h3>👁️ Viewport</h3>
+            <div class="panel-controls">
+              <button class="icon-btn" id="refresh-preview" title="Refresh">🔄</button>
+              <button class="icon-btn" id="maximize-preview" title="Maximize">⛶</button>
+            </div>
+          </div>
+          <div class="panel-content viewport">
+            <canvas id="preview-canvas" class="preview-canvas"></canvas>
+            <div class="viewport-overlay" id="viewport-overlay">
+              <span>No output to display</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div id="modal-container" class="modal-container">
+      <!-- Modal content will be inserted here -->
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Loading spinner -->
+  <div id="loading-spinner" class="loading-spinner hidden">
+    <div class="spinner"></div>
+    <span>Loading...</span>
+  </div>
+
+  <!-- Context menu -->
+  <div id="context-menu" class="context-menu hidden">
+    <div class="context-menu-item" data-action="duplicate">Duplicate Node</div>
+    <div class="context-menu-item" data-action="delete">Delete Node</div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" data-action="disconnect">Disconnect All</div>
+    <div class="context-menu-item" data-action="disable">Disable/Enable</div>
+  </div>
+
+  <script type="module" src="renderer.ts"></script>
+</body>
+</html>
