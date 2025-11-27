@@ -184,6 +184,20 @@ import { LightMixerNode } from '../nodes/LightMixerNode';
 import { PhysicsEngineNode } from '../nodes/PhysicsEngineNode';
 import { PhysicsWorldNode } from '../nodes/PhysicsWorldNode';
 
+// Version 3.1 - Pipeline & Collaboration
+import { USDNode } from '../nodes/USDNode';
+import { AlembicNode } from '../nodes/AlembicNode';
+import { PipelineManagerNode } from '../nodes/PipelineManagerNode';
+import { ReviewToolNode } from '../nodes/ReviewToolNode';
+import { VersionControlNode } from '../nodes/VersionControlNode';
+
+// Version 3.1 - Extended Machine Learning
+import { NeuralNetTrainerNode } from '../nodes/NeuralNetTrainerNode';
+import { SegmentAnythingNode } from '../nodes/SegmentAnythingNode';
+import { BackgroundRemovalNode } from '../nodes/BackgroundRemovalNode';
+import { FaceEnhancementNode } from '../nodes/FaceEnhancementNode';
+import { MotionPredictionNode } from '../nodes/MotionPredictionNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -381,6 +395,20 @@ export class RageVFXApp {
     // Version 3.1 - Advanced Physics Engine
     this.nodeRegistry.set('PhysicsEngine', PhysicsEngineNode as any);
     this.nodeRegistry.set('PhysicsWorld', PhysicsWorldNode as any);
+    
+    // Version 3.1 - Pipeline & Collaboration
+    this.nodeRegistry.set('USD', USDNode as any);
+    this.nodeRegistry.set('Alembic', AlembicNode as any);
+    this.nodeRegistry.set('PipelineManager', PipelineManagerNode as any);
+    this.nodeRegistry.set('ReviewTool', ReviewToolNode as any);
+    this.nodeRegistry.set('VersionControl', VersionControlNode as any);
+    
+    // Version 3.1 - Extended Machine Learning
+    this.nodeRegistry.set('NeuralNetTrainer', NeuralNetTrainerNode as any);
+    this.nodeRegistry.set('SegmentAnything', SegmentAnythingNode as any);
+    this.nodeRegistry.set('BackgroundRemoval', BackgroundRemovalNode as any);
+    this.nodeRegistry.set('FaceEnhancement', FaceEnhancementNode as any);
+    this.nodeRegistry.set('MotionPrediction', MotionPredictionNode as any);
   }
 
   /**

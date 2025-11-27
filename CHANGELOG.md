@@ -4,85 +4,112 @@ All notable changes to RageVFX will be documented in this file.
 
 ## [3.1.0] - 2025-11-27
 
-### Added - Version 3.1 Advanced Physics Engine Release
+### Added - Version 3.1 Complete Feature Release
 
-RageVFX 3.1 introduces a comprehensive built-in physics engine for handling static and dynamic objects with real-world forces and easy-to-use controls.
+RageVFX 3.1 introduces a comprehensive suite of professional features including advanced physics engine, pipeline collaboration tools, and extended machine learning capabilities.
 
-#### Built-in Physics Engine (2 new nodes)
+#### Built-in Physics Engine (2 nodes)
 - **PhysicsEngineNode**: Complete physics simulation engine
   - Static/Dynamic object toggle - any object can switch between static and dynamic
   - Dynamic objects interact, bounce off, and are affected by static objects
   - Static objects do not react to physics unless made dynamic
-  - Easy-to-use sliders and checkboxes for all controls
+  - 70+ slider/checkbox controls for intuitive control
 
 - **PhysicsWorldNode**: Global physics world management
   - World-wide physics settings
   - Global gravity, time scale, and solver controls
   - Debug visualization options
-  - Performance tuning parameters
 
-#### Real-World Forces
-- **Gravity**: Configurable XYZ gravity with multiplier slider (0-5x)
-- **Wind**: Directional wind with:
-  - Wind direction (X, Y, Z sliders)
-  - Wind strength slider (0-50)
-  - Turbulence slider (0-1)
-  - Frequency slider (0.1-10)
-  - Enable/disable checkbox
-- **Inertia**: Object inertia with enable/disable checkbox
-- **Momentum**: Conservation of momentum in collisions with enable/disable checkbox
-- **Drag**: Air resistance with linear damping slider (0-1)
-- **Angular Drag**: Rotational resistance with angular damping slider (0-1)
+#### Pipeline & Collaboration (5 new nodes)
+- **USDNode**: Universal Scene Description import/export
+  - USD file import/export (usda, usdc, usdz)
+  - Stage and layer management
+  - Layer composition and references
+  - Variant sets support
+  - Time sampling for animation
+  - Asset resolution
 
-#### Volumetrics & Buoyancy
-- Volumetric object properties
-- Buoyancy simulation with enable/disable checkbox
-- Fluid density slider (0-2000 kg/m³)
-- Automatic volume calculation
+- **AlembicNode**: Alembic geometry caching
+  - Alembic file import/export
+  - Geometry caching with streaming
+  - Camera and transform support
+  - Point cloud and curve support
+  - Archive compression
 
-#### Boundaries
-- World bounds with enable/disable checkbox
-- Configurable min/max bounds for X, Y, Z axes
-- Custom boundary shapes: plane, box, sphere, cylinder
-- Boundary friction and restitution sliders
-- Per-boundary enable/disable
+- **PipelineManagerNode**: Shot/asset management
+  - Shot management with versioning
+  - Asset tracking and linking
+  - Task management and status
+  - Publish/subscribe workflow
+  - Path templates for work/publish files
+  - Integration ready for ShotGrid, ftrack, Kitsu
 
-#### Constraints
-- Constraint system with enable/disable checkbox
-- Constraint types:
-  - Fixed: Lock objects together
-  - Hinge: Rotational joint around axis
-  - Slider: Linear movement along axis
-  - Ball: Free rotation around point
-  - Distance: Maintain fixed distance
-  - Spring: Elastic connection with stiffness/damping sliders
-- Constraint limits (min/max)
-- Constraint iteration slider (1-16)
+- **ReviewToolNode**: Built-in review and annotation
+  - Frame-accurate annotation tools
+  - Drawing tools (brush, line, shape, text)
+  - Version comparison (A/B, wipe, onion skin)
+  - Review status and approval workflow
+  - Comment threading
+  - Export annotations (JSON, PDF, HTML)
 
-#### Parenting System
-- Object parenting with enable/disable checkbox
-- Velocity inheritance with checkbox
-- Hierarchical transform propagation
-- Child object following
+- **VersionControlNode**: Git-based version control
+  - Full git integration
+  - Branch management
+  - Commit history and diff
+  - LFS support for large files
+  - Remote sync (push/pull/fetch)
 
-#### Sleep & Performance
-- Sleep detection with enable/disable checkbox
-- Sleep threshold slider (0.001-0.1)
-- Sleep time threshold slider (0.1-2.0)
-- Automatic wake on collision or force
+#### Extended Machine Learning (5 new nodes)
+- **NeuralNetTrainerNode**: Train custom neural networks (CopyCat-like)
+  - Multiple architectures (UNet, ResNet, Autoencoder)
+  - Data augmentation
+  - Training visualization with loss graphs
+  - Transfer learning support
+  - Model export (ONNX, TensorFlow, PyTorch)
+  - Hyperparameter tuning
 
-#### Easy-to-Use Controls
-All physics settings are exposed as sliders and checkboxes for intuitive control:
-- 30+ checkbox controls for feature toggling
-- 40+ slider controls for precise tuning
-- Grouped parameters for organized UI
+- **SegmentAnythingNode**: AI-powered instant segmentation
+  - Point-based prompting
+  - Box-based prompting
+  - Automatic mask generation
+  - Multi-mask output
+  - Real-time preview
+  - Mask refinement
+
+- **BackgroundRemovalNode**: One-click background removal
+  - Multiple removal algorithms (rembg, u2net, modnet)
+  - Edge refinement with defringing
+  - Alpha matte generation
+  - Background replacement
+  - Temporal stability for video
+
+- **FaceEnhancementNode**: AI face restoration
+  - Face detection and alignment
+  - Super resolution for faces
+  - Skin retouching
+  - Eye and teeth enhancement
+  - Age modification
+  - Expression transfer
+  - Makeup application
+
+- **MotionPredictionNode**: AI motion prediction
+  - Frame interpolation (RIFE, FILM, IFRNet)
+  - Slow motion generation (2x-16x)
+  - Motion prediction
+  - Optical flow estimation
+  - Occlusion handling
+  - Temporal consistency
+
+#### Core Improvements
+- Added MASK and ANIMATION data types for better node communication
+- Updated DataType enum with AUDIO type for future audio support
+- Total node count now exceeds 120 nodes
+- Enhanced node category organization
 
 ### Changed
 - Version bump from 3.0.0 to 3.1.0
-- Updated package description to include physics engine
-- Expanded node registry with 2 new physics nodes
-- Total node count now exceeds 110 nodes
-- Updated ROADMAP.md with 5 new future versions (3.2-3.6)
+- Updated package description with pipeline and ML features
+- Expanded node registry with 12 new nodes
 
 ## [3.0.0] - 2025-11-27
 

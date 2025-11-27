@@ -5,6 +5,7 @@
 
 export enum DataType {
   IMAGE = 'image',
+  MASK = 'mask',
   GEOMETRY = 'geometry',
   GEOMETRY_3D = 'geometry_3d',
   VECTOR = 'vector',
@@ -13,6 +14,8 @@ export enum DataType {
   MATRIX = 'matrix',
   PARTICLES = 'particles',
   SCRIPT = 'script',
+  ANIMATION = 'animation',
+  AUDIO = 'audio',
   ANY = 'any'
 }
 
