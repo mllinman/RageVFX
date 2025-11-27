@@ -2482,12 +2482,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const timelineManager = new TimelineManager();
     
     // Expose for debugging via single namespace object
-    const RageVFXDebug = {
+    interface RageVFXDebugInterface {
+      graphUI: NodeGraphUI;
+      viewportManager: ViewportManager;
+      timelineManager: TimelineManager;
+    }
+    
+    const RageVFXDebug: RageVFXDebugInterface = {
       graphUI,
       viewportManager,
       timelineManager
     };
-    (window as unknown as Record<string, unknown>).RageVFXDebug = RageVFXDebug;
+    
+    // Extend window interface for debug access
+    (window as Window & { RageVFXDebug?: RageVFXDebugInterface }).RageVFXDebug = RageVFXDebug;
     
     console.log('RageVFX Web initialized successfully!');
     console.log('- Node Graph Editor');
