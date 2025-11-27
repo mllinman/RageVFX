@@ -1732,3 +1732,8 @@ body {
 .settings-sidebar::-webkit-scrollbar-thumb:hover {
   background: var(--border-light);
 }
+
+/* Wide input fields for settings */
+.input-wide {
+  width: 200px;
+}

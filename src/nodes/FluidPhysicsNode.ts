@@ -29,6 +29,10 @@ interface FluidEmitter {
   active: boolean;
 }
 
+// Physical constants for fluid simulation
+const DIVERGENCE_SCALE = -0.5; // Central difference scaling factor for divergence calculation
+const PRESSURE_NEIGHBOR_COUNT = 6; // Number of neighbors in 3D grid (for Jacobi iteration)
+
 export class FluidPhysicsNode extends Node {
   private grid: FluidCell[] = [];
   private gridSize: { x: number; y: number; z: number } = { x: 64, y: 64, z: 64 };
@@ -425,6 +429,12 @@ export class FluidPhysicsNode extends Node {
       }
     }
     
+    // Pre-compute curl magnitudes for better performance
+    const curlMagnitudes = new Float32Array(this.grid.length);
+    for (let i = 0; i < this.grid.length; i++) {
+      curlMagnitudes[i] = Math.sqrt(curlX[i] * curlX[i] + curlY[i] * curlY[i] + curlZ[i] * curlZ[i]);
+    }
+    
     // Apply confinement force
     for (let z = 1; z < sz - 1; z++) {
       for (let y = 1; y < sy - 1; y++) {
@@ -435,15 +445,12 @@ export class FluidPhysicsNode extends Node {
           const cx = curlX[idx];
           const cy = curlY[idx];
           const cz = curlZ[idx];
-          const curlMag = Math.sqrt(cx * cx + cy * cy + cz * cz) + 0.0001;
+          const curlMag = curlMagnitudes[idx] + 0.0001;
           
-          // Gradient of curl magnitude
-          const dmagdx = (Math.sqrt(curlX[this.getIndex(x + 1, y, z)] ** 2 + curlY[this.getIndex(x + 1, y, z)] ** 2 + curlZ[this.getIndex(x + 1, y, z)] ** 2) -
-                          Math.sqrt(curlX[this.getIndex(x - 1, y, z)] ** 2 + curlY[this.getIndex(x - 1, y, z)] ** 2 + curlZ[this.getIndex(x - 1, y, z)] ** 2)) * 0.5;
-          const dmagdy = (Math.sqrt(curlX[this.getIndex(x, y + 1, z)] ** 2 + curlY[this.getIndex(x, y + 1, z)] ** 2 + curlZ[this.getIndex(x, y + 1, z)] ** 2) -
-                          Math.sqrt(curlX[this.getIndex(x, y - 1, z)] ** 2 + curlY[this.getIndex(x, y - 1, z)] ** 2 + curlZ[this.getIndex(x, y - 1, z)] ** 2)) * 0.5;
-          const dmagdz = (Math.sqrt(curlX[this.getIndex(x, y, z + 1)] ** 2 + curlY[this.getIndex(x, y, z + 1)] ** 2 + curlZ[this.getIndex(x, y, z + 1)] ** 2) -
-                          Math.sqrt(curlX[this.getIndex(x, y, z - 1)] ** 2 + curlY[this.getIndex(x, y, z - 1)] ** 2 + curlZ[this.getIndex(x, y, z - 1)] ** 2)) * 0.5;
+          // Gradient of curl magnitude using pre-computed values
+          const dmagdx = (curlMagnitudes[this.getIndex(x + 1, y, z)] - curlMagnitudes[this.getIndex(x - 1, y, z)]) * 0.5;
+          const dmagdy = (curlMagnitudes[this.getIndex(x, y + 1, z)] - curlMagnitudes[this.getIndex(x, y - 1, z)]) * 0.5;
+          const dmagdz = (curlMagnitudes[this.getIndex(x, y, z + 1)] - curlMagnitudes[this.getIndex(x, y, z - 1)]) * 0.5;
           
           const gradMag = Math.sqrt(dmagdx * dmagdx + dmagdy * dmagdy + dmagdz * dmagdz) + 0.0001;
           const nx = dmagdx / gradMag;
@@ -563,7 +570,7 @@ export class FluidPhysicsNode extends Node {
         for (let x = 1; x < sx - 1; x++) {
           const idx = this.getIndex(x, y, z);
           
-          divergence[idx] = -0.5 * (
+          divergence[idx] = DIVERGENCE_SCALE * (
             (this.grid[this.getIndex(x + 1, y, z)].velocityX - this.grid[this.getIndex(x - 1, y, z)].velocityX) +
             (this.grid[this.getIndex(x, y + 1, z)].velocityY - this.grid[this.getIndex(x, y - 1, z)].velocityY) +
             (this.grid[this.getIndex(x, y, z + 1)].velocityZ - this.grid[this.getIndex(x, y, z - 1)].velocityZ)
