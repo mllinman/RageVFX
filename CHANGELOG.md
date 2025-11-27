@@ -2,6 +2,73 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [2.1.0] - 2025-11-27
+
+### Added - Version 2.1 Features
+
+#### Animation Timeline
+- **AnimationTimelineNode**: Keyframe animation system for VFX nodes
+  - Multi-track animation support with named tracks
+  - Keyframe interpolation with multiple easing types (linear, ease-in, ease-out, ease-in-out, bezier, step)
+  - Custom bezier curve handles for precise timing control
+  - Loop and ping-pong playback modes
+  - Configurable playback speed
+  - Frame range controls (start frame, end frame)
+  - Normalized time output for procedural effects
+
+#### Output Nodes
+- **ImageSequenceOutputNode**: Image sequence exports
+  - Support for PNG, JPEG, TIFF, EXR, and DPX formats
+  - Configurable bit depth (8-bit, 16-bit, 32-bit float)
+  - Compression options (ZIP, RLE, PIZ for EXR, LZW for TIFF)
+  - Frame padding and naming conventions
+  - Color space conversion with premultiplied alpha support
+  - Embedded metadata
+
+- **VideoSequenceOutputNode**: Video export
+  - Container support: MP4, MOV, MXF, AVI, WebM
+  - Codec support: H.264, H.265, ProRes (422 Proxy to 4444 XQ), DNxHD/DNxHR, VP9, AV1
+  - Professional color space handling (BT.709, BT.2020)
+  - CRF and bitrate controls for quality
+  - ProRes and DNxHD profile selection
+  - FFmpeg command generation for external processing
+
+- **CameraFormatOutputNode**: Camera-native format exports
+  - ARRI RAW (.ari) with LogC4/LogC3 and ARRI Wide Gamut
+  - RED R3D with Log3G10 and RED Wide Gamut RGB
+  - Blackmagic RAW (.braw) with BMD Film Gen5
+  - Sony RAW with S-Log3 and S-Gamut3
+  - Camera metadata (reel, clip name, take number)
+
+#### Camera Nodes
+- **CameraPresetNode**: Cinema camera presets with accurate sensor specifications
+  - RED V-RAPTOR XL 8K, RED KOMODO 6K
+  - ARRI ALEXA 35, ALEXA LF, ALEXA Mini LF
+  - Blackmagic URSA Mini Pro 12K, Pocket 6K G2
+  - Sony VENICE 2 8K, FX6
+  - Canon EOS C70, C500 Mark II
+  - Accurate sensor dimensions, crop factors, and color science
+  - Native ISO and dynamic range information
+  - Resolution presets per camera
+
+- **CameraLensNode**: Professional lens simulation
+  - Lens presets: ARRI Signature, Zeiss Master Prime, Cooke Anamorphic, Panavision Primo, Atlas Orion
+  - Focal length and aperture controls
+  - Anamorphic squeeze support (2x, 1.33x, spherical)
+  - Lens distortion simulation (barrel, pincushion)
+  - Chromatic aberration and vignetting
+  - Bokeh blade count and curvature
+  - Focus breathing simulation
+
+- **LensDistortionCorrectionNode**: Lens undistortion for VFX matching
+  - Brown-Conrady distortion model
+  - Fisheye distortion model
+  - Anamorphic distortion support
+  - Predefined profiles for GoPro, DJI drones, cinema lenses
+  - ST Map generation for external tools
+  - Grid overlay for visualization
+  - Bilinear filtering for high-quality resampling
+
 ## [2.0.0] - 2025-11-26
 
 ### Added - Version 2.0 Features

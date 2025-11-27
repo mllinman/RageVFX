@@ -4,7 +4,7 @@
 
 RageVFX is a next-generation visual effects software that combines the power of node-based compositing with modern GPU-accelerated rendering. Built with cutting-edge web technologies and designed to rival industry-standard tools, RageVFX provides a comprehensive solution for creating award-winning visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-2.0.0-orange)
+![RageVFX](https://img.shields.io/badge/version-2.1.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
@@ -117,6 +117,36 @@ Download the Windows installer or portable version from the [Releases](https://g
 - **Object Detection**: Object detection and instance segmentation
 - **Inpaint**: AI-powered content-aware fill and inpainting
 - **Depth Estimation**: Monocular depth estimation with colormap visualization
+
+#### Animation Timeline (v2.1)
+- **Animation Timeline**: Keyframe animation system for VFX nodes
+  - Multi-track animation with keyframe control
+  - Multiple easing types (linear, ease-in/out, bezier, step)
+  - Loop and ping-pong playback modes
+  - Normalized time output for procedural effects
+
+#### Output Nodes (v2.1)
+- **Image Sequence Output**: Export image sequences (PNG, JPEG, TIFF, EXR, DPX)
+  - Configurable bit depth (8/16/32-bit)
+  - Compression options and color space conversion
+- **Video Sequence Output**: Export video files (MP4, MOV, MXF)
+  - H.264, H.265, ProRes, DNxHD codecs
+  - Professional color space handling
+- **Camera Format Output**: Export in camera-native formats
+  - ARRI RAW, RED R3D, Blackmagic RAW, Sony RAW
+  - Log encoding and wide gamut color spaces
+
+#### Camera Nodes (v2.1)
+- **Camera Preset**: Professional cinema camera presets
+  - RED, ARRI, Blackmagic, Sony, Canon cameras
+  - Accurate sensor specifications and color science
+- **Camera Lens**: Lens simulation and adjustment
+  - ARRI, Zeiss, Cooke, Panavision lens presets
+  - Anamorphic squeeze, distortion, vignetting
+- **Lens Distortion Correction**: Undistort lens distortion for VFX
+  - Brown-Conrady, fisheye, anamorphic models
+  - GoPro, DJI, cinema lens profiles
+  - ST Map generation
 
 ### 💼 Project Management
 - **Save/Load Projects**: Preserve your node graphs and settings

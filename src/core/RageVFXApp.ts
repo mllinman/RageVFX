@@ -134,6 +134,19 @@ import { ObjectDetectionNode } from '../nodes/ObjectDetectionNode';
 import { InpaintNode } from '../nodes/InpaintNode';
 import { DepthEstimationNode } from '../nodes/DepthEstimationNode';
 
+// Version 2.1 - Animation Timeline
+import { AnimationTimelineNode } from '../nodes/AnimationTimelineNode';
+
+// Version 2.1 - Output nodes
+import { ImageSequenceOutputNode } from '../nodes/ImageSequenceOutputNode';
+import { VideoSequenceOutputNode } from '../nodes/VideoSequenceOutputNode';
+import { CameraFormatOutputNode } from '../nodes/CameraFormatOutputNode';
+
+// Version 2.1 - Camera nodes
+import { CameraPresetNode } from '../nodes/CameraPresetNode';
+import { CameraLensNode } from '../nodes/CameraLensNode';
+import { LensDistortionCorrectionNode } from '../nodes/LensDistortionCorrectionNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -281,6 +294,19 @@ export class RageVFXApp {
     this.nodeRegistry.set('ObjectDetection', ObjectDetectionNode as any);
     this.nodeRegistry.set('Inpaint', InpaintNode as any);
     this.nodeRegistry.set('DepthEstimation', DepthEstimationNode as any);
+    
+    // Version 2.1 - Animation Timeline
+    this.nodeRegistry.set('AnimationTimeline', AnimationTimelineNode as any);
+    
+    // Version 2.1 - Output nodes
+    this.nodeRegistry.set('ImageSequenceOutput', ImageSequenceOutputNode as any);
+    this.nodeRegistry.set('VideoSequenceOutput', VideoSequenceOutputNode as any);
+    this.nodeRegistry.set('CameraFormatOutput', CameraFormatOutputNode as any);
+    
+    // Version 2.1 - Camera nodes
+    this.nodeRegistry.set('CameraPreset', CameraPresetNode as any);
+    this.nodeRegistry.set('CameraLens', CameraLensNode as any);
+    this.nodeRegistry.set('LensDistortionCorrection', LensDistortionCorrectionNode as any);
   }
 
   /**
