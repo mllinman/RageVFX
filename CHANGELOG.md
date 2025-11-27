@@ -2,6 +2,31 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [2.2.0] - 2025-11-27
+
+### Changed - Version 2.2 Upgrades
+
+#### Dependency Upgrades
+- **Electron**: 27.0.0 → 39.2.4 (major upgrade with latest Chromium and Node.js)
+- **Three.js**: 0.158.0 → 0.181.2 (new features and performance improvements)
+- **TypeScript**: 5.3.2 → 5.9.3 (latest stable with improved type checking)
+- **ESLint**: 8.54.0 → 9.39.1 (new flat config format)
+- **typescript-eslint**: 6.11.0 → 8.48.0 (compatibility with ESLint 9)
+- **Jest**: 29.7.0 → 30.2.0 (latest testing framework)
+- **@types/node**: 20.9.0 → 24.10.1 (latest Node.js types)
+
+#### Configuration Updates
+- Migrated to ESLint 9 flat configuration format (eslint.config.js)
+- Updated Node.js engine requirement to >=20.0.0
+- Resolved all linting errors in codebase
+
+### Fixed
+- Fixed unused variable warnings in CloudVolumeNode
+- Fixed unused variable errors in ObjectDetectionNode
+- Fixed unused variable errors in VolumetricFogNode
+- Removed unnecessary eslint-disable comments in CornerPinNode
+- Removed unnecessary eslint-disable comments in PlanarTrackerNode
+
 ## [2.1.0] - 2025-11-27
 
 ### Added - Version 2.1 Features

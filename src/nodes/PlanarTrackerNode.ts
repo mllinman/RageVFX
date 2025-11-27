@@ -286,7 +286,6 @@ export class PlanarTrackerNode extends Node {
     return bestMatch;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private calculateHomography(
     _srcPoints: Array<{ x: number; y: number }>,
     _dstPoints: Array<{ x: number; y: number }>
