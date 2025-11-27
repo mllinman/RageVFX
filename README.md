@@ -1,13 +1,31 @@
 # RageVFX
 
-**A Powerful Node-Based Visual Effects Program**
+**The Industry-Rivaling Node-Based Visual Effects Platform**
 
-RageVFX is a next-generation visual effects software that combines the power of node-based compositing with modern GPU-accelerated rendering. Built with cutting-edge web technologies and designed to rival industry-standard tools, RageVFX provides a comprehensive solution for creating award-winning visual effects.
+RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-2.3.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.0.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
+![Nodes](https://img.shields.io/badge/nodes-105%2B-green)
+
+## 🏆 Industry Competition
+
+RageVFX 3.0 introduces features that directly compete with industry-standard tools:
+
+| Feature | Nuke | Houdini | Redshift/V-Ray | RageVFX |
+|---------|------|---------|----------------|---------|
+| Node-based compositing | ✅ | ✅ | - | ✅ |
+| Deep compositing | ✅ | - | - | ✅ |
+| Multishot workflow | ✅ | - | - | ✅ 3.0 |
+| IBK-style keying | ✅ | - | - | ✅ 3.0 |
+| Procedural terrain | - | ✅ | - | ✅ 3.0 |
+| Crowd simulation | - | ✅ | - | ✅ 3.0 |
+| Path tracing | - | ✅ | ✅ | ✅ 3.0 |
+| Light mixing | - | - | ✅ | ✅ 3.0 |
+| Physics simulation | - | ✅ | - | ✅ |
+| ML-powered tools | ✅ | - | - | ✅ |
 
 ## 🚀 Try It Now
 
@@ -168,6 +186,53 @@ Download the Windows installer or portable version from the [Releases](https://g
 #### Professional Color Grading (v2.3)
 - **LUT Loader**: Load and apply 3D LUTs with 11 built-in presets
 - **CDL**: ASC Color Decision List with slope, offset, power controls
+
+#### 🆕 Nuke-Rivaling Compositing (v3.0)
+- **MultiShot**: Multishot workflow with graph scope variables
+  - Shot versioning and variant management
+  - Expression linking with math functions (sin, cos, lerp, clamp)
+  - Batch processing across multiple shots
+  - Template-based shot creation
+  - Pipeline-ready JSON export/import
+- **IBK Keyer**: Advanced IBK-style keying
+  - Auto-detect screen color with picker
+  - Adaptive algorithm for uneven screens
+  - Core matte with erosion/blur
+  - Multi-pass spill suppression
+  - Status keyer output
+
+#### 🆕 Houdini-Rivaling Procedural Tools (v3.0)
+- **Procedural Terrain**: Full terrain generation pipeline
+  - Multi-octave noise (simplex, perlin, FBM, ridged, voronoi)
+  - Hydraulic and thermal erosion simulation
+  - Automatic biome classification
+  - River carving and water bodies
+  - Vegetation scatter with biome awareness
+  - Normal map and erosion map outputs
+- **Crowd Sim**: Agent-based crowd simulation
+  - Multiple agent types with state machines
+  - Steering behaviors (separation, cohesion, alignment)
+  - Flow field and goal-seeking navigation
+  - Obstacle avoidance with terrain detection
+  - LOD system for massive crowds (10,000+ agents)
+  - Instance matrix output for rendering
+
+#### 🆕 Redshift/V-Ray-Rivaling Rendering (v3.0)
+- **Path Tracer**: Production-quality path tracing
+  - Unbiased physically-based rendering
+  - Multiple importance sampling (MIS)
+  - Next event estimation (NEE)
+  - Russian roulette termination
+  - ACES, Reinhard, Filmic tone mapping
+  - Progressive rendering with accumulation
+  - Depth of field with aperture control
+- **Light Mixer**: Interactive post-render light control
+  - Per-light intensity and color adjustment
+  - Light group management with master controls
+  - Solo/mute for individual lights
+  - Environment, GI, emission, caustics control
+  - Preset saving and interpolation
+  - Shadow intensity adjustment
 
 ### 💼 Project Management
 - **Save/Load Projects**: Preserve your node graphs and settings
@@ -467,11 +532,25 @@ RageVFX is optimized for professional workflows:
 - [x] Physics simulation nodes (RigidBody, SoftBody, FluidSim, ClothSim, Collision)
 - [x] Machine learning-powered tools (StyleTransfer, Upscale, Denoise, ObjectDetection, Inpaint, DepthEstimation)
 
-### Version 3.0 (Future)
-- [ ] Real-time raytracing with WebGPU
-- [ ] Advanced audio reactive nodes
-- [ ] Procedural mesh generation
-- [ ] Advanced rigging and animation system
+### Version 3.0 ✅ (Industry Competition Release)
+- [x] **Nuke-rivaling compositing**: MultiShot with graph scope variables, IBK-style keying
+- [x] **Houdini-rivaling procedural tools**: Procedural terrain with erosion, crowd simulation
+- [x] **Redshift/V-Ray-rivaling rendering**: Path tracer with MIS/NEE, interactive light mixer
+- [x] Comprehensive competitive analysis and roadmap (ROADMAP.md)
+
+### Version 3.1 (Future - Pipeline Integration)
+- [ ] USD/Alembic import/export
+- [ ] Neural network training (CopyCat-style)
+- [ ] Segment Anything integration
+- [ ] Built-in review and annotation tools
+- [ ] Git-based version control for projects
+
+### Version 3.2 (Future - Performance & Scale)
+- [ ] WebGPU rendering for 10x performance
+- [ ] Cloud-native distributed rendering
+- [ ] 8K+ resolution support
+- [ ] Stereoscopic 3D workflow
+- [ ] Live link to Unreal/Unity
 
 ## Contributing
 
@@ -490,7 +569,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Acknowledgments
 
 - Built with TypeScript, Electron, and WebGL2
-- Inspired by industry-standard VFX tools
+- Inspired by industry-standard VFX tools (Nuke, Houdini, Redshift, V-Ray)
 - Designed for professional artists and developers
 
 ## Support

@@ -2,6 +2,92 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.0.0] - 2025-11-27
+
+### Added - Version 3.0 Industry Competition Release
+
+RageVFX 3.0 introduces industry-rivaling features targeting Nuke, Houdini, and Redshift/V-Ray capabilities.
+
+#### Nuke-Rivaling Compositing Nodes (2 new nodes)
+- **MultiShotNode**: Nuke-style multishot workflow with graph scope variables
+  - Graph scope variable propagation across shots
+  - Shot versioning and variant management
+  - Expression linking with built-in math functions
+  - Batch processing with parallel execution
+  - Template-based shot creation
+  - JSON export/import for pipeline integration
+  - Production-ready multishot workflows
+
+- **IBKKeyerNode**: Advanced IBK-style keying matching Nuke's IBK
+  - Screen color auto-sampling with picker
+  - Adaptive algorithm for uneven screens
+  - Multiple keying algorithms (simple, adaptive, ibk_color, ibk_gizmo)
+  - Edge color correction with grow/shrink
+  - Core matte generation with erosion/blur
+  - Multi-pass spill suppression (average, max, min, replacement)
+  - Status keyer output for QC
+  - Clean plate support for better edge handling
+
+#### Houdini-Rivaling Procedural Nodes (2 new nodes)
+- **ProceduralTerrainNode**: Procedural terrain generation matching Houdini
+  - Multi-octave noise terrain (simplex, perlin, FBM, ridged, voronoi)
+  - Hydraulic and thermal erosion simulation
+  - Biome classification based on height and moisture
+  - River carving and water body detection
+  - Procedural vegetation scatter with biome awareness
+  - Normal map and erosion map outputs
+  - Real-world scale terrain generation
+  - Seed-based reproducible generation
+
+- **CrowdSimNode**: Agent-based crowd simulation like Houdini Crowds
+  - Multiple agent types with state machines
+  - State transitions with probability-based triggers
+  - Steering behaviors (separation, cohesion, alignment)
+  - Goal seeking and flow field navigation
+  - Obstacle avoidance with terrain slope detection
+  - Spatial hash for efficient neighbor queries
+  - LOD support for massive crowds
+  - Visualization output for debugging
+  - Instance matrix output for rendering
+
+#### Redshift/V-Ray-Rivaling Rendering Nodes (2 new nodes)
+- **PathTracerNode**: Production-quality unbiased path tracing
+  - Physically-based path tracing core
+  - Multiple importance sampling (MIS)
+  - Next event estimation (NEE) for direct lighting
+  - Russian roulette termination for efficiency
+  - Depth of field with aperture and focus distance
+  - Progressive rendering with accumulation
+  - ACES, Reinhard, and Filmic tone mapping
+  - Environment map sampling with rotation
+  - Clamp value to prevent fireflies
+  - PBR material support
+
+- **LightMixerNode**: Interactive light mixing like V-Ray Light Mix
+  - Post-render light intensity adjustment
+  - Per-light color modification
+  - Light group management with master controls
+  - Solo/mute functionality for individual lights
+  - Environment, GI, emission, and caustics control
+  - Shadow intensity and color adjustment
+  - Preset saving and loading
+  - Preset interpolation for animation
+  - JSON export/import of light mix settings
+  - Color space conversion (linear, sRGB, ACES)
+
+#### Documentation
+- **ROADMAP.md**: Comprehensive competitive analysis and development roadmap
+  - Feature comparison with Nuke, Houdini, Redshift, V-Ray
+  - Detailed node specifications for v3.1 and v3.2
+  - Development priority matrix
+  - Implementation timeline through Q4 2025
+
+### Changed
+- Version bump from 2.3.0 to 3.0.0
+- Updated package description to reflect industry-rivaling capabilities
+- Expanded node registry with 6 new professional nodes
+- Total node count now exceeds 105 nodes
+
 ## [2.3.0] - 2025-11-27
 
 ### Added - Version 2.3 Professional VFX Expansion

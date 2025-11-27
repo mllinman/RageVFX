@@ -168,6 +168,18 @@ import { AOVManagerNode } from '../nodes/AOVManagerNode';
 import { LUTLoaderNode } from '../nodes/LUTLoaderNode';
 import { CDLNode } from '../nodes/CDLNode';
 
+// Version 3.0 - Nuke-Rivaling Compositing nodes
+import { MultiShotNode } from '../nodes/MultiShotNode';
+import { IBKKeyerNode } from '../nodes/IBKKeyerNode';
+
+// Version 3.0 - Houdini-Rivaling Procedural nodes
+import { ProceduralTerrainNode } from '../nodes/ProceduralTerrainNode';
+import { CrowdSimNode } from '../nodes/CrowdSimNode';
+
+// Version 3.0 - Redshift/V-Ray-Rivaling Rendering nodes
+import { PathTracerNode } from '../nodes/PathTracerNode';
+import { LightMixerNode } from '../nodes/LightMixerNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -349,6 +361,18 @@ export class RageVFXApp {
     // Version 2.3 - Professional Color nodes
     this.nodeRegistry.set('LUTLoader', LUTLoaderNode as any);
     this.nodeRegistry.set('CDL', CDLNode as any);
+    
+    // Version 3.0 - Nuke-Rivaling Compositing nodes
+    this.nodeRegistry.set('MultiShot', MultiShotNode as any);
+    this.nodeRegistry.set('IBKKeyer', IBKKeyerNode as any);
+    
+    // Version 3.0 - Houdini-Rivaling Procedural nodes
+    this.nodeRegistry.set('ProceduralTerrain', ProceduralTerrainNode as any);
+    this.nodeRegistry.set('CrowdSim', CrowdSimNode as any);
+    
+    // Version 3.0 - Redshift/V-Ray-Rivaling Rendering nodes
+    this.nodeRegistry.set('PathTracer', PathTracerNode as any);
+    this.nodeRegistry.set('LightMixer', LightMixerNode as any);
   }
 
   /**
