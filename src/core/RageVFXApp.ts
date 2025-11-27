@@ -147,6 +147,27 @@ import { CameraPresetNode } from '../nodes/CameraPresetNode';
 import { CameraLensNode } from '../nodes/CameraLensNode';
 import { LensDistortionCorrectionNode } from '../nodes/LensDistortionCorrectionNode';
 
+// Version 2.3 - Advanced VFX nodes
+import { AnamorphicFlareNode } from '../nodes/AnamorphicFlareNode';
+import { NebulaNode } from '../nodes/NebulaNode';
+import { ShockwaveNode } from '../nodes/ShockwaveNode';
+import { PlasmaNode } from '../nodes/PlasmaNode';
+import { PortalNode } from '../nodes/PortalNode';
+import { HologramNode } from '../nodes/HologramNode';
+import { CausticsNode } from '../nodes/CausticsNode';
+import { AuroraNode } from '../nodes/AuroraNode';
+import { HeatDistortionNode } from '../nodes/HeatDistortionNode';
+import { DebrisNode } from '../nodes/DebrisNode';
+
+// Version 2.3 - Professional Compositing nodes
+import { DeepCompositeNode } from '../nodes/DeepCompositeNode';
+import { CryptomatteNode } from '../nodes/CryptomatteNode';
+import { AOVManagerNode } from '../nodes/AOVManagerNode';
+
+// Version 2.3 - Professional Color nodes
+import { LUTLoaderNode } from '../nodes/LUTLoaderNode';
+import { CDLNode } from '../nodes/CDLNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -307,6 +328,27 @@ export class RageVFXApp {
     this.nodeRegistry.set('CameraPreset', CameraPresetNode as any);
     this.nodeRegistry.set('CameraLens', CameraLensNode as any);
     this.nodeRegistry.set('LensDistortionCorrection', LensDistortionCorrectionNode as any);
+    
+    // Version 2.3 - Advanced VFX nodes
+    this.nodeRegistry.set('AnamorphicFlare', AnamorphicFlareNode as any);
+    this.nodeRegistry.set('Nebula', NebulaNode as any);
+    this.nodeRegistry.set('Shockwave', ShockwaveNode as any);
+    this.nodeRegistry.set('Plasma', PlasmaNode as any);
+    this.nodeRegistry.set('Portal', PortalNode as any);
+    this.nodeRegistry.set('Hologram', HologramNode as any);
+    this.nodeRegistry.set('Caustics', CausticsNode as any);
+    this.nodeRegistry.set('Aurora', AuroraNode as any);
+    this.nodeRegistry.set('HeatDistortion', HeatDistortionNode as any);
+    this.nodeRegistry.set('Debris', DebrisNode as any);
+    
+    // Version 2.3 - Professional Compositing nodes
+    this.nodeRegistry.set('DeepComposite', DeepCompositeNode as any);
+    this.nodeRegistry.set('Cryptomatte', CryptomatteNode as any);
+    this.nodeRegistry.set('AOVManager', AOVManagerNode as any);
+    
+    // Version 2.3 - Professional Color nodes
+    this.nodeRegistry.set('LUTLoader', LUTLoaderNode as any);
+    this.nodeRegistry.set('CDL', CDLNode as any);
   }
 
   /**

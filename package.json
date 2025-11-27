@@ -1,6 +1,6 @@
 {
   "name": "ragevfx",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A powerful Node-based Visual Effects program with advanced compositing, 3D rendering, particle systems, physics simulation, volumetric effects, ML-powered tools, animation timeline, camera nodes, and network rendering capabilities",
   "main": "dist/src/main.js",
   "scripts": {

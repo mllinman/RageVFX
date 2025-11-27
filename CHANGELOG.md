@@ -2,6 +2,116 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [2.3.0] - 2025-11-27
+
+### Added - Version 2.3 Professional VFX Expansion
+
+#### Advanced VFX Nodes (10 new nodes)
+- **AnamorphicFlareNode**: Professional anamorphic lens flare with horizontal streaks
+  - Chromatic aberration and color shifts
+  - Starburst patterns and flare elements
+  - Configurable streak count and spacing
+  - Bloom and glow effects
+
+- **NebulaNode**: Procedural space nebula and cosmic cloud effects
+  - Multi-octave turbulent noise for structure
+  - Primary, secondary, and emission colors
+  - Star field generation with twinkling
+  - Dust lane simulation
+
+- **ShockwaveNode**: Expanding shockwave distortion effects
+  - Multiple wave support with configurable delay
+  - Chromatic aberration on distortion
+  - Edge glow effects
+  - Mask output for compositing
+
+- **PlasmaNode**: Procedural plasma and energy effects
+  - Multi-frequency wave patterns
+  - Three-color gradient cycling
+  - Electric arc generation
+  - Flow direction and turbulence controls
+
+- **PortalNode**: Dimensional portal and wormhole effects
+  - Spiral vortex with configurable arms
+  - Energy particle effects
+  - Inner portal view warping
+  - Ring patterns and pulsation
+
+- **HologramNode**: Sci-fi holographic display effects
+  - Scan lines and interlacing
+  - Glitch and flicker effects
+  - Chromatic aberration
+  - Edge detection glow
+
+- **CausticsNode**: Water caustic light patterns
+  - Voronoi-based caustic generation
+  - Multi-layer animation
+  - Refraction displacement
+  - Multiple blend modes
+
+- **AuroraNode**: Northern lights / Aurora Borealis effects
+  - Animated curtain patterns
+  - Color cycling with three colors
+  - Star field with twinkling
+  - Vertical wave distortion
+
+- **HeatDistortionNode**: Heat shimmer distortion effects
+  - Multi-octave wave distortion
+  - Gradient or mask-based regions
+  - Chromatic aberration
+  - Motion blur simulation
+
+- **DebrisNode**: Particle debris and destruction effects
+  - Multiple particle shapes
+  - Physics simulation with gravity and drag
+  - Motion blur trails
+  - Glow effects for hot debris
+
+#### Professional Compositing Nodes (3 new nodes)
+- **DeepCompositeNode**: Deep compositing with per-pixel depth
+  - Depth-aware merging
+  - Multiple merge modes (depth, over, under, plus)
+  - Anti-aliasing and edge blending
+  - Holdout support
+
+- **CryptomatteNode**: Cryptomatte ID matte extraction
+  - Interactive object picking
+  - Anti-aliased matte edges
+  - Multiple crypto pass support
+  - Color and grayscale preview modes
+
+- **AOVManagerNode**: Arbitrary Output Variable manager
+  - 12 standard AOV inputs
+  - Configurable layer blending
+  - Global exposure, gamma, saturation
+  - AO and shadow integration
+
+#### Professional Color Grading Nodes (2 new nodes)
+- **LUTLoaderNode**: Look-Up Table loader for color grading
+  - 3D LUT support with trilinear interpolation
+  - 11 built-in preset looks
+  - Log/linear color space conversion
+  - Intensity blending
+
+- **CDLNode**: ASC Color Decision List grading
+  - Slope, Offset, Power controls per channel
+  - Saturation adjustment
+  - Forward and inverse processing
+  - Multiple working color spaces
+  - CDL XML export
+
+#### UI/UX Improvements
+- Added 7 new category colors for better visual organization
+- Enhanced node categorization with new categories:
+  - Tracker, Utility, Transform, Generator, Output, Camera
+- Extended VFX glow effects to new node types
+- Improved node search and filtering
+
+### Changed
+- Version bump to 2.3.0
+- Updated node registry with 15 new professional nodes
+- Enhanced web renderer with expanded category support
+
 ## [2.2.0] - 2025-11-27
 
 ### Changed - Version 2.2 Upgrades
