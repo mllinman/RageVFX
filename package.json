@@ -2,13 +2,21 @@
   "name": "ragevfx",
   "version": "2.0.0",
   "description": "A powerful Node-based Visual Effects program with advanced compositing, 3D rendering, particle systems, physics simulation, volumetric effects, ML-powered tools, and network rendering capabilities",
-  "main": "dist/main.js",
+  "main": "dist/src/main.js",
   "scripts": {
     "build": "tsc",
     "start": "npm run build && electron .",
     "dev": "tsc --watch",
     "test": "jest",
-    "lint": "eslint src/**/*.ts"
+    "lint": "eslint src/**/*.ts",
+    "build:web": "vite build",
+    "dev:web": "vite",
+    "preview:web": "vite preview",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dist:all": "npm run build && electron-builder --win --mac --linux"
   },
   "keywords": [
     "vfx",
@@ -31,11 +39,78 @@
     "@types/three": "^0.181.0",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
+    "electron-builder": "^26.0.12",
     "eslint": "^8.54.0",
     "jest": "^29.7.0",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "vite": "^7.2.4"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "build": {
+    "appId": "com.ragevfx.app",
+    "productName": "RageVFX",
+    "copyright": "Copyright © 2024 RageVFX Team",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "ui/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "assets/",
+        "to": "assets/",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "publisherName": "RageVFX Team"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "RageVFX",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "license": "LICENSE"
+    },
+    "portable": {
+      "artifactName": "RageVFX-Portable-${version}.${ext}"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "icon": "build/icon.icns",
+      "category": "public.app-category.graphics-design"
+    },
+    "linux": {
+      "target": ["AppImage", "deb", "rpm"],
+      "icon": "build/icons",
+      "category": "Graphics"
+    },
+    "dmg": {
+      "title": "RageVFX ${version}",
+      "icon": "build/icon.icns"
+    }
   }
 }
