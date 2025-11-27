@@ -130,7 +130,7 @@ export class MultiShotNode extends Node {
    * Add a new shot to the multishot workflow
    */
   addShot(name: string, frameStart: number, frameEnd: number, variant: string = 'main'): string {
-    const shotId = `shot_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const shotId = `shot_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     
     const shot: ShotData = {
       id: shotId,

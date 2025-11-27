@@ -728,7 +728,7 @@ export class IBKKeyerNode extends Node {
     for (let i = 0; i < matte.length; i++) {
       if (edges[i] > 0) {
         const idx = i * 4;
-        const _r = source.data[idx] / 255;
+        const r = source.data[idx] / 255;
         const g = source.data[idx + 1] / 255;
         const b = source.data[idx + 2] / 255;
         
@@ -738,12 +738,12 @@ export class IBKKeyerNode extends Node {
         
         if (isGreen) {
           // Reduce matte where there's strong green
-          const greenness = g - Math.max(b);
+          const greenness = g - Math.max(r, b);
           if (greenness > 0.1) {
             matte[i] = Math.round(matte[i] * (1 - greenness));
           }
         } else {
-          const blueness = b - Math.max(g);
+          const blueness = b - Math.max(r, g);
           if (blueness > 0.1) {
             matte[i] = Math.round(matte[i] * (1 - blueness));
           }
