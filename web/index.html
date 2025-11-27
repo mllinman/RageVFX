@@ -494,18 +494,127 @@
           <div class="panel-header">
             <h3>👁️ Viewport</h3>
             <div class="panel-controls">
+              <select id="viewport-mode" class="viewport-mode-select" title="Viewport Mode">
+                <option value="2d">2D View</option>
+                <option value="3d">3D View</option>
+                <option value="render">Render View</option>
+              </select>
               <button class="icon-btn" id="refresh-preview" title="Refresh">🔄</button>
               <button class="icon-btn" id="maximize-preview" title="Maximize">⛶</button>
             </div>
           </div>
-          <div class="panel-content viewport">
-            <canvas id="preview-canvas" class="preview-canvas"></canvas>
-            <div class="viewport-overlay" id="viewport-overlay">
-              <span>No output to display</span>
+          <div class="panel-content viewport" id="viewport-container">
+            <!-- 2D Viewport -->
+            <div id="viewport-2d" class="viewport-view active">
+              <canvas id="preview-canvas" class="preview-canvas"></canvas>
+              <div class="viewport-overlay" id="viewport-overlay">
+                <span>No output to display</span>
+              </div>
+              <div class="viewport-controls viewport-2d-controls">
+                <button class="viewport-tool" id="viewport-fit" title="Fit to Window">⊡</button>
+                <button class="viewport-tool" id="viewport-zoom-in" title="Zoom In">+</button>
+                <button class="viewport-tool" id="viewport-zoom-out" title="Zoom Out">−</button>
+                <span class="viewport-info" id="viewport-zoom-level">100%</span>
+              </div>
+            </div>
+            <!-- 3D Viewport -->
+            <div id="viewport-3d" class="viewport-view hidden">
+              <div id="viewport-3d-canvas" class="viewport-3d-container"></div>
+              <div class="viewport-controls viewport-3d-controls">
+                <div class="camera-tools">
+                  <button class="camera-tool active" id="camera-rotate" title="Rotate (Orbit)" data-mode="rotate">↻</button>
+                  <button class="camera-tool" id="camera-pan" title="Pan" data-mode="pan">✥</button>
+                  <button class="camera-tool" id="camera-dolly" title="Dolly" data-mode="dolly">⇆</button>
+                  <button class="camera-tool" id="camera-zoom" title="Zoom (FOV)" data-mode="zoom">⊕</button>
+                  <button class="camera-tool" id="camera-tilt" title="Tilt" data-mode="tilt">⤸</button>
+                  <button class="camera-tool" id="camera-crane" title="Crane" data-mode="crane">⤒</button>
+                  <button class="camera-tool" id="camera-aim" title="Aim" data-mode="aim">◎</button>
+                </div>
+                <div class="camera-presets">
+                  <select id="camera-preset" class="camera-preset-select" title="Camera Preset">
+                    <option value="Perspective">Perspective</option>
+                    <option value="Front">Front</option>
+                    <option value="Back">Back</option>
+                    <option value="Left">Left</option>
+                    <option value="Right">Right</option>
+                    <option value="Top">Top</option>
+                    <option value="Bottom">Bottom</option>
+                  </select>
+                  <button class="viewport-tool" id="camera-reset" title="Reset Camera">⟲</button>
+                </div>
+                <div class="viewport-options">
+                  <label class="viewport-checkbox"><input type="checkbox" id="show-grid" checked> Grid</label>
+                  <label class="viewport-checkbox"><input type="checkbox" id="show-axes" checked> Axes</label>
+                </div>
+              </div>
+            </div>
+            <!-- Render View -->
+            <div id="viewport-render" class="viewport-view hidden">
+              <canvas id="render-canvas" class="render-canvas"></canvas>
+              <div class="viewport-controls render-view-controls">
+                <div class="render-channel-buttons">
+                  <button class="channel-btn active" id="channel-rgb" data-channel="rgb">RGB</button>
+                  <button class="channel-btn" id="channel-r" data-channel="r">R</button>
+                  <button class="channel-btn" id="channel-g" data-channel="g">G</button>
+                  <button class="channel-btn" id="channel-b" data-channel="b">B</button>
+                  <button class="channel-btn" id="channel-a" data-channel="a">A</button>
+                </div>
+                <div class="render-adjustments">
+                  <label class="adjustment-label">Exposure
+                    <input type="range" id="render-exposure" min="-5" max="5" step="0.1" value="0">
+                  </label>
+                  <label class="adjustment-label">Gamma
+                    <input type="range" id="render-gamma" min="0.1" max="3" step="0.1" value="1">
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </aside>
+    </div>
+    
+    <!-- Timeline Panel -->
+    <div class="timeline-panel" id="timeline-panel">
+      <div class="timeline-header">
+        <div class="timeline-controls">
+          <button class="timeline-btn" id="timeline-goto-start" title="Go to Start">⏮</button>
+          <button class="timeline-btn" id="timeline-step-back" title="Step Back">◀◀</button>
+          <button class="timeline-btn primary" id="timeline-play" title="Play/Pause (Space)">▶</button>
+          <button class="timeline-btn" id="timeline-step-forward" title="Step Forward">▶▶</button>
+          <button class="timeline-btn" id="timeline-goto-end" title="Go to End">⏭</button>
+          <span class="timeline-separator">|</span>
+          <button class="timeline-btn" id="timeline-loop" title="Loop">🔁</button>
+        </div>
+        <div class="timeline-info">
+          <span class="timeline-timecode" id="timeline-current-frame">0</span>
+          <span class="timeline-divider">/</span>
+          <span class="timeline-timecode" id="timeline-total-frames">300</span>
+          <span class="timeline-fps">@ <input type="number" id="timeline-fps" value="24" min="1" max="120"> fps</span>
+        </div>
+        <div class="timeline-range">
+          <button class="timeline-btn" id="timeline-set-in" title="Set In Point (I)">In</button>
+          <span class="timeline-range-display" id="timeline-range-display">0 - 300</span>
+          <button class="timeline-btn" id="timeline-set-out" title="Set Out Point (O)">Out</button>
+        </div>
+        <div class="timeline-zoom-controls">
+          <button class="timeline-btn" id="timeline-zoom-out" title="Zoom Out">−</button>
+          <input type="range" id="timeline-zoom" class="timeline-zoom-slider" min="0.1" max="5" step="0.1" value="1">
+          <button class="timeline-btn" id="timeline-zoom-in" title="Zoom In">+</button>
+          <button class="timeline-btn" id="timeline-fit" title="Fit Timeline">⊡</button>
+        </div>
+        <div class="timeline-actions">
+          <button class="timeline-btn" id="timeline-add-keyframe" title="Add Keyframe">◆+</button>
+          <button class="timeline-btn" id="timeline-delete-keyframe" title="Delete Keyframe">◆−</button>
+          <button class="timeline-btn" id="timeline-add-marker" title="Add Marker">🚩</button>
+        </div>
+      </div>
+      <div class="timeline-body">
+        <div class="timeline-canvas-container" id="timeline-container">
+          <!-- Timeline canvas will be inserted here -->
+        </div>
+      </div>
+      <div class="timeline-resize-handle" id="timeline-resize-handle"></div>
     </div>
   </div>
 
