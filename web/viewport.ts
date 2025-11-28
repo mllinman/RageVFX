@@ -739,6 +739,208 @@ export class Viewport3D {
     if (this.axes) this.axes.visible = visible;
   }
 
+  /**
+   * Set shading mode for all meshes in the scene
+   */
+  setShadingMode(mode: 'solid' | 'wireframe' | 'material' | 'rendered'): void {
+    this.scene.traverse((object) => {
+      if (object instanceof THREE.Mesh) {
+        const material = object.material as THREE.MeshStandardMaterial;
+        switch (mode) {
+          case 'wireframe':
+            material.wireframe = true;
+            break;
+          case 'solid':
+            material.wireframe = false;
+            material.flatShading = true;
+            material.needsUpdate = true;
+            break;
+          case 'material':
+          case 'rendered':
+            material.wireframe = false;
+            material.flatShading = false;
+            material.needsUpdate = true;
+            break;
+        }
+      }
+    });
+  }
+
+  /**
+   * Set viewport background
+   */
+  setBackground(type: 'gradient' | 'solid' | 'hdri' | 'transparent', color?: string): void {
+    if (type === 'transparent') {
+      this.scene.background = null;
+      if (this.renderer) {
+        this.renderer.setClearColor(0x000000, 0);
+      }
+    } else if (type === 'solid' && color) {
+      this.scene.background = new THREE.Color(color);
+    } else if (type === 'gradient') {
+      // Create gradient background using a custom shader or default dark
+      this.scene.background = new THREE.Color(0x1a1a1a);
+    }
+  }
+
+  /**
+   * Frame selected object (focus camera on it)
+   */
+  frameSelected(): void {
+    if (!this.selectedObject) return;
+
+    const box = new THREE.Box3().setFromObject(this.selectedObject);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const distance = maxDim * 2;
+
+    const direction = new THREE.Vector3()
+      .subVectors(this.camera.position, center)
+      .normalize();
+    
+    this.camera.position.copy(center).add(direction.multiplyScalar(distance));
+    this.controls.setTarget(center);
+  }
+
+  /**
+   * Focus on all objects in scene
+   */
+  frameAll(): void {
+    const box = new THREE.Box3();
+    
+    this.scene.traverse((object) => {
+      if (object instanceof THREE.Mesh && 
+          !(object instanceof THREE.GridHelper) &&
+          !(object.parent instanceof THREE.AxesHelper)) {
+        box.expandByObject(object);
+      }
+    });
+
+    if (box.isEmpty()) return;
+
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const distance = maxDim * 2.5;
+
+    const direction = new THREE.Vector3(1, 0.7, 1).normalize();
+    this.camera.position.copy(center).add(direction.multiplyScalar(distance));
+    this.controls.setTarget(center);
+  }
+
+  /**
+   * Set ambient light intensity
+   */
+  setAmbientIntensity(intensity: number): void {
+    this.scene.traverse((object) => {
+      if (object instanceof THREE.AmbientLight) {
+        object.intensity = intensity;
+      }
+    });
+  }
+
+  /**
+   * Toggle shadow visibility
+   */
+  setShadowsEnabled(enabled: boolean): void {
+    if (this.renderer) {
+      this.renderer.shadowMap.enabled = enabled;
+    }
+    this.scene.traverse((object) => {
+      if (object instanceof THREE.Light) {
+        object.castShadow = enabled;
+      }
+      if (object instanceof THREE.Mesh) {
+        object.castShadow = enabled;
+        object.receiveShadow = enabled;
+      }
+    });
+  }
+
+  /**
+   * Set shadow quality
+   */
+  setShadowQuality(quality: 'off' | 'low' | 'medium' | 'high'): void {
+    if (!this.renderer) return;
+
+    if (quality === 'off') {
+      this.renderer.shadowMap.enabled = false;
+      return;
+    }
+
+    this.renderer.shadowMap.enabled = true;
+    
+    const sizes: Record<string, number> = {
+      'low': 512,
+      'medium': 1024,
+      'high': 2048
+    };
+
+    const size = sizes[quality] || 1024;
+
+    this.scene.traverse((object) => {
+      if (object instanceof THREE.DirectionalLight && object.shadow) {
+        object.shadow.mapSize.width = size;
+        object.shadow.mapSize.height = size;
+      }
+    });
+  }
+
+  /**
+   * Add a helper for visualizing bounding boxes
+   */
+  showBoundingBoxes(visible: boolean): void {
+    // Remove existing helpers
+    const helpersToRemove: THREE.BoxHelper[] = [];
+    this.scene.traverse((object) => {
+      if (object instanceof THREE.BoxHelper && object.name === 'boundingBoxHelper') {
+        helpersToRemove.push(object);
+      }
+    });
+    helpersToRemove.forEach(h => this.scene.remove(h));
+
+    if (!visible) return;
+
+    // Add new helpers
+    this.scene.traverse((object) => {
+      if (object instanceof THREE.Mesh && 
+          !(object instanceof THREE.GridHelper)) {
+        const helper = new THREE.BoxHelper(object, 0x888888);
+        helper.name = 'boundingBoxHelper';
+        this.scene.add(helper);
+      }
+    });
+  }
+
+  /**
+   * Get statistics about the scene
+   */
+  getSceneStats(): { objects: number; vertices: number; triangles: number } {
+    let objects = 0;
+    let vertices = 0;
+    let triangles = 0;
+
+    this.scene.traverse((object) => {
+      if (object instanceof THREE.Mesh) {
+        objects++;
+        const geometry = object.geometry;
+        if (geometry) {
+          if (geometry.index) {
+            triangles += geometry.index.count / 3;
+          } else if (geometry.attributes.position) {
+            triangles += geometry.attributes.position.count / 3;
+          }
+          if (geometry.attributes.position) {
+            vertices += geometry.attributes.position.count;
+          }
+        }
+      }
+    });
+
+    return { objects, vertices, triangles };
+  }
+
   dispose(): void {
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);

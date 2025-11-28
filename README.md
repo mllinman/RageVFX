@@ -4,15 +4,15 @@
 
 RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-3.2.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.4.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-130%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-140%2B-green)
 
 ## 🏆 Industry Competition
 
-RageVFX 3.2 introduces features that directly compete with industry-standard tools:
+RageVFX 3.4 introduces features that directly compete with industry-standard tools:
 
 | Feature | Nuke | Houdini | Maya | Mari | RageVFX |
 |---------|------|---------|------|------|---------|
@@ -34,7 +34,52 @@ RageVFX 3.2 introduces features that directly compete with industry-standard too
 | **3D Camera Tracking** | ✅ | - | ✅ | - | ✅ 3.2 |
 | **Real-World Camera** | - | - | ✅ | - | ✅ 3.2 |
 | **Model Import/Export** | - | ✅ | ✅ | ✅ | ✅ 3.2 |
+| **8K+ Resolution** | ✅ | ✅ | ✅ | ✅ | ✅ 3.3 |
+| **Stereoscopic 3D** | ✅ | - | ✅ | - | ✅ 3.3 |
+| **Node Backdrops** | ✅ | ✅ | - | - | ✅ 3.4 |
+| **Glitch/Temporal FX** | - | ✅ | - | - | ✅ 3.4 |
+| **Color Matching** | ✅ | - | - | - | ✅ 3.4 |
 | ML-powered tools | ✅ | - | - | - | ✅ |
+
+## 🆕 What's New in Version 3.4
+
+### Advanced VFX Effects
+New creative effects for modern visual design:
+
+- **Glitch Effects**: Digital distortion with RGB shift, scan lines, and block glitching
+- **Energy Fields**: Hexagonal, grid, circular, and organic force field patterns
+- **Magic Particles**: Fairy dust, sparkles, and magical particle systems
+- **Time Warp**: Echo trails, motion blur, temporal displacement effects
+
+### Professional Tools
+- **Text Overlay**: Full-featured text with shadows, glow, stroke, and transforms
+- **Color Match**: Match colors from reference images with multiple algorithms
+
+### Backdrop System
+Organize your node graphs like the pros:
+
+- **Customizable Backdrops**: Create labeled groups around node selections
+- **Color Coding**: Full color customization for visual organization
+- **Lock/Unlock**: Protect backdrops from accidental changes
+- **Resize & Move**: Intuitive drag handles for backdrop management
+
+### Enhanced Color Coding
+All nodes are now color-coded by category:
+- 🔴 VFX Fire/Explosion nodes (Red)
+- 🔵 VFX Water/Ice nodes (Blue)
+- 🟣 VFX Magic/Energy nodes (Purple)
+- 🔵 Color grading nodes (Green)
+- 🟠 3D pipeline nodes (Orange)
+- 🟡 Tracker nodes (Yellow)
+- 🟢 Input/Output nodes (Green/Orange)
+
+### Expanded Viewport Settings
+Professional 3D viewport controls:
+- Multiple shading modes (solid, wireframe, material, rendered)
+- Background options (gradient, solid, HDRI, transparent)
+- Ground plane, ambient occlusion, bounding boxes
+- Transform gizmo customization
+- Enhanced camera controls
 
 ## 🆕 What's New in Version 3.2
 
