@@ -405,12 +405,17 @@ RageVFX aims to become the industry-leading VFX software by combining the best f
 ### Q4 2025: Physics Engine & Pipeline (v3.1)
 - [x] PhysicsEngineNode implementation
 - [x] PhysicsWorldNode implementation
-- [ ] USD/Alembic support
-- [ ] Extended ML nodes
-- [ ] Review tools
+- [x] USD/Alembic support
+- [x] Extended ML nodes
+- [x] Review tools
 - [ ] Documentation and tutorials
 
 ### Q1 2026: Performance & Scale (v3.2)
+- [x] ProjectionPaintNode (Mari-like)
+- [x] FluidPhysicsNode & FluidCacheNode (Maya-like)
+- [x] Camera3DTrackingNode & RealWorldCameraNode
+- [x] ModelImportNode & ModelExportNode
+- [x] Comprehensive Settings modal
 - [ ] WebGPU Rendering
 - [ ] Distributed Rendering 2.0
 - [ ] Multi-GPU Support
