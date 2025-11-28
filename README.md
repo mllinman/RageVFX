@@ -679,14 +679,23 @@ RageVFX is optimized for professional workflows:
 - [x] **Redshift/V-Ray-rivaling rendering**: Path tracer with MIS/NEE, interactive light mixer
 - [x] Comprehensive competitive analysis and roadmap (ROADMAP.md)
 
-### Version 3.1 (Future - Pipeline Integration)
-- [ ] USD/Alembic import/export
-- [ ] Neural network training (CopyCat-style)
-- [ ] Segment Anything integration
-- [ ] Built-in review and annotation tools
-- [ ] Git-based version control for projects
+### Version 3.1 ✅ (Advanced Physics & Pipeline Integration)
+- [x] **Built-in Physics Engine**: PhysicsEngineNode, PhysicsWorldNode with 70+ controls
+- [x] USD/Alembic import/export
+- [x] Pipeline & Collaboration tools (PipelineManager, ReviewTool, VersionControl)
+- [x] Neural network training (CopyCat-style NeuralNetTrainer)
+- [x] Segment Anything integration
+- [x] Extended ML tools (BackgroundRemoval, FaceEnhancement, MotionPrediction)
 
-### Version 3.2 (Future - Performance & Scale)
+### Version 3.2 ✅ (Projection, Fluid & Camera Release)
+- [x] **Projection Painting**: Mari-like projection paint with multi-layer system
+- [x] **Fluid Physics**: Complete Eulerian fluid dynamics (FluidPhysics, FluidCache)
+- [x] **3D Camera Tracking**: Feature detection, bundle adjustment, point cloud generation
+- [x] **Real-World Camera**: 14 camera bodies, 10 lens presets with accurate specifications
+- [x] **Model Import/Export**: OBJ, FBX, glTF, USD, Alembic support
+- [x] **Settings System**: Comprehensive 13-category settings modal
+
+### Version 3.3 (Future - Advanced Simulation)
 - [ ] WebGPU rendering for 10x performance
 - [ ] Cloud-native distributed rendering
 - [ ] 8K+ resolution support

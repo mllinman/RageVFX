@@ -81,6 +81,7 @@ const CATEGORY_COLORS: Record<string, { primary: string; secondary: string; glow
   'Output': { primary: '#ff9944', secondary: '#ffbb77', glow: 'rgba(255, 153, 68, 0.4)' },
   'Camera': { primary: '#cc99ff', secondary: '#ddbbff', glow: 'rgba(204, 153, 255, 0.4)' },
   'Projection': { primary: '#88cc44', secondary: '#aaee66', glow: 'rgba(136, 204, 68, 0.4)' },
+  'Pipeline': { primary: '#8899bb', secondary: '#aabbdd', glow: 'rgba(136, 153, 187, 0.4)' },
   'Default': { primary: '#ff6b35', secondary: '#f7931e', glow: 'rgba(255, 107, 53, 0.3)' }
 };
 
