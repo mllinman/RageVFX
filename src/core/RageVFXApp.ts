@@ -219,6 +219,14 @@ import { StereoCompositorNode } from '../nodes/StereoCompositorNode';
 import { Transform3DNode } from '../nodes/Transform3DNode';
 import { Resolution8KNode } from '../nodes/Resolution8KNode';
 
+// Version 3.4 - Advanced VFX & Professional Tools
+import { GlitchNode } from '../nodes/GlitchNode';
+import { EnergyFieldNode } from '../nodes/EnergyFieldNode';
+import { MagicParticlesNode } from '../nodes/MagicParticlesNode';
+import { TimeWarpNode } from '../nodes/TimeWarpNode';
+import { TextOverlayNode } from '../nodes/TextOverlayNode';
+import { ColorMatchNode } from '../nodes/ColorMatchNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -451,6 +459,14 @@ export class RageVFXApp {
     this.nodeRegistry.set('StereoCompositor', StereoCompositorNode as any);
     this.nodeRegistry.set('Transform3D', Transform3DNode as any);
     this.nodeRegistry.set('Resolution8K', Resolution8KNode as any);
+    
+    // Version 3.4 - Advanced VFX & Professional Tools
+    this.nodeRegistry.set('Glitch', GlitchNode as any);
+    this.nodeRegistry.set('EnergyField', EnergyFieldNode as any);
+    this.nodeRegistry.set('MagicParticles', MagicParticlesNode as any);
+    this.nodeRegistry.set('TimeWarp', TimeWarpNode as any);
+    this.nodeRegistry.set('TextOverlay', TextOverlayNode as any);
+    this.nodeRegistry.set('ColorMatch', ColorMatchNode as any);
   }
 
   /**

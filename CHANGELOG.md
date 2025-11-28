@@ -2,6 +2,126 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.4.0] - 2025-11-28
+
+### Added - Version 3.4 Advanced VFX, Backdrops, & Professional Polish
+
+RageVFX 3.4 introduces new VFX effect nodes, a comprehensive backdrop system for node organization, enhanced color coding, expanded settings, and professional UI improvements.
+
+#### New VFX Effects (4 nodes)
+- **GlitchNode**: Digital glitch and distortion effects
+  - Block-based glitching with customizable block sizes
+  - RGB channel shift and color separation
+  - Scan line effects with adjustable intensity
+  - Wave distortion for organic glitch movement
+  - Chromatic aberration simulation
+  - Random noise injection
+  - Speed and intensity controls
+
+- **EnergyFieldNode**: Energy field and force field effects
+  - Multiple field patterns: hexagonal, grid, circular, organic
+  - Primary and secondary color customization
+  - Adjustable glow intensity and edge sharpness
+  - Pulsing animation with speed control
+  - Turbulent noise overlay for organic feel
+  - Perfect for sci-fi shields and magical barriers
+
+- **MagicParticlesNode**: Magical sparkles and fairy dust particles
+  - Particle system with customizable emission rate
+  - Configurable particle life, size, and speed
+  - Hue range selection for color variety
+  - Trail rendering with adjustable length
+  - Twinkle effect with speed control
+  - Emitter position and size configuration
+  - Gravity and spread controls
+
+- **TimeWarpNode**: Temporal effects including echo, motion trails, and time displacement
+  - Echo mode with frame decay and offset
+  - Trail mode with blend modes (add, screen, overlay)
+  - Displacement mode with radial, directional, and wave options
+  - Stroboscopic mode for freeze-frame effects
+  - Color shift option for rainbow trails
+  - Frame buffer system for temporal effects
+
+#### Professional Tools (2 nodes)
+- **TextOverlayNode**: Professional text overlay with effects
+  - Full font customization (family, size, weight, style)
+  - Position and alignment controls
+  - Stroke and shadow effects
+  - Glow effect with color control
+  - Rotation and scale transforms
+  - Perfect for titles, watermarks, and HUD elements
+
+- **ColorMatchNode**: Color matching between images
+  - Multiple matching methods: histogram, Reinhard, Pitié
+  - Strength control for subtle adjustments
+  - Preserve luminance option
+  - Shadow, midtone, and highlight matching
+  - Mask input for selective color matching
+
+#### Backdrop System
+- **Customizable Backdrops**: Group and organize nodes visually
+  - Create backdrops around selected nodes
+  - Customizable label, color, and font size
+  - Drag to move and resize handles
+  - Lock/unlock capability for protection
+  - Z-index layering for backdrop stacking
+  - Title bar with backdrop name
+  - Edit backdrop modal for properties
+  - Context menu integration
+
+#### Enhanced Color Coding
+- **Comprehensive Node Color System**: 
+  - VFX nodes (Fire/Explosion): Red (#ff4444)
+  - VFX nodes (Water/Ice): Blue (#4488ff)  
+  - VFX nodes (Magic/Energy): Purple (#aa44ff)
+  - VFX nodes (Tech/Cyber): Cyan (#00dddd)
+  - Color nodes: Green (#44cc88)
+  - Filter nodes: Blue (#4488ff)
+  - Composite nodes: Purple (#aa44ff)
+  - 3D nodes: Orange (#ff8844)
+  - Physics nodes: Pink (#dd4488)
+  - ML nodes: Cyan (#44dddd)
+  - Tracker nodes: Yellow (#ffdd44)
+  - Utility nodes: Gray (#888888)
+  - Input nodes: Green (#44bb44)
+  - Output nodes: Orange (#ff9944)
+  - Stereo nodes: Magenta (#ff00ff)
+  - Category header color indicators
+
+#### Expanded Viewport Settings
+- **3D Viewport Enhancements**:
+  - Ground plane toggle
+  - Ambient occlusion option
+  - Wireframe overlay mode
+  - Bounding boxes display
+  - Transform gizmo size adjustment
+  - Grid snap with configurable size
+  - Shading modes: solid, wireframe, material, rendered
+  - Background options: gradient, solid color, HDRI, transparent
+  - Crane speed control
+  - Smooth camera toggle
+  - Selection highlight option
+
+- **Viewport API Enhancements**:
+  - setShadingMode() for mesh display modes
+  - setBackground() for viewport background
+  - frameSelected() for focus on selection
+  - frameAll() for focus on entire scene
+  - setShadowsEnabled() and setShadowQuality()
+  - showBoundingBoxes() for visualization
+  - getSceneStats() for object/vertex/triangle counts
+
+#### UI Polish & Improvements
+- Enhanced button ripple effects
+- Smooth scrolling for all panels
+- Enhanced focus states for accessibility
+- Property input styling improvements
+- Quick-add node tooltip framework
+- Version badge styling
+- Node type badge on hover
+- Professional loading overlay styles
+
 ## [3.3.0] - 2025-11-28
 
 ### Added - Version 3.3 8K+ Resolution & Stereoscopic 3D Support
