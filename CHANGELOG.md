@@ -2,6 +2,96 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.3.0] - 2025-11-28
+
+### Added - Version 3.3 8K+ Resolution & Stereoscopic 3D Support
+
+RageVFX 3.3 introduces comprehensive 8K+ resolution support, professional stereoscopic 3D workflow, and advanced 3D object manipulation tools with WASD controls and keyframe animation.
+
+#### 8K+ Ultra High Resolution Support (1 node)
+- **Resolution8KNode**: Ultra-high resolution pipeline support from HD to 16K+
+  - 35+ resolution presets including HD, 2K, 4K, 6K, 8K, 10K, 12K, 16K
+  - Cinema formats: Flat, Scope, DCI, Full for all resolutions
+  - IMAX Digital and IMAX Laser support
+  - VR/360 formats: VR 4K, VR 8K, 360 Stereo 8K
+  - Social media presets: Instagram, TikTok, YouTube
+  - Tiled rendering for memory-efficient 8K+ processing
+  - Advanced scaling methods: nearest, bilinear, bicubic, Lanczos
+  - Automatic tile overlap blending for seamless output
+  - Sharpening and antialiasing options
+  - GPU acceleration support
+  - Progressive refinement for preview
+  - Memory usage estimation
+
+#### Stereoscopic 3D Workflow (2 nodes)
+- **StereoCamera3DNode**: Professional stereoscopic 3D camera rig
+  - 8 stereo presets: Human Vision (65mm), Cinema Standard (63.5mm), IMAX 3D (75mm), VR Headset (64mm), Macro Stereo (20mm), Architectural (100mm), Aerial/Landscape (300mm), Miniature (10mm)
+  - Stereo modes: toe-in, parallel, off-axis
+  - Interaxial distance and convergence distance controls
+  - Eye swap for cross-eye viewing
+  - Horizontal and vertical image translation
+  - Depth budget controls (positive/negative parallax limits)
+  - Comfort zone warnings
+  - Output formats: separate, side-by-side, top-bottom, anaglyph
+
+- **StereoCompositorNode**: Stereoscopic 3D compositing and output
+  - Output formats: separate, side-by-side, top-bottom, anaglyph, interlaced, checkerboard
+  - Half-width/height mode for 3D TVs
+  - 7 anaglyph modes: red-cyan, green-magenta, amber-blue, true-anaglyph, gray-anaglyph, optimized, Dubois
+  - Dubois optimized matrices for accurate color reproduction
+  - Floating window (stereo masking) controls
+  - Depth-based color grading
+  - Stereo adjustment controls: horizontal/vertical offset, convergence adjustment, depth strength
+  - Real-time anaglyph preview
+
+#### 3D Object Manipulation Tools (1 node)
+- **Transform3DNode**: Professional 3D object transformation
+  - Transform modes: translate, rotate, scale
+  - Transform spaces: world, local, view, screen
+  - Snap controls for translation, rotation, and scale
+  - Pivot modes: center, origin, bounding box, cursor, custom
+  - Euler and quaternion rotation support
+  - Multiple rotation orders: XYZ, XZY, YXZ, YZX, ZXY, ZYX
+  - Uniform and non-uniform scaling
+  - Transform constraints per axis
+  - Min/max limits for translation and scale
+  - Look-at target support
+
+#### Screenspace Manipulation & Interactive Controls
+- **WASD Object Controls**: Move selected objects in 3D scene
+  - W/A/S/D for forward/left/backward/right movement
+  - Q/E for up/down movement
+  - Shift modifier for faster movement (3x)
+  - Alt modifier for precision movement (0.1x)
+  - G key for translate mode (grab)
+  - R key for rotate mode
+  - T key for scale mode
+
+- **F Key Keyframe**: Set keyframe on timeline for selected object
+  - Records position, rotation, and scale
+  - Integration with timeline system
+  - Visual feedback on keyframe creation
+
+- **View Through Camera**: Look through scene camera
+  - Toggle view-through-camera mode in 3D viewport
+  - Maintains camera aspect ratio
+  - Useful for shot composition
+
+- **Object Selection**: Click to select 3D objects
+  - Visual selection highlight (BoxHelper)
+  - Raycasting for accurate object picking
+  - Escape to deselect
+  - Selection callback for external integrations
+
+#### UI/UX Improvements
+- New node category: "8K+ Resolution & Stereo 3D"
+- Transform tools bar in 3D viewport
+- WASD control hint text in viewport
+- View through camera checkbox
+- Keyframe button in viewport controls
+- Resolution badges for different quality levels
+- Stereo indicator with gradient styling
+
 ## [3.2.0] - 2025-11-27
 
 ### Added - Version 3.2 Complete Feature Release

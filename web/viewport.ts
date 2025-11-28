@@ -256,6 +256,30 @@ export class Viewport3D {
   private grid: THREE.GridHelper | null = null;
   private axes: THREE.AxesHelper | null = null;
 
+  // Selection and manipulation
+  private selectedObject: THREE.Object3D | null = null;
+  private transformMode: 'translate' | 'rotate' | 'scale' = 'translate';
+  private wasdState: { w: boolean; a: boolean; s: boolean; d: boolean; q: boolean; e: boolean } = 
+    { w: false, a: false, s: false, d: false, q: false, e: false };
+  private shiftHeld: boolean = false;
+  private altHeld: boolean = false;
+  private lastFrameTime: number = 0;
+  private moveSpeed: number = 5.0;
+  private rotateSpeed: number = 90; // degrees per second
+  private scaleSpeed: number = 1.0;
+
+  // View through camera feature
+  private viewThroughCamera: THREE.PerspectiveCamera | null = null;
+  private isViewingThroughCamera: boolean = false;
+
+  // Selection helper
+  private selectionHelper: THREE.BoxHelper | null = null;
+  private raycaster: THREE.Raycaster = new THREE.Raycaster();
+
+  // Callbacks
+  private onObjectSelect: ((object: THREE.Object3D | null) => void) | null = null;
+  private onKeyframe: ((objectId: string, transform: { position: number[]; rotation: number[]; scale: number[] }) => void) | null = null;
+
   // Camera presets
   private cameraPresets: CameraPreset[] = [
     { name: 'Front', position: new THREE.Vector3(0, 0, 10), target: new THREE.Vector3(0, 0, 0), fov: 50 },
@@ -279,6 +303,7 @@ export class Viewport3D {
     this.controls = new CameraControls(this.camera, container);
     
     this.initialize();
+    this.setupKeyboardControls();
     this.startRenderLoop();
   }
 
@@ -317,6 +342,125 @@ export class Viewport3D {
     
     // Window resize handler
     window.addEventListener('resize', () => this.resize());
+    
+    // Click handler for selection
+    this.container.addEventListener('click', (e) => this.onContainerClick(e));
+  }
+
+  private setupKeyboardControls(): void {
+    // Keyboard event handlers for WASD and other controls
+    document.addEventListener('keydown', (e) => this.onKeyDown(e));
+    document.addEventListener('keyup', (e) => this.onKeyUp(e));
+  }
+
+  private onKeyDown(e: KeyboardEvent): void {
+    // Check if viewport has focus
+    if (!this.container.contains(document.activeElement) && document.activeElement !== document.body) {
+      return;
+    }
+
+    // Track modifier keys
+    this.shiftHeld = e.shiftKey;
+    this.altHeld = e.altKey;
+
+    // WASD controls
+    switch (e.key.toLowerCase()) {
+      case 'w':
+        this.wasdState.w = true;
+        break;
+      case 'a':
+        this.wasdState.a = true;
+        break;
+      case 's':
+        this.wasdState.s = true;
+        break;
+      case 'd':
+        this.wasdState.d = true;
+        break;
+      case 'q':
+        this.wasdState.q = true;
+        break;
+      case 'e':
+        this.wasdState.e = true;
+        break;
+      case 'g':
+        // G for translate (grab) mode
+        this.setTransformMode('translate');
+        break;
+      case 'r':
+        // R for rotate mode
+        this.setTransformMode('rotate');
+        break;
+      case 't':
+        // T for scale mode (like Blender)
+        this.setTransformMode('scale');
+        break;
+      case 'f':
+        // F to set keyframe on timeline
+        e.preventDefault();
+        this.setKeyframe();
+        break;
+      case 'escape':
+        // Escape to deselect
+        this.selectObject(null);
+        break;
+    }
+  }
+
+  private onKeyUp(e: KeyboardEvent): void {
+    this.shiftHeld = e.shiftKey;
+    this.altHeld = e.altKey;
+
+    switch (e.key.toLowerCase()) {
+      case 'w':
+        this.wasdState.w = false;
+        break;
+      case 'a':
+        this.wasdState.a = false;
+        break;
+      case 's':
+        this.wasdState.s = false;
+        break;
+      case 'd':
+        this.wasdState.d = false;
+        break;
+      case 'q':
+        this.wasdState.q = false;
+        break;
+      case 'e':
+        this.wasdState.e = false;
+        break;
+    }
+  }
+
+  private onContainerClick(e: MouseEvent): void {
+    // Calculate normalized device coordinates
+    const rect = this.container.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    const activeCamera = this.isViewingThroughCamera && this.viewThroughCamera 
+      ? this.viewThroughCamera 
+      : this.camera;
+
+    // Raycast to find clicked object
+    this.raycaster.setFromCamera(new THREE.Vector2(x, y), activeCamera);
+    const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+
+    // Filter out helpers (grid, axes, selection box)
+    const selectableIntersects = intersects.filter(i => {
+      const obj = i.object;
+      return !(obj instanceof THREE.GridHelper || 
+               obj instanceof THREE.AxesHelper ||
+               obj instanceof THREE.BoxHelper ||
+               obj instanceof THREE.Line);
+    });
+
+    if (selectableIntersects.length > 0) {
+      this.selectObject(selectableIntersects[0].object);
+    } else if (!e.shiftKey) {
+      this.selectObject(null);
+    }
   }
 
   private addSampleObjects(): void {
@@ -331,6 +475,7 @@ export class Viewport3D {
     cube.position.y = 1;
     cube.castShadow = true;
     cube.receiveShadow = true;
+    cube.name = 'SampleCube';
     this.scene.add(cube);
     
     // Add ground plane
@@ -342,6 +487,7 @@ export class Viewport3D {
     const ground = new THREE.Mesh(groundGeometry, groundMaterial);
     ground.rotation.x = -Math.PI / 2;
     ground.receiveShadow = true;
+    ground.name = 'Ground';
     this.scene.add(ground);
   }
 
@@ -355,17 +501,190 @@ export class Viewport3D {
     
     this.camera.aspect = this.width / this.height;
     this.camera.updateProjectionMatrix();
+    
+    if (this.viewThroughCamera) {
+      this.viewThroughCamera.aspect = this.width / this.height;
+      this.viewThroughCamera.updateProjectionMatrix();
+    }
   }
 
   private startRenderLoop(): void {
+    this.lastFrameTime = performance.now();
+    
     const animate = () => {
       this.animationId = requestAnimationFrame(animate);
+      
+      // Calculate delta time
+      const now = performance.now();
+      const deltaTime = (now - this.lastFrameTime) / 1000;
+      this.lastFrameTime = now;
+      
+      // Update WASD movement for selected object
+      this.updateObjectMovement(deltaTime);
+      
+      // Update selection helper
+      if (this.selectionHelper && this.selectedObject) {
+        this.selectionHelper.update();
+      }
+      
       this.controls.update();
+      
       if (this.renderer) {
-        this.renderer.render(this.scene, this.camera);
+        const activeCamera = this.isViewingThroughCamera && this.viewThroughCamera 
+          ? this.viewThroughCamera 
+          : this.camera;
+        this.renderer.render(this.scene, activeCamera);
       }
     };
     animate();
+  }
+
+  private updateObjectMovement(deltaTime: number): void {
+    if (!this.selectedObject) return;
+
+    // Calculate speed modifiers
+    let speedMod = 1.0;
+    if (this.shiftHeld) speedMod *= 3.0;
+    if (this.altHeld) speedMod *= 0.1;
+
+    const hasInput = this.wasdState.w || this.wasdState.a || this.wasdState.s || 
+                     this.wasdState.d || this.wasdState.q || this.wasdState.e;
+    
+    if (!hasInput) return;
+
+    switch (this.transformMode) {
+      case 'translate': {
+        const moveAmount = this.moveSpeed * speedMod * deltaTime;
+        if (this.wasdState.w) this.selectedObject.position.z -= moveAmount;
+        if (this.wasdState.s) this.selectedObject.position.z += moveAmount;
+        if (this.wasdState.a) this.selectedObject.position.x -= moveAmount;
+        if (this.wasdState.d) this.selectedObject.position.x += moveAmount;
+        if (this.wasdState.q) this.selectedObject.position.y -= moveAmount;
+        if (this.wasdState.e) this.selectedObject.position.y += moveAmount;
+        break;
+      }
+      case 'rotate': {
+        const rotateAmount = (this.rotateSpeed * speedMod * deltaTime) * Math.PI / 180;
+        if (this.wasdState.w) this.selectedObject.rotation.x += rotateAmount;
+        if (this.wasdState.s) this.selectedObject.rotation.x -= rotateAmount;
+        if (this.wasdState.a) this.selectedObject.rotation.y += rotateAmount;
+        if (this.wasdState.d) this.selectedObject.rotation.y -= rotateAmount;
+        if (this.wasdState.q) this.selectedObject.rotation.z += rotateAmount;
+        if (this.wasdState.e) this.selectedObject.rotation.z -= rotateAmount;
+        break;
+      }
+      case 'scale': {
+        const scaleAmount = this.scaleSpeed * speedMod * deltaTime;
+        if (this.wasdState.w || this.wasdState.d) {
+          this.selectedObject.scale.x += scaleAmount;
+          this.selectedObject.scale.y += scaleAmount;
+          this.selectedObject.scale.z += scaleAmount;
+        }
+        if (this.wasdState.s || this.wasdState.a) {
+          this.selectedObject.scale.x = Math.max(0.01, this.selectedObject.scale.x - scaleAmount);
+          this.selectedObject.scale.y = Math.max(0.01, this.selectedObject.scale.y - scaleAmount);
+          this.selectedObject.scale.z = Math.max(0.01, this.selectedObject.scale.z - scaleAmount);
+        }
+        break;
+      }
+    }
+  }
+
+  // Selection methods
+  selectObject(object: THREE.Object3D | null): void {
+    // Remove existing selection helper
+    if (this.selectionHelper) {
+      this.scene.remove(this.selectionHelper);
+      this.selectionHelper = null;
+    }
+
+    this.selectedObject = object;
+
+    // Create selection helper for new selection
+    if (object) {
+      this.selectionHelper = new THREE.BoxHelper(object, 0xffff00);
+      this.scene.add(this.selectionHelper);
+    }
+
+    // Notify callback
+    if (this.onObjectSelect) {
+      this.onObjectSelect(object);
+    }
+  }
+
+  getSelectedObject(): THREE.Object3D | null {
+    return this.selectedObject;
+  }
+
+  setTransformMode(mode: 'translate' | 'rotate' | 'scale'): void {
+    this.transformMode = mode;
+  }
+
+  getTransformMode(): 'translate' | 'rotate' | 'scale' {
+    return this.transformMode;
+  }
+
+  // Keyframe methods
+  setKeyframe(): void {
+    if (!this.selectedObject || !this.onKeyframe) return;
+
+    const transform = {
+      position: [
+        this.selectedObject.position.x,
+        this.selectedObject.position.y,
+        this.selectedObject.position.z
+      ],
+      rotation: [
+        this.selectedObject.rotation.x * 180 / Math.PI,
+        this.selectedObject.rotation.y * 180 / Math.PI,
+        this.selectedObject.rotation.z * 180 / Math.PI
+      ],
+      scale: [
+        this.selectedObject.scale.x,
+        this.selectedObject.scale.y,
+        this.selectedObject.scale.z
+      ]
+    };
+
+    this.onKeyframe(this.selectedObject.name || this.selectedObject.uuid, transform);
+  }
+
+  setOnKeyframeCallback(callback: (objectId: string, transform: { position: number[]; rotation: number[]; scale: number[] }) => void): void {
+    this.onKeyframe = callback;
+  }
+
+  setOnObjectSelectCallback(callback: (object: THREE.Object3D | null) => void): void {
+    this.onObjectSelect = callback;
+  }
+
+  // View through camera methods
+  setViewThroughCamera(camera: THREE.PerspectiveCamera | null): void {
+    this.viewThroughCamera = camera;
+    if (camera) {
+      camera.aspect = this.width / this.height;
+      camera.updateProjectionMatrix();
+    }
+  }
+
+  enableViewThroughCamera(enabled: boolean): void {
+    this.isViewingThroughCamera = enabled;
+  }
+
+  isViewingThrough(): boolean {
+    return this.isViewingThroughCamera;
+  }
+
+  // Movement speed setters
+  setMoveSpeed(speed: number): void {
+    this.moveSpeed = speed;
+  }
+
+  setRotateSpeed(speed: number): void {
+    this.rotateSpeed = speed;
+  }
+
+  setScaleSpeed(speed: number): void {
+    this.scaleSpeed = speed;
   }
 
   // Camera control methods

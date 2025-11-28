@@ -213,6 +213,12 @@ import { RealWorldCameraNode } from '../nodes/RealWorldCameraNode';
 import { FluidPhysicsNode } from '../nodes/FluidPhysicsNode';
 import { FluidCacheNode } from '../nodes/FluidCacheNode';
 
+// Version 3.3 - 8K+ Resolution & Stereoscopic 3D Support
+import { StereoCamera3DNode } from '../nodes/StereoCamera3DNode';
+import { StereoCompositorNode } from '../nodes/StereoCompositorNode';
+import { Transform3DNode } from '../nodes/Transform3DNode';
+import { Resolution8KNode } from '../nodes/Resolution8KNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -439,6 +445,12 @@ export class RageVFXApp {
     // Version 3.2 - Fluid Physics System (Maya-like)
     this.nodeRegistry.set('FluidPhysics', FluidPhysicsNode as any);
     this.nodeRegistry.set('FluidCache', FluidCacheNode as any);
+    
+    // Version 3.3 - 8K+ Resolution & Stereoscopic 3D Support
+    this.nodeRegistry.set('StereoCamera3D', StereoCamera3DNode as any);
+    this.nodeRegistry.set('StereoCompositor', StereoCompositorNode as any);
+    this.nodeRegistry.set('Transform3D', Transform3DNode as any);
+    this.nodeRegistry.set('Resolution8K', Resolution8KNode as any);
   }
 
   /**
