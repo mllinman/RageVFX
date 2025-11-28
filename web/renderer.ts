@@ -66,6 +66,15 @@ const VFX_NODE_TYPES = new Set([
   'Glitch', 'EnergyField', 'MagicParticles', 'TimeWarp'
 ]);
 
+// Default backdrop styling constants
+const BACKDROP_DEFAULTS = {
+  COLOR: '#4488ff',        // Default backdrop color (blue from Filter category)
+  TEXT_COLOR: '#ffffff',   // Default text color (white)
+  FONT_SIZE: 14,           // Default font size in pixels
+  WIDTH: 400,              // Default width
+  HEIGHT: 300              // Default height
+};
+
 // Category colors for visual distinction - Enhanced with more categories
 const CATEGORY_COLORS: Record<string, { primary: string; secondary: string; glow: string }> = {
   'VFX': { primary: '#ff4444', secondary: '#ff8866', glow: 'rgba(255, 68, 68, 0.6)' },
@@ -1108,7 +1117,7 @@ class NodeGraphUI {
   /**
    * Create a new backdrop
    */
-  createBackdrop(x: number, y: number, width: number = 400, height: number = 300, label: string = 'Backdrop'): Backdrop {
+  createBackdrop(x: number, y: number, width: number = BACKDROP_DEFAULTS.WIDTH, height: number = BACKDROP_DEFAULTS.HEIGHT, label: string = 'Backdrop'): Backdrop {
     const backdrop: Backdrop = {
       id: `backdrop_${this.backdropIdCounter++}`,
       label,
@@ -1116,9 +1125,9 @@ class NodeGraphUI {
       y,
       width,
       height,
-      color: '#4488ff',
-      textColor: '#ffffff',
-      fontSize: 14,
+      color: BACKDROP_DEFAULTS.COLOR,
+      textColor: BACKDROP_DEFAULTS.TEXT_COLOR,
+      fontSize: BACKDROP_DEFAULTS.FONT_SIZE,
       selected: false,
       locked: false,
       zIndex: this.backdrops.length

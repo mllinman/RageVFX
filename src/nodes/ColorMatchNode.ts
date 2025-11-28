@@ -161,13 +161,21 @@ export class ColorMatchNode extends Node {
     const meanG = sumG / pixelCount;
     const meanB = sumB / pixelCount;
     
-    const stdR = Math.sqrt(sumR2 / pixelCount - meanR * meanR);
-    const stdG = Math.sqrt(sumG2 / pixelCount - meanG * meanG);
-    const stdB = Math.sqrt(sumB2 / pixelCount - meanB * meanB);
+    const stdR = Math.sqrt(Math.max(0, sumR2 / pixelCount - meanR * meanR));
+    const stdG = Math.sqrt(Math.max(0, sumG2 / pixelCount - meanG * meanG));
+    const stdB = Math.sqrt(Math.max(0, sumB2 / pixelCount - meanB * meanB));
+    
+    // Use small epsilon for zero variance to avoid division by zero
+    // while preserving near-constant colors
+    const epsilon = 0.001;
     
     return {
       mean: { r: meanR, g: meanG, b: meanB },
-      std: { r: stdR || 1, g: stdG || 1, b: stdB || 1 },
+      std: { 
+        r: stdR > epsilon ? stdR : epsilon, 
+        g: stdG > epsilon ? stdG : epsilon, 
+        b: stdB > epsilon ? stdB : epsilon 
+      },
       min: { r: minR, g: minG, b: minB },
       max: { r: maxR, g: maxG, b: maxB }
     };

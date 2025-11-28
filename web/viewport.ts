@@ -739,29 +739,44 @@ export class Viewport3D {
     if (this.axes) this.axes.visible = visible;
   }
 
+  // Camera distance constants
+  private readonly FRAME_SELECTED_DISTANCE_FACTOR = 2.0;
+  private readonly FRAME_ALL_DISTANCE_FACTOR = 2.5;
+
   /**
    * Set shading mode for all meshes in the scene
    */
   setShadingMode(mode: 'solid' | 'wireframe' | 'material' | 'rendered'): void {
     this.scene.traverse((object) => {
       if (object instanceof THREE.Mesh) {
-        const material = object.material as THREE.MeshStandardMaterial;
-        switch (mode) {
-          case 'wireframe':
-            material.wireframe = true;
-            break;
-          case 'solid':
-            material.wireframe = false;
-            material.flatShading = true;
-            material.needsUpdate = true;
-            break;
-          case 'material':
-          case 'rendered':
-            material.wireframe = false;
-            material.flatShading = false;
-            material.needsUpdate = true;
-            break;
-        }
+        // Handle both single material and material arrays
+        const materials = Array.isArray(object.material) ? object.material : [object.material];
+        
+        materials.forEach((material) => {
+          // Only apply to materials that support these properties
+          if (material && 'wireframe' in material) {
+            switch (mode) {
+              case 'wireframe':
+                material.wireframe = true;
+                break;
+              case 'solid':
+                material.wireframe = false;
+                if ('flatShading' in material) {
+                  (material as THREE.MeshStandardMaterial).flatShading = true;
+                  material.needsUpdate = true;
+                }
+                break;
+              case 'material':
+              case 'rendered':
+                material.wireframe = false;
+                if ('flatShading' in material) {
+                  (material as THREE.MeshStandardMaterial).flatShading = false;
+                  material.needsUpdate = true;
+                }
+                break;
+            }
+          }
+        });
       }
     });
   }
@@ -793,7 +808,7 @@ export class Viewport3D {
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const distance = maxDim * 2;
+    const distance = maxDim * this.FRAME_SELECTED_DISTANCE_FACTOR;
 
     const direction = new THREE.Vector3()
       .subVectors(this.camera.position, center)
@@ -822,7 +837,7 @@ export class Viewport3D {
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const distance = maxDim * 2.5;
+    const distance = maxDim * this.FRAME_ALL_DISTANCE_FACTOR;
 
     const direction = new THREE.Vector3(1, 0.7, 1).normalize();
     this.camera.position.copy(center).add(direction.multiplyScalar(distance));
