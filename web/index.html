@@ -391,6 +391,66 @@
               <div class="node-item" draggable="true" data-node-type="Collision">
                 💥 Collision
               </div>
+              <div class="node-item" draggable="true" data-node-type="FluidPhysics">
+                🌊 Fluid Physics
+              </div>
+              <div class="node-item" draggable="true" data-node-type="FluidCache">
+                💾 Fluid Cache
+              </div>
+              <div class="node-item" draggable="true" data-node-type="PhysicsEngine">
+                ⚡ Physics Engine
+              </div>
+              <div class="node-item" draggable="true" data-node-type="PhysicsWorld">
+                🌍 Physics World
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Projection & Painting
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="ProjectionPaint">
+                🎨 Projection Paint
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> Camera & Tracking
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="Camera3DTracking">
+                📹 3D Camera Tracking
+              </div>
+              <div class="node-item" draggable="true" data-node-type="RealWorldCamera">
+                📷 Real World Camera
+              </div>
+              <div class="node-item" draggable="true" data-node-type="CameraPreset">
+                🎥 Camera Preset
+              </div>
+              <div class="node-item" draggable="true" data-node-type="CameraLens">
+                🔭 Camera Lens
+              </div>
+            </div>
+          </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> 3D Import/Export
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="ModelImport">
+                📥 Model Import
+              </div>
+              <div class="node-item" draggable="true" data-node-type="ModelExport">
+                📤 Model Export
+              </div>
+              <div class="node-item" draggable="true" data-node-type="USD">
+                📦 USD
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Alembic">
+                📊 Alembic
+              </div>
             </div>
           </div>
           <div class="category">
@@ -641,6 +701,733 @@
     <div class="context-menu-divider"></div>
     <div class="context-menu-item" data-action="disconnect">Disconnect All</div>
     <div class="context-menu-item" data-action="disable">Disable/Enable</div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="settings-modal hidden">
+    <div class="settings-modal-content">
+      <div class="settings-header">
+        <h2>⚙️ RageVFX Settings</h2>
+        <button class="settings-close" id="settings-close">&times;</button>
+      </div>
+      <div class="settings-body">
+        <div class="settings-sidebar">
+          <div class="settings-nav-item active" data-section="general">🔧 General</div>
+          <div class="settings-nav-item" data-section="appearance">🎨 Appearance</div>
+          <div class="settings-nav-item" data-section="performance">⚡ Performance</div>
+          <div class="settings-nav-item" data-section="project">📁 Project</div>
+          <div class="settings-nav-item" data-section="rendering">🖼️ Rendering</div>
+          <div class="settings-nav-item" data-section="physics">🌊 Physics</div>
+          <div class="settings-nav-item" data-section="camera">📹 Camera</div>
+          <div class="settings-nav-item" data-section="viewport">👁️ Viewport</div>
+          <div class="settings-nav-item" data-section="timeline">⏱️ Timeline</div>
+          <div class="settings-nav-item" data-section="cache">💾 Caching</div>
+          <div class="settings-nav-item" data-section="colormanagement">🎯 Color Management</div>
+          <div class="settings-nav-item" data-section="shortcuts">⌨️ Shortcuts</div>
+          <div class="settings-nav-item" data-section="advanced">🔬 Advanced</div>
+        </div>
+        <div class="settings-content">
+          <!-- General Settings -->
+          <div class="settings-section active" id="settings-general">
+            <h3>General Settings</h3>
+            <div class="settings-group">
+              <h4>Language & Region</h4>
+              <div class="settings-row">
+                <label>Interface Language</label>
+                <select id="setting-language">
+                  <option value="en">English</option>
+                  <option value="es">Español</option>
+                  <option value="fr">Français</option>
+                  <option value="de">Deutsch</option>
+                  <option value="ja">日本語</option>
+                  <option value="zh">中文</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Time Format</label>
+                <select id="setting-time-format">
+                  <option value="timecode">Timecode (HH:MM:SS:FF)</option>
+                  <option value="frames">Frames</option>
+                  <option value="seconds">Seconds</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Auto-Save</h4>
+              <div class="settings-row">
+                <label>Enable Auto-Save</label>
+                <input type="checkbox" id="setting-autosave" checked>
+              </div>
+              <div class="settings-row">
+                <label>Auto-Save Interval (minutes)</label>
+                <input type="number" id="setting-autosave-interval" value="5" min="1" max="60">
+              </div>
+              <div class="settings-row">
+                <label>Keep Auto-Save Versions</label>
+                <input type="number" id="setting-autosave-versions" value="10" min="1" max="100">
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Undo/Redo</h4>
+              <div class="settings-row">
+                <label>Undo History Steps</label>
+                <input type="number" id="setting-undo-steps" value="100" min="10" max="1000">
+              </div>
+            </div>
+          </div>
+
+          <!-- Appearance Settings -->
+          <div class="settings-section" id="settings-appearance">
+            <h3>Appearance Settings</h3>
+            <div class="settings-group">
+              <h4>Theme</h4>
+              <div class="settings-row">
+                <label>Color Theme</label>
+                <select id="setting-theme">
+                  <option value="dark">Dark</option>
+                  <option value="light">Light</option>
+                  <option value="midnight">Midnight Blue</option>
+                  <option value="charcoal">Charcoal</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Accent Color</label>
+                <input type="color" id="setting-accent-color" value="#ff6b35">
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>UI Scale</h4>
+              <div class="settings-row">
+                <label>Interface Scale</label>
+                <input type="range" id="setting-ui-scale" min="0.75" max="1.5" step="0.05" value="1">
+                <span class="range-value" id="ui-scale-value">100%</span>
+              </div>
+              <div class="settings-row">
+                <label>Font Size</label>
+                <select id="setting-font-size">
+                  <option value="small">Small</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="large">Large</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Node Editor</h4>
+              <div class="settings-row">
+                <label>Connection Style</label>
+                <select id="setting-connection-style">
+                  <option value="bezier">Bezier Curves</option>
+                  <option value="straight">Straight Lines</option>
+                  <option value="step">Step Lines</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Grid Type</label>
+                <select id="setting-grid-type">
+                  <option value="lines">Lines</option>
+                  <option value="dots">Dots</option>
+                  <option value="none">None</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Node Shadows</label>
+                <input type="checkbox" id="setting-node-shadows" checked>
+              </div>
+              <div class="settings-row">
+                <label>Animated VFX Nodes</label>
+                <input type="checkbox" id="setting-animated-nodes" checked>
+              </div>
+            </div>
+          </div>
+
+          <!-- Performance Settings -->
+          <div class="settings-section" id="settings-performance">
+            <h3>Performance Settings</h3>
+            <div class="settings-group">
+              <h4>GPU Acceleration</h4>
+              <div class="settings-row">
+                <label>Enable GPU Rendering</label>
+                <input type="checkbox" id="setting-gpu-enabled" checked>
+              </div>
+              <div class="settings-row">
+                <label>Preferred GPU</label>
+                <select id="setting-gpu-device">
+                  <option value="auto">Auto-Detect</option>
+                  <option value="integrated">Integrated Graphics</option>
+                  <option value="discrete">Discrete GPU</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Memory</h4>
+              <div class="settings-row">
+                <label>Maximum RAM Usage (GB)</label>
+                <input type="number" id="setting-max-ram" value="8" min="2" max="64">
+              </div>
+              <div class="settings-row">
+                <label>Maximum GPU Memory (GB)</label>
+                <input type="number" id="setting-max-vram" value="4" min="1" max="24">
+              </div>
+              <div class="settings-row">
+                <label>Tile Size for Large Images</label>
+                <select id="setting-tile-size">
+                  <option value="256">256 x 256</option>
+                  <option value="512" selected>512 x 512</option>
+                  <option value="1024">1024 x 1024</option>
+                  <option value="2048">2048 x 2048</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Multi-Threading</h4>
+              <div class="settings-row">
+                <label>Number of Threads</label>
+                <select id="setting-threads">
+                  <option value="auto">Auto (System Default)</option>
+                  <option value="1">1 Thread</option>
+                  <option value="2">2 Threads</option>
+                  <option value="4">4 Threads</option>
+                  <option value="8">8 Threads</option>
+                  <option value="16">16 Threads</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Preview Quality</h4>
+              <div class="settings-row">
+                <label>Preview Resolution</label>
+                <select id="setting-preview-res">
+                  <option value="full">Full Resolution</option>
+                  <option value="half" selected>Half Resolution</option>
+                  <option value="quarter">Quarter Resolution</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Proxy Mode</label>
+                <input type="checkbox" id="setting-proxy-mode">
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Settings -->
+          <div class="settings-section" id="settings-project">
+            <h3>Project Settings</h3>
+            <div class="settings-group">
+              <h4>Default Resolution</h4>
+              <div class="settings-row">
+                <label>Width</label>
+                <input type="number" id="setting-default-width" value="1920" min="1" max="16384">
+              </div>
+              <div class="settings-row">
+                <label>Height</label>
+                <input type="number" id="setting-default-height" value="1080" min="1" max="16384">
+              </div>
+              <div class="settings-row">
+                <label>Resolution Preset</label>
+                <select id="setting-resolution-preset">
+                  <option value="hd">HD (1920x1080)</option>
+                  <option value="2k">2K (2048x1080)</option>
+                  <option value="uhd">UHD (3840x2160)</option>
+                  <option value="4k">4K (4096x2160)</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Frame Rate</h4>
+              <div class="settings-row">
+                <label>Default FPS</label>
+                <select id="setting-default-fps">
+                  <option value="23.976">23.976 (Film)</option>
+                  <option value="24" selected>24 (Film)</option>
+                  <option value="25">25 (PAL)</option>
+                  <option value="29.97">29.97 (NTSC)</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                  <option value="59.94">59.94</option>
+                  <option value="60">60</option>
+                  <option value="120">120</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Bit Depth</h4>
+              <div class="settings-row">
+                <label>Default Bit Depth</label>
+                <select id="setting-bit-depth">
+                  <option value="8">8-bit</option>
+                  <option value="16" selected>16-bit</option>
+                  <option value="32">32-bit Float</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Project Defaults</h4>
+              <div class="settings-row">
+                <label>Frame Range Start</label>
+                <input type="number" id="setting-frame-start" value="1" min="0">
+              </div>
+              <div class="settings-row">
+                <label>Frame Range End</label>
+                <input type="number" id="setting-frame-end" value="300" min="1">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rendering Settings -->
+          <div class="settings-section" id="settings-rendering">
+            <h3>Rendering Settings</h3>
+            <div class="settings-group">
+              <h4>Output Format</h4>
+              <div class="settings-row">
+                <label>Default Image Format</label>
+                <select id="setting-output-format">
+                  <option value="exr">EXR (OpenEXR)</option>
+                  <option value="png" selected>PNG</option>
+                  <option value="jpg">JPEG</option>
+                  <option value="tiff">TIFF</option>
+                  <option value="dpx">DPX</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>EXR Compression</label>
+                <select id="setting-exr-compression">
+                  <option value="none">None</option>
+                  <option value="zip" selected>ZIP</option>
+                  <option value="zips">ZIP (Scanline)</option>
+                  <option value="piz">PIZ (Wavelet)</option>
+                  <option value="dwaa">DWAA</option>
+                  <option value="dwab">DWAB</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Render Quality</h4>
+              <div class="settings-row">
+                <label>Render Quality</label>
+                <select id="setting-render-quality">
+                  <option value="draft">Draft</option>
+                  <option value="preview">Preview</option>
+                  <option value="final" selected>Final</option>
+                  <option value="ultra">Ultra</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Anti-Aliasing</label>
+                <select id="setting-antialiasing">
+                  <option value="none">None</option>
+                  <option value="2x">2x MSAA</option>
+                  <option value="4x" selected>4x MSAA</option>
+                  <option value="8x">8x MSAA</option>
+                  <option value="16x">16x MSAA</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Path Tracing (3D)</h4>
+              <div class="settings-row">
+                <label>Samples per Pixel</label>
+                <input type="number" id="setting-samples" value="128" min="1" max="10000">
+              </div>
+              <div class="settings-row">
+                <label>Max Bounces</label>
+                <input type="number" id="setting-bounces" value="8" min="1" max="64">
+              </div>
+              <div class="settings-row">
+                <label>Denoising</label>
+                <input type="checkbox" id="setting-denoising" checked>
+              </div>
+            </div>
+          </div>
+
+          <!-- Physics Settings -->
+          <div class="settings-section" id="settings-physics">
+            <h3>Physics Settings</h3>
+            <div class="settings-group">
+              <h4>Fluid Simulation</h4>
+              <div class="settings-row">
+                <label>Default Resolution</label>
+                <select id="setting-fluid-resolution">
+                  <option value="32">32³ (Fast)</option>
+                  <option value="64" selected>64³ (Standard)</option>
+                  <option value="128">128³ (High)</option>
+                  <option value="256">256³ (Ultra)</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Simulation Substeps</label>
+                <input type="number" id="setting-fluid-substeps" value="2" min="1" max="10">
+              </div>
+              <div class="settings-row">
+                <label>Time Scale</label>
+                <input type="range" id="setting-fluid-timescale" min="0.1" max="2" step="0.1" value="1">
+                <span class="range-value" id="fluid-timescale-value">1.0x</span>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Cache Settings</h4>
+              <div class="settings-row">
+                <label>Default Cache Directory</label>
+                <input type="text" id="setting-cache-dir" value="./cache" class="input-wide">
+              </div>
+              <div class="settings-row">
+                <label>Cache Format</label>
+                <select id="setting-cache-format">
+                  <option value="vdb" selected>OpenVDB</option>
+                  <option value="field3d">Field3D</option>
+                  <option value="raw">Raw Binary</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Cache Compression</label>
+                <select id="setting-cache-compression">
+                  <option value="none">None</option>
+                  <option value="blosc" selected>BLOSC</option>
+                  <option value="zip">ZIP</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Max Cache Size (GB)</label>
+                <input type="number" id="setting-max-cache" value="50" min="1" max="1000">
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Gravity & Forces</h4>
+              <div class="settings-row">
+                <label>Gravity (m/s²)</label>
+                <input type="number" id="setting-gravity" value="9.81" step="0.01">
+              </div>
+              <div class="settings-row">
+                <label>World Scale</label>
+                <input type="number" id="setting-world-scale" value="1" step="0.1" min="0.01">
+              </div>
+            </div>
+          </div>
+
+          <!-- Camera Settings -->
+          <div class="settings-section" id="settings-camera">
+            <h3>Camera Settings</h3>
+            <div class="settings-group">
+              <h4>Default Camera</h4>
+              <div class="settings-row">
+                <label>Default Camera Type</label>
+                <select id="setting-camera-type">
+                  <option value="ARRI ALEXA 35">ARRI ALEXA 35</option>
+                  <option value="RED V-RAPTOR XL 8K">RED V-RAPTOR XL 8K</option>
+                  <option value="Sony VENICE 2 8K">Sony VENICE 2 8K</option>
+                  <option value="Canon EOS C70">Canon EOS C70</option>
+                  <option value="Blackmagic URSA Mini Pro 12K">Blackmagic URSA Mini Pro 12K</option>
+                  <option value="Full Frame 35mm" selected>Full Frame 35mm</option>
+                  <option value="Super 35mm">Super 35mm</option>
+                  <option value="APS-C">APS-C</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Default Lens</label>
+                <select id="setting-default-lens">
+                  <option value="24mm">24mm</option>
+                  <option value="35mm" selected>35mm</option>
+                  <option value="50mm">50mm</option>
+                  <option value="85mm">85mm</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Camera Tracking</h4>
+              <div class="settings-row">
+                <label>Tracking Quality</label>
+                <select id="setting-tracking-quality">
+                  <option value="low">Low (Fast)</option>
+                  <option value="medium">Medium</option>
+                  <option value="high" selected>High</option>
+                  <option value="ultra">Ultra (Slow)</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Max Track Points</label>
+                <input type="number" id="setting-max-tracks" value="200" min="50" max="1000">
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Lens Profiles</h4>
+              <div class="settings-row">
+                <label>Apply Lens Distortion</label>
+                <input type="checkbox" id="setting-lens-distortion" checked>
+              </div>
+              <div class="settings-row">
+                <label>Apply Chromatic Aberration</label>
+                <input type="checkbox" id="setting-chromatic-ab">
+              </div>
+              <div class="settings-row">
+                <label>Apply Vignette</label>
+                <input type="checkbox" id="setting-vignette">
+              </div>
+            </div>
+          </div>
+
+          <!-- Viewport Settings -->
+          <div class="settings-section" id="settings-viewport">
+            <h3>Viewport Settings</h3>
+            <div class="settings-group">
+              <h4>3D Viewport</h4>
+              <div class="settings-row">
+                <label>Show Grid</label>
+                <input type="checkbox" id="setting-show-grid" checked>
+              </div>
+              <div class="settings-row">
+                <label>Show Axes</label>
+                <input type="checkbox" id="setting-show-axes" checked>
+              </div>
+              <div class="settings-row">
+                <label>Anti-Aliasing</label>
+                <input type="checkbox" id="setting-viewport-aa" checked>
+              </div>
+              <div class="settings-row">
+                <label>Shadow Quality</label>
+                <select id="setting-shadow-quality">
+                  <option value="off">Off</option>
+                  <option value="low">Low</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Camera Controls</h4>
+              <div class="settings-row">
+                <label>Orbit Speed</label>
+                <input type="range" id="setting-orbit-speed" min="0.1" max="2" step="0.1" value="1">
+                <span class="range-value" id="orbit-speed-value">1.0x</span>
+              </div>
+              <div class="settings-row">
+                <label>Pan Speed</label>
+                <input type="range" id="setting-pan-speed" min="0.1" max="2" step="0.1" value="1">
+                <span class="range-value" id="pan-speed-value">1.0x</span>
+              </div>
+              <div class="settings-row">
+                <label>Dolly Speed</label>
+                <input type="range" id="setting-dolly-speed" min="0.1" max="2" step="0.1" value="1">
+                <span class="range-value" id="dolly-speed-value">1.0x</span>
+              </div>
+              <div class="settings-row">
+                <label>Invert Y Axis</label>
+                <input type="checkbox" id="setting-invert-y">
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline Settings -->
+          <div class="settings-section" id="settings-timeline">
+            <h3>Timeline Settings</h3>
+            <div class="settings-group">
+              <h4>Playback</h4>
+              <div class="settings-row">
+                <label>Real-Time Playback</label>
+                <input type="checkbox" id="setting-realtime" checked>
+              </div>
+              <div class="settings-row">
+                <label>Loop Playback</label>
+                <input type="checkbox" id="setting-loop" checked>
+              </div>
+              <div class="settings-row">
+                <label>Audio Scrubbing</label>
+                <input type="checkbox" id="setting-audio-scrub" checked>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Keyframes</h4>
+              <div class="settings-row">
+                <label>Default Interpolation</label>
+                <select id="setting-interpolation">
+                  <option value="linear">Linear</option>
+                  <option value="bezier" selected>Bezier</option>
+                  <option value="step">Step</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Auto-Key</label>
+                <input type="checkbox" id="setting-autokey">
+              </div>
+            </div>
+          </div>
+
+          <!-- Cache Settings -->
+          <div class="settings-section" id="settings-cache">
+            <h3>Caching Settings</h3>
+            <div class="settings-group">
+              <h4>Disk Cache</h4>
+              <div class="settings-row">
+                <label>Enable Disk Cache</label>
+                <input type="checkbox" id="setting-disk-cache" checked>
+              </div>
+              <div class="settings-row">
+                <label>Cache Location</label>
+                <input type="text" id="setting-disk-cache-dir" value="./disk_cache" class="input-wide">
+              </div>
+              <div class="settings-row">
+                <label>Max Disk Cache (GB)</label>
+                <input type="number" id="setting-disk-cache-size" value="100" min="1" max="1000">
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Memory Cache</h4>
+              <div class="settings-row">
+                <label>Frame Cache Size</label>
+                <input type="number" id="setting-frame-cache" value="100" min="10" max="1000">
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Cache Management</h4>
+              <button class="settings-btn" id="clear-cache-btn">Clear All Cache</button>
+              <button class="settings-btn" id="clear-disk-cache-btn">Clear Disk Cache</button>
+            </div>
+          </div>
+
+          <!-- Color Management Settings -->
+          <div class="settings-section" id="settings-colormanagement">
+            <h3>Color Management Settings</h3>
+            <div class="settings-group">
+              <h4>Color Space</h4>
+              <div class="settings-row">
+                <label>Working Color Space</label>
+                <select id="setting-working-space">
+                  <option value="sRGB">sRGB</option>
+                  <option value="linear" selected>Linear sRGB</option>
+                  <option value="ACEScg">ACEScg</option>
+                  <option value="Rec709">Rec.709</option>
+                  <option value="Rec2020">Rec.2020</option>
+                  <option value="DCI-P3">DCI-P3</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Display Color Space</label>
+                <select id="setting-display-space">
+                  <option value="sRGB" selected>sRGB</option>
+                  <option value="Rec709">Rec.709</option>
+                  <option value="Rec2020">Rec.2020</option>
+                  <option value="DCI-P3">DCI-P3</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>OCIO Configuration</h4>
+              <div class="settings-row">
+                <label>OCIO Config File</label>
+                <input type="text" id="setting-ocio-config" value="" placeholder="Path to config.ocio" class="input-wide">
+              </div>
+              <div class="settings-row">
+                <label>Enable OCIO</label>
+                <input type="checkbox" id="setting-ocio-enabled">
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Look Development</h4>
+              <div class="settings-row">
+                <label>Default View Transform</label>
+                <select id="setting-view-transform">
+                  <option value="none">None</option>
+                  <option value="filmic" selected>Filmic</option>
+                  <option value="aces">ACES</option>
+                  <option value="agx">AgX</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shortcuts Settings -->
+          <div class="settings-section" id="settings-shortcuts">
+            <h3>Keyboard Shortcuts</h3>
+            <div class="settings-group">
+              <h4>Node Editor</h4>
+              <div class="settings-row shortcut-row">
+                <label>Execute Graph</label>
+                <input type="text" class="shortcut-input" value="Ctrl+Enter" readonly>
+                <button class="shortcut-btn">Edit</button>
+              </div>
+              <div class="settings-row shortcut-row">
+                <label>Delete Node</label>
+                <input type="text" class="shortcut-input" value="Delete" readonly>
+                <button class="shortcut-btn">Edit</button>
+              </div>
+              <div class="settings-row shortcut-row">
+                <label>Duplicate Node</label>
+                <input type="text" class="shortcut-input" value="Ctrl+D" readonly>
+                <button class="shortcut-btn">Edit</button>
+              </div>
+              <div class="settings-row shortcut-row">
+                <label>Fit to Window</label>
+                <input type="text" class="shortcut-input" value="F" readonly>
+                <button class="shortcut-btn">Edit</button>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Timeline</h4>
+              <div class="settings-row shortcut-row">
+                <label>Play/Pause</label>
+                <input type="text" class="shortcut-input" value="Space" readonly>
+                <button class="shortcut-btn">Edit</button>
+              </div>
+              <div class="settings-row shortcut-row">
+                <label>Set In Point</label>
+                <input type="text" class="shortcut-input" value="I" readonly>
+                <button class="shortcut-btn">Edit</button>
+              </div>
+              <div class="settings-row shortcut-row">
+                <label>Set Out Point</label>
+                <input type="text" class="shortcut-input" value="O" readonly>
+                <button class="shortcut-btn">Edit</button>
+              </div>
+            </div>
+            <button class="settings-btn" id="reset-shortcuts-btn">Reset to Defaults</button>
+          </div>
+
+          <!-- Advanced Settings -->
+          <div class="settings-section" id="settings-advanced">
+            <h3>Advanced Settings</h3>
+            <div class="settings-group">
+              <h4>Debug</h4>
+              <div class="settings-row">
+                <label>Enable Debug Mode</label>
+                <input type="checkbox" id="setting-debug">
+              </div>
+              <div class="settings-row">
+                <label>Show Performance Metrics</label>
+                <input type="checkbox" id="setting-perf-metrics" checked>
+              </div>
+              <div class="settings-row">
+                <label>Log Level</label>
+                <select id="setting-log-level">
+                  <option value="error">Errors Only</option>
+                  <option value="warn" selected>Warnings</option>
+                  <option value="info">Info</option>
+                  <option value="debug">Debug</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Experimental</h4>
+              <div class="settings-row">
+                <label>Enable Experimental Features</label>
+                <input type="checkbox" id="setting-experimental">
+              </div>
+              <div class="settings-row">
+                <label>WebGPU Rendering (Beta)</label>
+                <input type="checkbox" id="setting-webgpu">
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Reset</h4>
+              <button class="settings-btn danger" id="reset-all-btn">Reset All Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="settings-footer">
+        <button class="settings-btn" id="settings-cancel">Cancel</button>
+        <button class="settings-btn primary" id="settings-apply">Apply</button>
+        <button class="settings-btn primary" id="settings-save">Save & Close</button>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="renderer.ts"></script>

@@ -2,81 +2,100 @@
 
 **The Industry-Rivaling Node-Based Visual Effects Platform**
 
-RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
+RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-3.1.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.2.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-120%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-130%2B-green)
 
 ## 🏆 Industry Competition
 
-RageVFX 3.1 introduces features that directly compete with industry-standard tools:
+RageVFX 3.2 introduces features that directly compete with industry-standard tools:
 
-| Feature | Nuke | Houdini | Redshift/V-Ray | RageVFX |
-|---------|------|---------|----------------|---------|
-| Node-based compositing | ✅ | ✅ | - | ✅ |
-| Deep compositing | ✅ | - | - | ✅ |
-| Multishot workflow | ✅ | - | - | ✅ 3.0 |
-| IBK-style keying | ✅ | - | - | ✅ 3.0 |
-| Procedural terrain | - | ✅ | - | ✅ 3.0 |
-| Crowd simulation | - | ✅ | - | ✅ 3.0 |
-| Path tracing | - | ✅ | ✅ | ✅ 3.0 |
-| Light mixing | - | - | ✅ | ✅ 3.0 |
-| **Built-in Physics Engine** | - | ✅ | - | ✅ 3.1 |
-| **USD/Alembic Support** | ✅ | ✅ | ✅ | ✅ 3.1 |
-| **Pipeline Integration** | ✅ | ✅ | - | ✅ 3.1 |
-| **CopyCat-like Training** | ✅ | - | - | ✅ 3.1 |
-| **AI Segmentation** | - | - | - | ✅ 3.1 |
-| ML-powered tools | ✅ | - | - | ✅ |
+| Feature | Nuke | Houdini | Maya | Mari | RageVFX |
+|---------|------|---------|------|------|---------|
+| Node-based compositing | ✅ | ✅ | - | - | ✅ |
+| Deep compositing | ✅ | - | - | - | ✅ |
+| Multishot workflow | ✅ | - | - | - | ✅ 3.0 |
+| IBK-style keying | ✅ | - | - | - | ✅ 3.0 |
+| Procedural terrain | - | ✅ | - | - | ✅ 3.0 |
+| Crowd simulation | - | ✅ | - | - | ✅ 3.0 |
+| Path tracing | - | ✅ | ✅ | - | ✅ 3.0 |
+| Light mixing | - | - | - | - | ✅ 3.0 |
+| Built-in Physics Engine | - | ✅ | ✅ | - | ✅ 3.1 |
+| USD/Alembic Support | ✅ | ✅ | ✅ | ✅ | ✅ 3.1 |
+| Pipeline Integration | ✅ | ✅ | ✅ | ✅ | ✅ 3.1 |
+| CopyCat-like Training | ✅ | - | - | - | ✅ 3.1 |
+| AI Segmentation | - | - | - | - | ✅ 3.1 |
+| **Projection Painting** | - | - | - | ✅ | ✅ 3.2 |
+| **Fluid Dynamics** | - | ✅ | ✅ | - | ✅ 3.2 |
+| **3D Camera Tracking** | ✅ | - | ✅ | - | ✅ 3.2 |
+| **Real-World Camera** | - | - | ✅ | - | ✅ 3.2 |
+| **Model Import/Export** | - | ✅ | ✅ | ✅ | ✅ 3.2 |
+| ML-powered tools | ✅ | - | - | - | ✅ |
 
-## 🆕 What's New in Version 3.1
+## 🆕 What's New in Version 3.2
 
-### Built-in Physics Engine
-RageVFX 3.1 introduces a comprehensive physics engine with easy-to-use controls:
+### Projection Mapping & Painting System (Mari-like)
+Professional texture painting directly on 3D surfaces:
 
-- **Static/Dynamic Toggle**: Any object can switch between static and dynamic states
-- **Real-World Forces**: Gravity, wind, inertia, momentum with slider controls
-- **Volumetrics**: Buoyancy simulation in fluid environments
-- **Boundaries**: World bounds and custom collision boundaries
-- **Constraints**: Fixed, hinge, slider, ball, distance, and spring joints
-- **Parenting**: Hierarchical object relationships with velocity inheritance
-- **Easy Controls**: 70+ sliders and checkboxes for intuitive physics tuning
+- **Projection Painting**: Paint directly onto 3D models with camera-based projection
+- **Multi-Layer System**: 16+ blend modes (normal, multiply, screen, overlay, etc.)
+- **Advanced Brushes**: Pressure-sensitive with size dynamics, hardness, flow, spacing
+- **Projection Modes**: Perspective, orthographic, cylindrical, spherical, planar, triplanar
+- **UDIM Support**: UV tile support for high-resolution texturing
+- **Map Generation**: Automatic normal and displacement map generation
+- **Undo/Redo**: Full history with configurable levels
 
-### Pipeline & Collaboration
-Professional VFX pipeline integration for team workflows:
+### Fluid Physics System (Maya-like)
+Complete Eulerian fluid dynamics for realistic simulations:
 
-- **USD Support**: Universal Scene Description import/export (usda, usdc, usdz)
-- **Alembic Cache**: Geometry caching with streaming and compression
-- **Pipeline Manager**: Shot/asset management with ShotGrid, ftrack, Kitsu integration
-- **Review Tool**: Frame-accurate annotation, comparison, and approval workflow
-- **Version Control**: Git-based versioning with LFS support for large files
+- **Fluid Types**: Smoke, fire, liquid, pyro simulations
+- **Navier-Stokes Solver**: Accurate pressure solving with vorticity confinement
+- **Combustion System**: Fire with fuel consumption, burn rate, heat generation
+- **Turbulence**: Noise-based turbulence with configurable octaves
+- **Cache System**: OpenVDB, Field3D, raw binary with BLOSC/ZIP compression
+- **Real-Time Preview**: GPU-accelerated visualization
 
-### Extended Machine Learning
-AI-powered tools that push the boundaries of VFX:
+### 3D Camera Tracking (3DSMax/Maya-like)
+Extract camera motion from live footage:
 
-- **Neural Net Trainer**: Train custom AI models like Nuke's CopyCat
-- **Segment Anything**: Instant AI segmentation with point/box prompts
-- **Background Removal**: One-click background removal with edge refinement
-- **Face Enhancement**: AI face restoration, retouching, and beautification
-- **Motion Prediction**: Frame interpolation and slow motion generation
+- **Auto-Tracking**: SIFT, ORB, AKAZE, Harris feature detection
+- **Bundle Adjustment**: Optimized camera solve with error reporting
+- **Distortion Models**: Brown-Conrady and fisheye lens undistortion
+- **Point Cloud**: Automatic 3D point cloud generation
+- **Ground Plane**: Automatic detection and scene orientation
+- **Export**: FBX, Alembic, Maya, Nuke compatible
 
-## 🚀 Try It Now
+### Real-World Camera System
+Create cameras based on actual cinema equipment:
 
-### Web Version (No Installation Required)
-Try RageVFX directly in your browser - no download, no installation, just start creating!
+- **14 Camera Bodies**: ARRI ALEXA 35/LF, RED V-RAPTOR/KOMODO, Sony VENICE 2/FX6, Canon C70/C500, Blackmagic URSA, Full Frame, Super 35, APS-C, MFT
+- **10 Lens Presets**: ARRI Signature Prime, Zeiss Master Prime, Cooke Anamorphic, Panavision Primo, Atlas Orion
+- **Complete Lens Data**: Distortion, chromatic aberration, vignette, blade count
+- **Depth of Field**: Accurate circle of confusion and hyperfocal calculation
+- **Exposure Control**: Aperture, shutter angle, ISO, exposure compensation
 
-```bash
-# Clone and run the web version locally
-git clone https://github.com/mllinman/RageVFX.git
-cd RageVFX
-npm install
-npm run dev:web
-```
+### 3D Model Import/Export
+Universal 3D format support:
 
-### Desktop Version
-Download the Windows installer or portable version from the [Releases](https://github.com/mllinman/RageVFX/releases) page.
+- **Import Formats**: OBJ, FBX, glTF/GLB, USD, Alembic, DAE, 3DS, STL, PLY
+- **Export Formats**: glTF/GLB (with DRACO), OBJ, FBX, USD, STL, PLY
+- **Material Support**: PBR materials with texture embedding
+- **Animation**: Skeleton and animation import/export
+
+### Robust Settings System
+Comprehensive application customization:
+
+- **13 Settings Categories**: General, Appearance, Performance, Project, Rendering, Physics, Camera, Viewport, Timeline, Caching, Color Management, Shortcuts, Advanced
+- **Theme Customization**: Dark/light themes with accent colors
+- **Performance Tuning**: GPU/memory limits, threading, preview quality
+- **Color Management**: OCIO support, working/display color spaces
+- **Keyboard Shortcuts**: Fully customizable hotkeys
+
+## What's in Version 3.1
 
 ## Features
 
