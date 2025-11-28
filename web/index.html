@@ -534,6 +534,25 @@
               </div>
             </div>
           </div>
+          <div class="category">
+            <div class="category-header" data-collapsed="false">
+              <span class="collapse-icon">▼</span> 8K+ Resolution & Stereo 3D
+            </div>
+            <div class="category-content">
+              <div class="node-item" draggable="true" data-node-type="Resolution8K">
+                📺 Resolution 8K+
+              </div>
+              <div class="node-item" draggable="true" data-node-type="StereoCamera3D">
+                👁️ Stereo Camera 3D
+              </div>
+              <div class="node-item" draggable="true" data-node-type="StereoCompositor">
+                🎬 Stereo Compositor
+              </div>
+              <div class="node-item" draggable="true" data-node-type="Transform3D">
+                🔄 Transform 3D
+              </div>
+            </div>
+          </div>
         </div>
         <div class="sidebar-resize-handle" id="left-resize-handle"></div>
       </aside>
@@ -636,6 +655,17 @@
                 <div class="viewport-options">
                   <label class="viewport-checkbox"><input type="checkbox" id="show-grid" checked> Grid</label>
                   <label class="viewport-checkbox"><input type="checkbox" id="show-axes" checked> Axes</label>
+                  <label class="viewport-checkbox"><input type="checkbox" id="view-through-camera"> View Through Camera</label>
+                </div>
+                <div class="transform-tools">
+                  <span class="tool-label">Transform:</span>
+                  <button class="transform-tool active" id="transform-translate" title="Translate (G)" data-mode="translate">↔ Move</button>
+                  <button class="transform-tool" id="transform-rotate" title="Rotate (R)" data-mode="rotate">↻ Rotate</button>
+                  <button class="transform-tool" id="transform-scale" title="Scale (T)" data-mode="scale">⬌ Scale</button>
+                  <button class="transform-tool keyframe-btn" id="set-keyframe" title="Set Keyframe (F)">◆ Key</button>
+                </div>
+                <div class="wasd-info">
+                  <span class="info-text">WASD/QE: Move selected | G/R/T: Transform mode | F: Keyframe</span>
                 </div>
               </div>
             </div>
