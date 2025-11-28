@@ -381,27 +381,215 @@ body {
   transform: translateX(4px) scale(0.98);
 }
 
-/* VFX Node Items - Special styling */
+/* ============================================
+   Node Category Color Coding - Enhanced
+   ============================================ */
+
+/* VFX Effects - Red/Orange tones */
 .node-item[data-node-type="Fire"],
 .node-item[data-node-type="Explosion"],
 .node-item[data-node-type="Lightning"],
 .node-item[data-node-type="Spark"],
-.node-item[data-node-type="LensFlare"] {
+.node-item[data-node-type="LensFlare"],
+.node-item[data-node-type="HeatDistortion"],
+.node-item[data-node-type="AnamorphicFlare"],
+.node-item[data-node-type="Glitch"] {
   border-left: 3px solid #ff4444;
 }
 
+.node-item[data-node-type="Fire"]::before,
+.node-item[data-node-type="Explosion"]::before,
+.node-item[data-node-type="Lightning"]::before,
+.node-item[data-node-type="HeatDistortion"]::before,
+.node-item[data-node-type="Glitch"]::before {
+  background: linear-gradient(135deg, #ff4444, #ff6644);
+}
+
+/* VFX Effects - Blue/Cyan tones */
 .node-item[data-node-type="Water"],
 .node-item[data-node-type="Rain"],
 .node-item[data-node-type="Clouds"],
 .node-item[data-node-type="Fog"],
-.node-item[data-node-type="Snow"] {
+.node-item[data-node-type="Snow"],
+.node-item[data-node-type="Caustics"] {
   border-left: 3px solid #4488ff;
 }
 
+.node-item[data-node-type="Water"]::before,
+.node-item[data-node-type="Rain"]::before,
+.node-item[data-node-type="Snow"]::before,
+.node-item[data-node-type="Caustics"]::before {
+  background: linear-gradient(135deg, #4488ff, #44aaff);
+}
+
+/* VFX Effects - Purple/Magic tones */
+.node-item[data-node-type="Nebula"],
+.node-item[data-node-type="Portal"],
+.node-item[data-node-type="EnergyField"],
+.node-item[data-node-type="MagicParticles"],
+.node-item[data-node-type="Aurora"] {
+  border-left: 3px solid #aa44ff;
+}
+
+.node-item[data-node-type="Nebula"]::before,
+.node-item[data-node-type="Portal"]::before,
+.node-item[data-node-type="EnergyField"]::before,
+.node-item[data-node-type="MagicParticles"]::before {
+  background: linear-gradient(135deg, #aa44ff, #cc66ff);
+}
+
+/* VFX Effects - Neutral/Gray tones */
 .node-item[data-node-type="Smoke"],
 .node-item[data-node-type="Tornado"],
-.node-item[data-node-type="Dissolve"] {
+.node-item[data-node-type="Dissolve"],
+.node-item[data-node-type="Debris"] {
   border-left: 3px solid #888888;
+}
+
+/* VFX Effects - Cyan/Tech tones */
+.node-item[data-node-type="Hologram"],
+.node-item[data-node-type="TimeWarp"],
+.node-item[data-node-type="Plasma"],
+.node-item[data-node-type="Shockwave"] {
+  border-left: 3px solid #00dddd;
+}
+
+.node-item[data-node-type="Hologram"]::before,
+.node-item[data-node-type="TimeWarp"]::before,
+.node-item[data-node-type="Plasma"]::before {
+  background: linear-gradient(135deg, #00dddd, #44ffff);
+}
+
+/* Color Nodes - Green tones */
+.node-item[data-node-type="ColorCorrect"],
+.node-item[data-node-type="Grade"],
+.node-item[data-node-type="Curves"],
+.node-item[data-node-type="Levels"],
+.node-item[data-node-type="HSL"],
+.node-item[data-node-type="LUTLoader"],
+.node-item[data-node-type="CDL"],
+.node-item[data-node-type="ColorMatch"] {
+  border-left: 3px solid #44cc88;
+}
+
+.node-item[data-node-type="ColorCorrect"]::before,
+.node-item[data-node-type="Grade"]::before,
+.node-item[data-node-type="ColorMatch"]::before {
+  background: linear-gradient(135deg, #44cc88, #66ddaa);
+}
+
+/* Filter Nodes - Blue tones */
+.node-item[data-node-type="Blur"],
+.node-item[data-node-type="Sharpen"],
+.node-item[data-node-type="EdgeDetect"],
+.node-item[data-node-type="Glow"],
+.node-item[data-node-type="MotionBlur"],
+.node-item[data-node-type="DepthOfField"],
+.node-item[data-node-type="ChromaticAberration"],
+.node-item[data-node-type="Vignette"],
+.node-item[data-node-type="FilmGrain"] {
+  border-left: 3px solid #4488ff;
+}
+
+/* Composite Nodes - Purple tones */
+.node-item[data-node-type="Merge"],
+.node-item[data-node-type="Screen"],
+.node-item[data-node-type="Overlay"],
+.node-item[data-node-type="DeepComposite"],
+.node-item[data-node-type="Cryptomatte"],
+.node-item[data-node-type="AOVManager"] {
+  border-left: 3px solid #aa44ff;
+}
+
+/* 3D Nodes - Orange tones */
+.node-item[data-node-type="Scene"],
+.node-item[data-node-type="Renderer3D"],
+.node-item[data-node-type="Geometry3D"],
+.node-item[data-node-type="Mesh"],
+.node-item[data-node-type="Material"],
+.node-item[data-node-type="Camera"],
+.node-item[data-node-type="Light"],
+.node-item[data-node-type="Transform3D"] {
+  border-left: 3px solid #ff8844;
+}
+
+.node-item[data-node-type="Scene"]::before,
+.node-item[data-node-type="Renderer3D"]::before,
+.node-item[data-node-type="Mesh"]::before {
+  background: linear-gradient(135deg, #ff8844, #ffaa66);
+}
+
+/* Physics Nodes - Pink tones */
+.node-item[data-node-type="RigidBody"],
+.node-item[data-node-type="SoftBody"],
+.node-item[data-node-type="FluidSim"],
+.node-item[data-node-type="ClothSim"],
+.node-item[data-node-type="Collision"],
+.node-item[data-node-type="FluidPhysics"],
+.node-item[data-node-type="FluidCache"],
+.node-item[data-node-type="PhysicsEngine"],
+.node-item[data-node-type="PhysicsWorld"] {
+  border-left: 3px solid #dd4488;
+}
+
+/* ML Nodes - Cyan tones */
+.node-item[data-node-type="StyleTransfer"],
+.node-item[data-node-type="Upscale"],
+.node-item[data-node-type="Denoise"],
+.node-item[data-node-type="ObjectDetection"],
+.node-item[data-node-type="Inpaint"],
+.node-item[data-node-type="DepthEstimation"],
+.node-item[data-node-type="NeuralNetTrainer"],
+.node-item[data-node-type="SegmentAnything"],
+.node-item[data-node-type="BackgroundRemoval"],
+.node-item[data-node-type="FaceEnhancement"],
+.node-item[data-node-type="MotionPrediction"] {
+  border-left: 3px solid #44dddd;
+}
+
+.node-item[data-node-type="StyleTransfer"]::before,
+.node-item[data-node-type="Denoise"]::before,
+.node-item[data-node-type="SegmentAnything"]::before {
+  background: linear-gradient(135deg, #44dddd, #66ffff);
+}
+
+/* Tracker Nodes - Yellow tones */
+.node-item[data-node-type="PointTracker"],
+.node-item[data-node-type="PlanarTracker"],
+.node-item[data-node-type="CornerDetector"],
+.node-item[data-node-type="OpticalFlow"],
+.node-item[data-node-type="Stabilizer"],
+.node-item[data-node-type="Camera3DTracking"] {
+  border-left: 3px solid #ffdd44;
+}
+
+/* Utility Nodes - Gray tones */
+.node-item[data-node-type="Time"],
+.node-item[data-node-type="Math"],
+.node-item[data-node-type="Switch"],
+.node-item[data-node-type="Dot"],
+.node-item[data-node-type="FrameHold"],
+.node-item[data-node-type="TimeOffset"],
+.node-item[data-node-type="TextOverlay"] {
+  border-left: 3px solid #888888;
+}
+
+/* Input/Output Nodes - Green/Orange tones */
+.node-item[data-node-type="ImageInput"],
+.node-item[data-node-type="Noise"],
+.node-item[data-node-type="Gradient"] {
+  border-left: 3px solid #44bb44;
+}
+
+.node-item[data-node-type="Output"] {
+  border-left: 3px solid #ff9944;
+}
+
+/* Stereo/Resolution Nodes - Magenta tones */
+.node-item[data-node-type="StereoCamera3D"],
+.node-item[data-node-type="StereoCompositor"],
+.node-item[data-node-type="Resolution8K"] {
+  border-left: 3px solid #ff00ff;
 }
 
 /* VFX Badge */
@@ -414,7 +602,15 @@ body {
 .node-item[data-node-type="Lightning"]::after,
 .node-item[data-node-type="Spark"]::after,
 .node-item[data-node-type="Tornado"]::after,
-.node-item[data-node-type="LensFlare"]::after {
+.node-item[data-node-type="LensFlare"]::after,
+.node-item[data-node-type="Glitch"]::after,
+.node-item[data-node-type="EnergyField"]::after,
+.node-item[data-node-type="MagicParticles"]::after,
+.node-item[data-node-type="TimeWarp"]::after,
+.node-item[data-node-type="Nebula"]::after,
+.node-item[data-node-type="Plasma"]::after,
+.node-item[data-node-type="Portal"]::after,
+.node-item[data-node-type="Hologram"]::after {
   content: '✦';
   position: absolute;
   right: 8px;
@@ -422,6 +618,37 @@ body {
   color: var(--accent-primary);
   opacity: 0.6;
 }
+
+/* Category tabs with color indicators */
+.category-header {
+  position: relative;
+  padding-left: 16px;
+}
+
+.category-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  border-radius: 2px;
+  background: var(--border-color);
+}
+
+/* Category color indicators */
+.category:has([data-node-type="Fire"]) .category-header::before { background: #ff4444; }
+.category:has([data-node-type="ColorCorrect"]) .category-header::before { background: #44cc88; }
+.category:has([data-node-type="Blur"]) .category-header::before { background: #4488ff; }
+.category:has([data-node-type="Merge"]) .category-header::before { background: #aa44ff; }
+.category:has([data-node-type="Scene"]) .category-header::before { background: #ff8844; }
+.category:has([data-node-type="RigidBody"]) .category-header::before { background: #dd4488; }
+.category:has([data-node-type="StyleTransfer"]) .category-header::before { background: #44dddd; }
+.category:has([data-node-type="PointTracker"]) .category-header::before { background: #ffdd44; }
+.category:has([data-node-type="Time"]) .category-header::before { background: #888888; }
+.category:has([data-node-type="ImageInput"]) .category-header::before { background: #44bb44; }
+.category:has([data-node-type="StereoCamera3D"]) .category-header::before { background: #ff00ff; }
 
 /* Node Editor */
 .node-editor {
@@ -1886,4 +2113,237 @@ body {
   20% { opacity: 1; transform: translateX(-50%) translateY(0); }
   80% { opacity: 1; transform: translateX(-50%) translateY(0); }
   100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+/* ============================================
+   Backdrop Styles
+   ============================================ */
+
+/* Property input styling for modals */
+.property-input {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  width: 150px;
+}
+
+.property-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+/* Backdrop color presets */
+.backdrop-color-preset {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.backdrop-color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.backdrop-color-swatch:hover {
+  transform: scale(1.1);
+  border-color: var(--text-primary);
+}
+
+.backdrop-color-swatch.selected {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 8px var(--vfx-glow);
+}
+
+/* Backdrop preset colors */
+.backdrop-color-swatch.red { background: #ff4444; }
+.backdrop-color-swatch.orange { background: #ff8844; }
+.backdrop-color-swatch.yellow { background: #ffdd44; }
+.backdrop-color-swatch.green { background: #44cc88; }
+.backdrop-color-swatch.cyan { background: #44dddd; }
+.backdrop-color-swatch.blue { background: #4488ff; }
+.backdrop-color-swatch.purple { background: #aa44ff; }
+.backdrop-color-swatch.pink { background: #dd4488; }
+.backdrop-color-swatch.gray { background: #888888; }
+
+/* ============================================
+   Node Editor Enhancements
+   ============================================ */
+
+/* Node tab organization indicators */
+.node-tab-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* Enhanced category header with icon */
+.category-header .category-icon {
+  font-size: 14px;
+  margin-right: 6px;
+}
+
+/* Quick add node tooltip */
+.quick-add-tooltip {
+  position: absolute;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  min-width: 250px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.quick-add-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.quick-add-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.quick-add-results {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.quick-add-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+}
+
+.quick-add-item:hover {
+  background: var(--bg-hover);
+}
+
+.quick-add-item.selected {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.quick-add-category {
+  font-size: 10px;
+  color: var(--text-muted);
+  padding: 2px 6px;
+  background: var(--bg-tertiary);
+  border-radius: 3px;
+  margin-left: auto;
+}
+
+/* ============================================
+   Professional UI Polish
+   ============================================ */
+
+/* Enhanced panel headers */
+.panel-header {
+  background: linear-gradient(180deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+}
+
+/* Enhanced buttons with ripple effect */
+.tool-btn, .timeline-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-btn::after, .timeline-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.tool-btn:active::after, .timeline-btn:active::after {
+  width: 200px;
+  height: 200px;
+}
+
+/* Smooth scrolling for all scrollable areas */
+.node-categories,
+.settings-content,
+.settings-sidebar,
+.panel-content {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Professional loading states */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+/* Version badge styling */
+.version-badge {
+  font-size: 10px;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Node type badge */
+.node-type-badge {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: var(--bg-primary);
+  color: var(--text-muted);
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.node-item:hover .node-type-badge {
+  opacity: 1;
 }

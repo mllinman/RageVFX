@@ -184,6 +184,18 @@
               <div class="node-item" draggable="true" data-node-type="Debris">
                 💎 Debris
               </div>
+              <div class="node-item" draggable="true" data-node-type="Glitch">
+                📺 Glitch
+              </div>
+              <div class="node-item" draggable="true" data-node-type="EnergyField">
+                ⚡ Energy Field
+              </div>
+              <div class="node-item" draggable="true" data-node-type="MagicParticles">
+                ✨ Magic Particles
+              </div>
+              <div class="node-item" draggable="true" data-node-type="TimeWarp">
+                ⏰ Time Warp
+              </div>
             </div>
           </div>
           <div class="category">
@@ -211,6 +223,9 @@
               </div>
               <div class="node-item" draggable="true" data-node-type="CDL">
                 🎬 CDL
+              </div>
+              <div class="node-item" draggable="true" data-node-type="ColorMatch">
+                🎯 Color Match
               </div>
             </div>
           </div>
@@ -532,6 +547,9 @@
               <div class="node-item" draggable="true" data-node-type="TimeOffset">
                 ⏰ Time Offset
               </div>
+              <div class="node-item" draggable="true" data-node-type="TextOverlay">
+                📝 Text Overlay
+              </div>
             </div>
           </div>
           <div class="category">
@@ -762,6 +780,49 @@
     <div class="context-menu-divider"></div>
     <div class="context-menu-item" data-action="disconnect">Disconnect All</div>
     <div class="context-menu-item" data-action="disable">Disable/Enable</div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" data-action="create-backdrop">Create Backdrop</div>
+    <div class="context-menu-item" data-action="backdrop-selection">Backdrop Selection</div>
+    <div class="context-menu-item" data-action="edit-backdrop">Edit Backdrop</div>
+  </div>
+
+  <!-- Backdrop Edit Modal -->
+  <div id="backdrop-modal" class="modal-overlay hidden">
+    <div class="modal-container" style="min-width: 350px;">
+      <div class="modal-header">
+        <h3>📦 Edit Backdrop</h3>
+        <button class="modal-close" id="backdrop-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="property-group">
+          <h4>Backdrop Properties</h4>
+          <div class="property-row">
+            <label>Label</label>
+            <input type="text" id="backdrop-label" class="property-input" value="Node Group">
+          </div>
+          <div class="property-row">
+            <label>Color</label>
+            <input type="color" id="backdrop-color" value="#4488ff">
+          </div>
+          <div class="property-row">
+            <label>Text Color</label>
+            <input type="color" id="backdrop-text-color" value="#ffffff">
+          </div>
+          <div class="property-row">
+            <label>Font Size</label>
+            <input type="number" id="backdrop-font-size" value="14" min="10" max="32">
+          </div>
+          <div class="property-row">
+            <label>Locked</label>
+            <input type="checkbox" id="backdrop-locked">
+          </div>
+        </div>
+        <div class="socket-actions" style="margin-top: 16px;">
+          <button class="tool-btn" id="backdrop-delete">🗑️ Delete</button>
+          <button class="tool-btn primary" id="backdrop-apply">✓ Apply</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Settings Modal -->
@@ -1252,6 +1313,22 @@
                   <option value="high">High</option>
                 </select>
               </div>
+              <div class="settings-row">
+                <label>Ground Plane</label>
+                <input type="checkbox" id="setting-show-ground" checked>
+              </div>
+              <div class="settings-row">
+                <label>Ambient Occlusion</label>
+                <input type="checkbox" id="setting-ambient-occlusion">
+              </div>
+              <div class="settings-row">
+                <label>Wireframe Overlay</label>
+                <input type="checkbox" id="setting-wireframe-overlay">
+              </div>
+              <div class="settings-row">
+                <label>Bounding Boxes</label>
+                <input type="checkbox" id="setting-show-bounds">
+              </div>
             </div>
             <div class="settings-group">
               <h4>Camera Controls</h4>
@@ -1271,8 +1348,62 @@
                 <span class="range-value" id="dolly-speed-value">1.0x</span>
               </div>
               <div class="settings-row">
+                <label>Crane Speed</label>
+                <input type="range" id="setting-crane-speed" min="0.1" max="2" step="0.1" value="1">
+                <span class="range-value" id="crane-speed-value">1.0x</span>
+              </div>
+              <div class="settings-row">
                 <label>Invert Y Axis</label>
                 <input type="checkbox" id="setting-invert-y">
+              </div>
+              <div class="settings-row">
+                <label>Smooth Camera</label>
+                <input type="checkbox" id="setting-smooth-camera" checked>
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Selection & Transform</h4>
+              <div class="settings-row">
+                <label>Selection Highlight</label>
+                <input type="checkbox" id="setting-selection-highlight" checked>
+              </div>
+              <div class="settings-row">
+                <label>Transform Gizmo Size</label>
+                <input type="range" id="setting-gizmo-size" min="0.5" max="2" step="0.1" value="1">
+                <span class="range-value" id="gizmo-size-value">1.0x</span>
+              </div>
+              <div class="settings-row">
+                <label>Snap to Grid</label>
+                <input type="checkbox" id="setting-snap-to-grid">
+              </div>
+              <div class="settings-row">
+                <label>Grid Snap Size</label>
+                <input type="number" id="setting-grid-snap-size" value="0.5" step="0.1" min="0.1">
+              </div>
+            </div>
+            <div class="settings-group">
+              <h4>Display Modes</h4>
+              <div class="settings-row">
+                <label>Shading Mode</label>
+                <select id="setting-shading-mode">
+                  <option value="solid">Solid</option>
+                  <option value="wireframe">Wireframe</option>
+                  <option value="material" selected>Material Preview</option>
+                  <option value="rendered">Rendered</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Background</label>
+                <select id="setting-viewport-background">
+                  <option value="gradient" selected>Gradient</option>
+                  <option value="solid">Solid Color</option>
+                  <option value="hdri">Environment HDRI</option>
+                  <option value="transparent">Transparent</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <label>Background Color</label>
+                <input type="color" id="setting-viewport-bg-color" value="#1a1a1a">
               </div>
             </div>
           </div>

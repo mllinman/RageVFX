@@ -61,10 +61,12 @@ const VFX_NODE_TYPES = new Set([
   'VolumetricLight', 'VolumeRender', 'CloudVolume', 'ParticleSystem', 'ParticleEmitter',
   // Version 2.3 - Advanced VFX nodes
   'AnamorphicFlare', 'Nebula', 'Shockwave', 'Plasma', 'Portal', 'Hologram',
-  'Caustics', 'Aurora', 'HeatDistortion', 'Debris'
+  'Caustics', 'Aurora', 'HeatDistortion', 'Debris',
+  // Version 3.4 - New VFX nodes
+  'Glitch', 'EnergyField', 'MagicParticles', 'TimeWarp'
 ]);
 
-// Category colors for visual distinction
+// Category colors for visual distinction - Enhanced with more categories
 const CATEGORY_COLORS: Record<string, { primary: string; secondary: string; glow: string }> = {
   'VFX': { primary: '#ff4444', secondary: '#ff8866', glow: 'rgba(255, 68, 68, 0.6)' },
   'Filter': { primary: '#4488ff', secondary: '#66aaff', glow: 'rgba(68, 136, 255, 0.4)' },
@@ -82,8 +84,32 @@ const CATEGORY_COLORS: Record<string, { primary: string; secondary: string; glow
   'Camera': { primary: '#cc99ff', secondary: '#ddbbff', glow: 'rgba(204, 153, 255, 0.4)' },
   'Projection': { primary: '#88cc44', secondary: '#aaee66', glow: 'rgba(136, 204, 68, 0.4)' },
   'Pipeline': { primary: '#8899bb', secondary: '#aabbdd', glow: 'rgba(136, 153, 187, 0.4)' },
+  'Volumetric': { primary: '#6677dd', secondary: '#8899ff', glow: 'rgba(102, 119, 221, 0.4)' },
+  'Particles': { primary: '#ffaa00', secondary: '#ffcc44', glow: 'rgba(255, 170, 0, 0.4)' },
+  'Temporal': { primary: '#00aaaa', secondary: '#44cccc', glow: 'rgba(0, 170, 170, 0.4)' },
+  'Text': { primary: '#dddd00', secondary: '#ffff44', glow: 'rgba(221, 221, 0, 0.4)' },
+  'Input': { primary: '#44bb44', secondary: '#66dd66', glow: 'rgba(68, 187, 68, 0.4)' },
+  'Render': { primary: '#dd6644', secondary: '#ff8866', glow: 'rgba(221, 102, 68, 0.4)' },
+  'Stereo': { primary: '#ff00ff', secondary: '#ff66ff', glow: 'rgba(255, 0, 255, 0.4)' },
+  'Resolution': { primary: '#00ddff', secondary: '#66eeff', glow: 'rgba(0, 221, 255, 0.4)' },
   'Default': { primary: '#ff6b35', secondary: '#f7931e', glow: 'rgba(255, 107, 53, 0.3)' }
 };
+
+// Backdrop interface for node grouping
+interface Backdrop {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: string;
+  textColor: string;
+  fontSize: number;
+  selected: boolean;
+  locked: boolean;
+  zIndex: number;
+}
 
 interface NodeSocket {
   id: string;
@@ -133,8 +159,10 @@ class NodeGraphUI {
   private ctx: CanvasRenderingContext2D;
   private nodes: UINode[] = [];
   private connections: UIConnection[] = [];
+  private backdrops: Backdrop[] = [];
   private selectedNodes: Set<string> = new Set();
   private selectedConnections: Set<string> = new Set();
+  private selectedBackdrops: Set<string> = new Set();
   private offset = { x: 0, y: 0 };
   private scale = 1.0;
   private isDragging = false;
@@ -142,10 +170,13 @@ class NodeGraphUI {
   private isResizingNode = false;
   private isDraggingSocket = false;
   private isDraggingConnection = false;
+  private isDraggingBackdrop = false;
+  private isResizingBackdrop = false;
   private dragOffset = { x: 0, y: 0 };
   private panStart = { x: 0, y: 0 };
   private nodeIdCounter = 1;
   private connectionIdCounter = 1;
+  private backdropIdCounter = 1;
   private gridSnap = true;
   private gridSize = 20;
   private showMinimap = false;
@@ -160,6 +191,7 @@ class NodeGraphUI {
   private hoveredNode: UINode | null = null;
   private hoveredSocket: { node: UINode; type: 'input' | 'output'; index: number } | null = null;
   private hoveredConnection: UIConnection | null = null;
+  private hoveredBackdrop: Backdrop | null = null;
   private draggedSocket: { node: UINode; type: 'input' | 'output'; index: number } | null = null;
   private connectionStyle: 'bezier' | 'linear' | 'step' = 'bezier';
   private showNodeShadows = true;
@@ -969,6 +1001,9 @@ class NodeGraphUI {
     // Draw grid
     this.drawGrid();
     
+    // Draw backdrops (behind everything)
+    this.drawBackdrops();
+    
     // Draw connections
     this.drawConnections();
     
@@ -991,6 +1026,179 @@ class NodeGraphUI {
     // Update minimap if visible
     if (this.showMinimap) {
       this.renderMinimap();
+    }
+  }
+
+  /**
+   * Draw all backdrops
+   */
+  private drawBackdrops(): void {
+    // Sort by zIndex to ensure proper layering
+    const sortedBackdrops = [...this.backdrops].sort((a, b) => a.zIndex - b.zIndex);
+    
+    sortedBackdrops.forEach(backdrop => this.drawBackdrop(backdrop));
+  }
+
+  /**
+   * Draw a single backdrop
+   */
+  private drawBackdrop(backdrop: Backdrop): void {
+    const ctx = this.ctx;
+    const isSelected = this.selectedBackdrops.has(backdrop.id);
+    const isHovered = this.hoveredBackdrop === backdrop;
+    
+    // Parse the color to add transparency
+    const alpha = 0.15;
+    const borderAlpha = isSelected ? 1.0 : (isHovered ? 0.8 : 0.4);
+    
+    // Background with transparency
+    ctx.fillStyle = this.hexToRgba(backdrop.color, alpha);
+    ctx.fillRect(backdrop.x, backdrop.y, backdrop.width, backdrop.height);
+    
+    // Border
+    ctx.strokeStyle = this.hexToRgba(backdrop.color, borderAlpha);
+    ctx.lineWidth = isSelected ? 3 : (isHovered ? 2 : 1);
+    ctx.setLineDash(isSelected ? [] : [5, 5]);
+    ctx.strokeRect(backdrop.x, backdrop.y, backdrop.width, backdrop.height);
+    ctx.setLineDash([]);
+    
+    // Title bar
+    const titleBarHeight = 30;
+    ctx.fillStyle = this.hexToRgba(backdrop.color, 0.3);
+    ctx.fillRect(backdrop.x, backdrop.y, backdrop.width, titleBarHeight);
+    
+    // Title text
+    ctx.fillStyle = backdrop.textColor;
+    ctx.font = `bold ${backdrop.fontSize}px Inter, sans-serif`;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(backdrop.label, backdrop.x + 12, backdrop.y + titleBarHeight / 2);
+    
+    // Resize handle (bottom-right corner)
+    if (!backdrop.locked && (isSelected || isHovered)) {
+      const handleSize = 12;
+      ctx.fillStyle = backdrop.color;
+      ctx.beginPath();
+      ctx.moveTo(backdrop.x + backdrop.width, backdrop.y + backdrop.height - handleSize);
+      ctx.lineTo(backdrop.x + backdrop.width, backdrop.y + backdrop.height);
+      ctx.lineTo(backdrop.x + backdrop.width - handleSize, backdrop.y + backdrop.height);
+      ctx.closePath();
+      ctx.fill();
+    }
+    
+    // Lock indicator
+    if (backdrop.locked) {
+      ctx.fillStyle = backdrop.textColor;
+      ctx.font = '12px Inter, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText('🔒', backdrop.x + backdrop.width - 10, backdrop.y + titleBarHeight / 2);
+    }
+  }
+
+  /**
+   * Convert hex color to rgba
+   */
+  private hexToRgba(hex: string, alpha: number): string {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  /**
+   * Create a new backdrop
+   */
+  createBackdrop(x: number, y: number, width: number = 400, height: number = 300, label: string = 'Backdrop'): Backdrop {
+    const backdrop: Backdrop = {
+      id: `backdrop_${this.backdropIdCounter++}`,
+      label,
+      x,
+      y,
+      width,
+      height,
+      color: '#4488ff',
+      textColor: '#ffffff',
+      fontSize: 14,
+      selected: false,
+      locked: false,
+      zIndex: this.backdrops.length
+    };
+    
+    this.backdrops.push(backdrop);
+    return backdrop;
+  }
+
+  /**
+   * Create backdrop around selected nodes
+   */
+  createBackdropAroundSelection(): Backdrop | null {
+    const selectedNodes = this.nodes.filter(n => this.selectedNodes.has(n.id));
+    
+    if (selectedNodes.length === 0) return null;
+    
+    // Calculate bounding box
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    
+    selectedNodes.forEach(node => {
+      minX = Math.min(minX, node.x);
+      minY = Math.min(minY, node.y);
+      maxX = Math.max(maxX, node.x + node.width);
+      maxY = Math.max(maxY, node.y + node.height);
+    });
+    
+    // Add padding
+    const padding = 40;
+    minX -= padding;
+    minY -= padding + 30; // Extra space for title
+    maxX += padding;
+    maxY += padding;
+    
+    return this.createBackdrop(minX, minY, maxX - minX, maxY - minY, 'Node Group');
+  }
+
+  /**
+   * Delete selected backdrops
+   */
+  deleteSelectedBackdrops(): void {
+    this.backdrops = this.backdrops.filter(b => !this.selectedBackdrops.has(b.id));
+    this.selectedBackdrops.clear();
+  }
+
+  /**
+   * Get backdrop at position
+   */
+  getBackdropAt(x: number, y: number): Backdrop | null {
+    // Check in reverse order (top to bottom)
+    for (let i = this.backdrops.length - 1; i >= 0; i--) {
+      const backdrop = this.backdrops[i];
+      if (x >= backdrop.x && x <= backdrop.x + backdrop.width &&
+          y >= backdrop.y && y <= backdrop.y + backdrop.height) {
+        return backdrop;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Check if position is on backdrop resize handle
+   */
+  isOnBackdropResizeHandle(backdrop: Backdrop, x: number, y: number): boolean {
+    if (backdrop.locked) return false;
+    
+    const handleSize = 15;
+    return x >= backdrop.x + backdrop.width - handleSize &&
+           x <= backdrop.x + backdrop.width &&
+           y >= backdrop.y + backdrop.height - handleSize &&
+           y <= backdrop.y + backdrop.height;
+  }
+
+  /**
+   * Update backdrop properties
+   */
+  updateBackdrop(backdropId: string, updates: Partial<Backdrop>): void {
+    const backdrop = this.backdrops.find(b => b.id === backdropId);
+    if (backdrop) {
+      Object.assign(backdrop, updates);
     }
   }
 
