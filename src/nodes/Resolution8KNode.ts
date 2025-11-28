@@ -23,6 +23,17 @@ export interface TileInfo {
   totalTiles: number;
 }
 
+/**
+ * Lanczos weight function for high-quality image resampling
+ * Moved to module level for performance (avoids repeated function creation)
+ */
+function lanczosWeight(t: number, a: number): number {
+  if (t === 0) return 1;
+  if (Math.abs(t) >= a) return 0;
+  const pit = Math.PI * t;
+  return (a * Math.sin(pit) * Math.sin(pit / a)) / (pit * pit);
+}
+
 export class Resolution8KNode extends Node {
   // Industry-standard resolution presets
   private readonly resolutionPresets: Record<string, ResolutionPreset> = {
@@ -462,13 +473,6 @@ export class Resolution8KNode extends Node {
   }
 
   private sampleLanczos(image: ImageData, x: number, y: number, a: number = 3): [number, number, number, number] {
-    const lanczosWeight = (t: number, a: number): number => {
-      if (t === 0) return 1;
-      if (Math.abs(t) >= a) return 0;
-      const pit = Math.PI * t;
-      return (a * Math.sin(pit) * Math.sin(pit / a)) / (pit * pit);
-    };
-
     const x0 = Math.floor(x);
     const y0 = Math.floor(y);
     const result: [number, number, number, number] = [0, 0, 0, 0];

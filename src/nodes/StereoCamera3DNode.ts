@@ -196,16 +196,21 @@ export class StereoCamera3DNode extends Node {
         const horizontalShift = this.calculateOffAxisShift(halfInteraxial, convergence, fov, aspectRatio);
         const hit = this.getParameter('horizontalImageTranslation');
 
+        // Get resolution from preset for proper 8K+ support
+        const resolution = this.getResolutionFromPreset(this.getParameter('resolution'));
+        const resWidth = resolution.width;
+        const resHeight = resolution.height;
+
         // Apply frustum shift via film offset
         this.leftCamera.setViewOffset(
-          1920, 1080,
-          (horizontalShift + hit) * 1920, 0,
-          1920, 1080
+          resWidth, resHeight,
+          (horizontalShift + hit) * resWidth, 0,
+          resWidth, resHeight
         );
         this.rightCamera.setViewOffset(
-          1920, 1080,
-          (-horizontalShift + hit) * 1920, 0,
-          1920, 1080
+          resWidth, resHeight,
+          (-horizontalShift + hit) * resWidth, 0,
+          resWidth, resHeight
         );
         break;
       }

@@ -12,6 +12,17 @@ export interface StereoFrame {
   height: number;
 }
 
+// Dubois optimized matrices for better color reproduction in anaglyph 3D
+// These matrices minimize ghosting and color distortion
+const DUBOIS_RED_CYAN = {
+  leftR: [0.4561, 0.500484, 0.176381],
+  leftG: [-0.0400822, -0.0378246, -0.0157589],
+  leftB: [-0.0152161, -0.0205971, -0.00546856],
+  rightR: [-0.0434706, -0.0879388, -0.00155529],
+  rightG: [0.378476, 0.73364, -0.0184503],
+  rightB: [-0.0721527, -0.112961, 1.2264]
+};
+
 export class StereoCompositorNode extends Node {
   constructor(id: string) {
     super(id, 'StereoCompositor', 'Stereo Compositor');
@@ -384,16 +395,6 @@ export class StereoCompositorNode extends Node {
     const saturation = this.getParameter('anaglyphSaturation');
     const result = new ImageData(left.width, left.height);
 
-    // Dubois optimized matrices for better color reproduction
-    const duboisRedCyan = {
-      leftR: [0.4561, 0.500484, 0.176381],
-      leftG: [-0.0400822, -0.0378246, -0.0157589],
-      leftB: [-0.0152161, -0.0205971, -0.00546856],
-      rightR: [-0.0434706, -0.0879388, -0.00155529],
-      rightG: [0.378476, 0.73364, -0.0184503],
-      rightB: [-0.0721527, -0.112961, 1.2264]
-    };
-
     for (let i = 0; i < left.width * left.height; i++) {
       const idx = i * 4;
       
@@ -439,18 +440,18 @@ export class StereoCompositorNode extends Node {
           break;
         case 'dubois':
         case 'optimized':
-          // Dubois optimized anaglyph
+          // Dubois optimized anaglyph using pre-defined coefficients
           outR = Math.max(0, Math.min(255,
-            duboisRedCyan.leftR[0] * lR + duboisRedCyan.leftR[1] * lG + duboisRedCyan.leftR[2] * lB +
-            duboisRedCyan.rightR[0] * rR + duboisRedCyan.rightR[1] * rG + duboisRedCyan.rightR[2] * rB
+            DUBOIS_RED_CYAN.leftR[0] * lR + DUBOIS_RED_CYAN.leftR[1] * lG + DUBOIS_RED_CYAN.leftR[2] * lB +
+            DUBOIS_RED_CYAN.rightR[0] * rR + DUBOIS_RED_CYAN.rightR[1] * rG + DUBOIS_RED_CYAN.rightR[2] * rB
           ));
           outG = Math.max(0, Math.min(255,
-            duboisRedCyan.leftG[0] * lR + duboisRedCyan.leftG[1] * lG + duboisRedCyan.leftG[2] * lB +
-            duboisRedCyan.rightG[0] * rR + duboisRedCyan.rightG[1] * rG + duboisRedCyan.rightG[2] * rB
+            DUBOIS_RED_CYAN.leftG[0] * lR + DUBOIS_RED_CYAN.leftG[1] * lG + DUBOIS_RED_CYAN.leftG[2] * lB +
+            DUBOIS_RED_CYAN.rightG[0] * rR + DUBOIS_RED_CYAN.rightG[1] * rG + DUBOIS_RED_CYAN.rightG[2] * rB
           ));
           outB = Math.max(0, Math.min(255,
-            duboisRedCyan.leftB[0] * lR + duboisRedCyan.leftB[1] * lG + duboisRedCyan.leftB[2] * lB +
-            duboisRedCyan.rightB[0] * rR + duboisRedCyan.rightB[1] * rG + duboisRedCyan.rightB[2] * rB
+            DUBOIS_RED_CYAN.leftB[0] * lR + DUBOIS_RED_CYAN.leftB[1] * lG + DUBOIS_RED_CYAN.leftB[2] * lB +
+            DUBOIS_RED_CYAN.rightB[0] * rR + DUBOIS_RED_CYAN.rightB[1] * rG + DUBOIS_RED_CYAN.rightB[2] * rB
           ));
           break;
         default:

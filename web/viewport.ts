@@ -307,6 +307,15 @@ export class Viewport3D {
     this.startRenderLoop();
   }
 
+  /**
+   * Get the currently active camera (either main or view-through camera)
+   */
+  private getActiveCamera(): THREE.PerspectiveCamera {
+    return this.isViewingThroughCamera && this.viewThroughCamera 
+      ? this.viewThroughCamera 
+      : this.camera;
+  }
+
   private initialize(): void {
     this.width = this.container.offsetWidth;
     this.height = this.container.offsetHeight;
@@ -439,12 +448,8 @@ export class Viewport3D {
     const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-    const activeCamera = this.isViewingThroughCamera && this.viewThroughCamera 
-      ? this.viewThroughCamera 
-      : this.camera;
-
     // Raycast to find clicked object
-    this.raycaster.setFromCamera(new THREE.Vector2(x, y), activeCamera);
+    this.raycaster.setFromCamera(new THREE.Vector2(x, y), this.getActiveCamera());
     const intersects = this.raycaster.intersectObjects(this.scene.children, true);
 
     // Filter out helpers (grid, axes, selection box)
@@ -530,10 +535,7 @@ export class Viewport3D {
       this.controls.update();
       
       if (this.renderer) {
-        const activeCamera = this.isViewingThroughCamera && this.viewThroughCamera 
-          ? this.viewThroughCamera 
-          : this.camera;
-        this.renderer.render(this.scene, activeCamera);
+        this.renderer.render(this.scene, this.getActiveCamera());
       }
     };
     animate();
