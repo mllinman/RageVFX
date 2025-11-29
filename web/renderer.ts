@@ -101,6 +101,9 @@ const CATEGORY_COLORS: Record<string, { primary: string; secondary: string; glow
   'Render': { primary: '#dd6644', secondary: '#ff8866', glow: 'rgba(221, 102, 68, 0.4)' },
   'Stereo': { primary: '#ff00ff', secondary: '#ff66ff', glow: 'rgba(255, 0, 255, 0.4)' },
   'Resolution': { primary: '#00ddff', secondary: '#66eeff', glow: 'rgba(0, 221, 255, 0.4)' },
+  // Version 3.5 - Motion Graphics & Animation
+  'MotionGraphics': { primary: '#ff6b9d', secondary: '#ff8fb4', glow: 'rgba(255, 107, 157, 0.5)' },
+  'Animation': { primary: '#9966ff', secondary: '#b388ff', glow: 'rgba(153, 102, 255, 0.5)' },
   'Default': { primary: '#ff6b35', secondary: '#f7931e', glow: 'rgba(255, 107, 53, 0.3)' }
 };
 
@@ -425,6 +428,9 @@ class NodeGraphUI {
     if (['CameraPreset', 'CameraLens', 'LensDistortionCorrection', 'RealWorldCamera'].includes(type)) return 'Camera';
     if (['ChromaKey', 'LuminanceKey', 'Rotoscope', 'SpillSuppression', 'EdgeMatte'].includes(type)) return 'Keying';
     if (['ProjectionPaint'].includes(type)) return 'Projection';
+    // Version 3.5 - Motion Graphics & Animation
+    if (['MotionGraphics', 'ArrayModifier'].includes(type)) return 'MotionGraphics';
+    if (['Transition', 'CurveEditor', 'AnimationTimeline'].includes(type)) return 'Animation';
     return 'Default';
   }
 

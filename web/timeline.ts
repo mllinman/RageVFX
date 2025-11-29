@@ -4,7 +4,7 @@
  */
 
 /**
- * Keyframe easing types
+ * Keyframe easing types - Extended with smooth, stepped, and custom options
  */
 export enum EasingType {
   LINEAR = 'linear',
@@ -14,7 +14,19 @@ export enum EasingType {
   BEZIER = 'bezier',
   HOLD = 'hold',
   BOUNCE = 'bounce',
-  ELASTIC = 'elastic'
+  ELASTIC = 'elastic',
+  // Version 3.5 - New easing types
+  SMOOTH = 'smooth',          // Hermite smooth interpolation
+  STEPPED = 'stepped',        // Stepped/hold until next keyframe
+  CUSTOM = 'custom',          // Custom curve via bezier handles
+  BACK = 'back',              // Overshoot easing
+  EXPO = 'expo',              // Exponential easing
+  CIRC = 'circ',              // Circular easing
+  SINE = 'sine',              // Sinusoidal easing
+  QUAD = 'quad',              // Quadratic easing
+  CUBIC = 'cubic',            // Cubic easing
+  QUART = 'quart',            // Quartic easing
+  QUINT = 'quint'             // Quintic easing
 }
 
 /**
