@@ -2013,9 +2013,9 @@ Using ProceduralTerrainNode:
 - ROADMAP.md - Development plans
 
 ### Community
-- Discord: [discord.gg/ragevfx](https://discord.gg/ragevfx)
+- Discord: Coming soon
 - GitHub: [github.com/mllinman/RageVFX](https://github.com/mllinman/RageVFX)
-- Email: support@ragevfx.com
+- Issues: [GitHub Issues](https://github.com/mllinman/RageVFX/issues)
 
 ### Learning Resources
 - Tutorial videos (coming soon)
