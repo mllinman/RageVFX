@@ -503,16 +503,50 @@ export class ArrayModifierNode extends Node {
       ctx.scale(instance.scale.x, instance.scale.y);
       ctx.globalAlpha = instance.opacity;
       
-      // Apply color tint if enabled
-      if (instance.color.r !== 255 || instance.color.g !== 255 || instance.color.b !== 255) {
-        ctx.filter = `sepia(1) saturate(0) brightness(1) contrast(1)`;
-        // Note: Full color tinting would require additional processing
-      }
-      
       // Draw centered
       ctx.drawImage(srcCanvas, -inputData.width / 2, -inputData.height / 2);
       
       ctx.restore();
+    }
+    
+    // Apply color tinting as a post-process for instances with non-white colors
+    const colorVariation = this.getParameter('colorVariation');
+    if (colorVariation) {
+      const tempImageData = ctx.getImageData(0, 0, width, height);
+      
+      for (const instance of instances) {
+        if (instance.color.r !== 255 || instance.color.g !== 255 || instance.color.b !== 255) {
+          // Apply color tint by modulating pixel colors
+          // This is a simplified tint - multiply blend
+          const tintR = instance.color.r / 255;
+          const tintG = instance.color.g / 255;
+          const tintB = instance.color.b / 255;
+          
+          // Calculate instance bounds (approximate)
+          const cx = instance.position.x;
+          const cy = instance.position.y;
+          const hw = (inputData.width / 2) * instance.scale.x;
+          const hh = (inputData.height / 2) * instance.scale.y;
+          
+          const minX = Math.max(0, Math.floor(cx - hw));
+          const maxX = Math.min(width - 1, Math.ceil(cx + hw));
+          const minY = Math.max(0, Math.floor(cy - hh));
+          const maxY = Math.min(height - 1, Math.ceil(cy + hh));
+          
+          for (let y = minY; y <= maxY; y++) {
+            for (let x = minX; x <= maxX; x++) {
+              const idx = (y * width + x) * 4;
+              if (tempImageData.data[idx + 3] > 0) {
+                tempImageData.data[idx] = Math.round(tempImageData.data[idx] * tintR);
+                tempImageData.data[idx + 1] = Math.round(tempImageData.data[idx + 1] * tintG);
+                tempImageData.data[idx + 2] = Math.round(tempImageData.data[idx + 2] * tintB);
+              }
+            }
+          }
+        }
+      }
+      
+      ctx.putImageData(tempImageData, 0, 0);
     }
     
     // Get final image data

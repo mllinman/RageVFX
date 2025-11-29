@@ -352,9 +352,27 @@ export class CurveEditorNode extends Node {
   }
 
   /**
+   * Maximum recursion depth for infinity calculations
+   */
+  private static readonly MAX_RECURSION_DEPTH = 10;
+
+  /**
    * Evaluate a curve at a specific time
    */
   evaluateCurve(curveId: string, time: number): CurveEvaluation {
+    return this.evaluateCurveInternal(curveId, time, 0);
+  }
+
+  /**
+   * Internal curve evaluation with recursion depth tracking
+   */
+  private evaluateCurveInternal(curveId: string, time: number, depth: number): CurveEvaluation {
+    // Prevent infinite recursion
+    if (depth >= CurveEditorNode.MAX_RECURSION_DEPTH) {
+      console.warn('CurveEditorNode: Maximum recursion depth reached in curve evaluation');
+      return { value: 0, velocity: 0, acceleration: 0 };
+    }
+
     const curve = this.curves.get(curveId);
     if (!curve || curve.keyframes.length === 0) {
       return { value: 0, velocity: 0, acceleration: 0 };
@@ -364,12 +382,12 @@ export class CurveEditorNode extends Node {
     
     // Handle time before first keyframe
     if (time <= keyframes[0].time) {
-      return this.handlePreInfinity(curve, time);
+      return this.handlePreInfinity(curve, time, depth + 1);
     }
     
     // Handle time after last keyframe
     if (time >= keyframes[keyframes.length - 1].time) {
-      return this.handlePostInfinity(curve, time);
+      return this.handlePostInfinity(curve, time, depth + 1);
     }
     
     // Find surrounding keyframes
@@ -428,7 +446,7 @@ export class CurveEditorNode extends Node {
   /**
    * Handle pre-infinity behavior
    */
-  private handlePreInfinity(curve: AnimationCurve, time: number): CurveEvaluation {
+  private handlePreInfinity(curve: AnimationCurve, time: number, depth: number): CurveEvaluation {
     const firstKf = curve.keyframes[0];
     
     switch (curve.preInfinity) {
@@ -455,7 +473,7 @@ export class CurveEditorNode extends Node {
           let cycledTime = firstKf.time + ((time - firstKf.time) % duration);
           if (cycledTime < firstKf.time) cycledTime += duration;
           
-          return this.evaluateCurve(curve.id, cycledTime);
+          return this.evaluateCurveInternal(curve.id, cycledTime, depth);
         }
         
       case InfinityType.OSCILLATE:
@@ -471,7 +489,7 @@ export class CurveEditorNode extends Node {
             cycledTime = firstKf.time + (firstKf.time - cycledTime);
           }
           
-          return this.evaluateCurve(curve.id, cycledTime);
+          return this.evaluateCurveInternal(curve.id, cycledTime, depth);
         }
         
       default:
@@ -482,7 +500,7 @@ export class CurveEditorNode extends Node {
   /**
    * Handle post-infinity behavior
    */
-  private handlePostInfinity(curve: AnimationCurve, time: number): CurveEvaluation {
+  private handlePostInfinity(curve: AnimationCurve, time: number, depth: number): CurveEvaluation {
     const lastKf = curve.keyframes[curve.keyframes.length - 1];
     const firstKf = curve.keyframes[0];
     
@@ -507,7 +525,7 @@ export class CurveEditorNode extends Node {
           if (duration <= 0) return { value: lastKf.value, velocity: 0, acceleration: 0 };
           
           const cycledTime = firstKf.time + ((time - firstKf.time) % duration);
-          return this.evaluateCurve(curve.id, cycledTime);
+          return this.evaluateCurveInternal(curve.id, cycledTime, depth);
         }
         
       case InfinityType.CYCLE_OFFSET:
@@ -519,7 +537,7 @@ export class CurveEditorNode extends Node {
           const cycledTime = firstKf.time + ((time - firstKf.time) % duration);
           const valueOffset = cycleCount * (lastKf.value - firstKf.value);
           
-          const result = this.evaluateCurve(curve.id, cycledTime);
+          const result = this.evaluateCurveInternal(curve.id, cycledTime, depth);
           return { ...result, value: result.value + valueOffset };
         }
         
@@ -535,7 +553,7 @@ export class CurveEditorNode extends Node {
             cycledTime = lastKf.time - (cycledTime - firstKf.time);
           }
           
-          return this.evaluateCurve(curve.id, cycledTime);
+          return this.evaluateCurveInternal(curve.id, cycledTime, depth);
         }
         
       default:

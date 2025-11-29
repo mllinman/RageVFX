@@ -655,13 +655,15 @@ export class TransitionNode extends Node {
         let rSum = 0, gSum = 0, bSum = 0, aSum = 0;
         let count = 0;
         
+        // Determine which image to blur based on progress
+        const src = progress < 0.5 ? dataA : dataB;
+        
         for (let dy = -radius; dy <= radius; dy++) {
           for (let dx = -radius; dx <= radius; dx++) {
             const nx = Math.max(0, Math.min(width - 1, x + dx));
             const ny = Math.max(0, Math.min(height - 1, y + dy));
             const srcIdx = (ny * width + nx) * 4;
             
-            const src = progress < 0.5 ? dataA : dataB;
             rSum += src[srcIdx];
             gSum += src[srcIdx + 1];
             bSum += src[srcIdx + 2];
@@ -670,12 +672,29 @@ export class TransitionNode extends Node {
           }
         }
         
-        // Blend with other image
-        const blend = progress;
-        output[idx] = Math.round((rSum / count) * (1 - blend) + (dataB[idx] * blend));
-        output[idx + 1] = Math.round((gSum / count) * (1 - blend) + (dataB[idx + 1] * blend));
-        output[idx + 2] = Math.round((bSum / count) * (1 - blend) + (dataB[idx + 2] * blend));
-        output[idx + 3] = Math.round((aSum / count) * (1 - blend) + (dataB[idx + 3] * blend));
+        // Calculate blurred values
+        const blurredR = rSum / count;
+        const blurredG = gSum / count;
+        const blurredB = bSum / count;
+        const blurredA = aSum / count;
+        
+        // For first half: blur dataA, for second half: blur dataB transitioning to clear dataB
+        // Blend between blurred and unblurred target based on distance from midpoint
+        const blurFactor = Math.sin(progress * Math.PI); // Max blur at midpoint
+        
+        if (progress < 0.5) {
+          // Transitioning from A to blur
+          output[idx] = Math.round(dataA[idx] * (1 - blurFactor) + blurredR * blurFactor);
+          output[idx + 1] = Math.round(dataA[idx + 1] * (1 - blurFactor) + blurredG * blurFactor);
+          output[idx + 2] = Math.round(dataA[idx + 2] * (1 - blurFactor) + blurredB * blurFactor);
+          output[idx + 3] = Math.round(dataA[idx + 3] * (1 - blurFactor) + blurredA * blurFactor);
+        } else {
+          // Transitioning from blur to B
+          output[idx] = Math.round(blurredR * blurFactor + dataB[idx] * (1 - blurFactor));
+          output[idx + 1] = Math.round(blurredG * blurFactor + dataB[idx + 1] * (1 - blurFactor));
+          output[idx + 2] = Math.round(blurredB * blurFactor + dataB[idx + 2] * (1 - blurFactor));
+          output[idx + 3] = Math.round(blurredA * blurFactor + dataB[idx + 3] * (1 - blurFactor));
+        }
       }
     }
   }
