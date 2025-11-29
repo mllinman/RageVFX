@@ -1,7 +1,7 @@
 {
   "name": "ragevfx",
-  "version": "3.4.0",
-  "description": "A powerful Node-based Visual Effects program rivaling Nuke, Houdini, and Redshift/V-Ray with advanced compositing, procedural generation, path tracing, crowd simulation, physics engine, projection mapping, fluid dynamics, 3D camera tracking, 8K+ resolution support, stereoscopic 3D workflow, customizable backdrops, and professional pipeline tools",
+  "version": "3.5.0",
+  "description": "A powerful Node-based Visual Effects program rivaling Nuke, Houdini, and Redshift/V-Ray with advanced compositing, procedural generation, path tracing, crowd simulation, physics engine, projection mapping, fluid dynamics, 3D camera tracking, 8K+ resolution support, stereoscopic 3D workflow, customizable backdrops, motion graphics, animation curves, timeline transitions, and professional pipeline tools",
   "main": "dist/src/main.js",
   "scripts": {
     "build": "tsc",

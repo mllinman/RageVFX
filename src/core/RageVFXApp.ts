@@ -227,6 +227,12 @@ import { TimeWarpNode } from '../nodes/TimeWarpNode';
 import { TextOverlayNode } from '../nodes/TextOverlayNode';
 import { ColorMatchNode } from '../nodes/ColorMatchNode';
 
+// Version 3.5 - Motion Graphics & Animation Tools
+import { MotionGraphicsNode } from '../nodes/MotionGraphicsNode';
+import { ArrayModifierNode } from '../nodes/ArrayModifierNode';
+import { TransitionNode } from '../nodes/TransitionNode';
+import { CurveEditorNode } from '../nodes/CurveEditorNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -467,6 +473,12 @@ export class RageVFXApp {
     this.nodeRegistry.set('TimeWarp', TimeWarpNode as any);
     this.nodeRegistry.set('TextOverlay', TextOverlayNode as any);
     this.nodeRegistry.set('ColorMatch', ColorMatchNode as any);
+    
+    // Version 3.5 - Motion Graphics & Animation Tools
+    this.nodeRegistry.set('MotionGraphics', MotionGraphicsNode as any);
+    this.nodeRegistry.set('ArrayModifier', ArrayModifierNode as any);
+    this.nodeRegistry.set('Transition', TransitionNode as any);
+    this.nodeRegistry.set('CurveEditor', CurveEditorNode as any);
   }
 
   /**

@@ -2,6 +2,92 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.5.0] - 2025-11-29
+
+### Added - Version 3.5 Motion Graphics & Animation Tools
+
+RageVFX 3.5 introduces comprehensive motion graphics capabilities similar to After Effects, advanced array tools, timeline transitions, and a professional curve editor for animation control similar to Maya's Graph Editor.
+
+#### Motion Graphics System (2 nodes)
+- **MotionGraphicsNode**: Complete motion graphics creation system
+  - Shape layer support: rectangle, ellipse, polygon, star, path, text
+  - Position, rotation, scale, and opacity animation
+  - Motion path following with Catmull-Rom spline interpolation
+  - Orient-to-path option for automatic rotation
+  - Animation presets: fadeIn, fadeOut, scaleUp, scaleDown, slideIn, slideOut, bounce, elastic, spin
+  - Four easing modes: linear, smooth, stepped, bezier
+  - Multiple blend modes: normal, add, multiply, screen, overlay
+  - Full stroke and fill color control
+  - Corner radius support for rounded rectangles
+  - Real-time animation preview
+
+- **ArrayModifierNode**: Advanced array tool similar to Cinema 4D/After Effects
+  - Five array modes: linear, radial, grid, spiral, random
+  - Linear array with position, rotation, scale, and opacity offset
+  - Radial array with center position, radius, angle range, and orient-to-center
+  - Grid array with X/Y count, spacing, and stagger offset
+  - Spiral array with expansion rate and turn count
+  - Random array with seeded randomization for position, rotation, and scale
+  - Color variation modes: gradient, random, hue shift
+  - Animation support with stagger delay
+  - Instance data output for external use
+  - Global transform controls
+
+#### Timeline Transitions (1 node)
+- **TransitionNode**: Professional timeline transitions between edits
+  - 17 transition types: smooth, linear, stepped, custom, easeIn, easeOut, easeInOut, bounce, elastic, back, expo, circ, sine, quad, cubic, quart, quint
+  - 14 visual effects: cut, dissolve, fade, wipe, slide, zoom, iris, push, reveal, morph, blur, pixelate, swirl, glitch
+  - Custom bezier curve support for precise timing control
+  - Wipe transitions with angle and softness control
+  - Slide transitions with directional control (left, right, up, down)
+  - Iris transitions with shape options (circle, diamond, square, star)
+  - Zoom transitions with center position control
+  - Blur and pixelate transitions with intensity control
+  - Elastic easing with amplitude and period parameters
+  - Back easing with overshoot control
+  - Reverse transition option
+
+#### Animation Curve Editor (1 node)
+- **CurveEditorNode**: Maya-style animation curve editor
+  - Full bezier curve animation control
+  - Tangent types: auto, smooth, linear, stepped, flat, free, clamped, plateau
+  - Infinity types: constant, linear, cycle, cycleOffset, oscillate
+  - Weighted tangent support with in/out weight control
+  - Lock/unlock tangents for unified or broken control
+  - Curve evaluation with value, velocity, and acceleration output
+  - Pre/post infinity behavior for animation looping
+  - Bake curve to keyframes functionality
+  - Curve simplification with tolerance control
+  - Catmull-Rom style auto-tangent calculation
+  - Plateau tangent mode for peaks/valleys
+  - JSON serialization for curve data
+  - Multi-curve support with color coding
+
+#### Extended Timeline Features
+- **New Easing Types**: 13 new easing types added to the timeline system
+  - smooth: Hermite smooth interpolation
+  - stepped: Hold value until next keyframe
+  - custom: User-defined bezier curve
+  - back: Overshoot easing
+  - expo: Exponential easing
+  - circ: Circular easing
+  - sine: Sinusoidal easing
+  - quad: Quadratic easing
+  - cubic: Cubic easing
+  - quart: Quartic easing
+  - quint: Quintic easing
+
+#### UI/UX Improvements
+- New node categories: "MotionGraphics" and "Animation"
+- Category colors for Motion Graphics (pink #ff6b9d) and Animation (purple #9966ff)
+- Node category detection for new nodes
+- Enhanced node palette organization
+
+### Changed
+- Updated package version from 3.4.0 to 3.5.0
+- Extended EasingType enum with 13 new easing types
+- Total node count now exceeds 130 nodes
+
 ## [3.4.0] - 2025-11-28
 
 ### Added - Version 3.4 Advanced VFX, Backdrops, & Professional Polish
