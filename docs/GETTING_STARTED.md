@@ -7,7 +7,7 @@ Welcome to RageVFX! This guide will help you get up and running with the most po
 ### System Requirements
 
 - **Operating System**: Windows 10+, macOS 10.14+, or Linux (Ubuntu 20.04+)
-- **Node.js**: Version 18.0.0 or higher
+- **Node.js**: Version 20.0.0 or higher
 - **RAM**: 8 GB minimum, 16 GB recommended
 - **GPU**: WebGL2-compatible graphics card
 - **Disk Space**: 500 MB for installation
