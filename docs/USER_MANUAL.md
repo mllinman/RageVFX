@@ -193,7 +193,7 @@ Contains all 140+ nodes organized by category:
 ### 3.3 Node Graph Editor (Center)
 
 ![Node Graph Editor](images/node-graph.png)
-*The Node Graph Editor showing nodes from different categories connected in a workflow. VFX nodes display animated glow effects.*
+*The Node Graph Editor showing nodes from different categories. Each node category has distinct color coding for easy identification.*
 
 **Navigation:**
 - **Pan**: Drag on empty space / Middle Mouse Button
