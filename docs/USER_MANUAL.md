@@ -132,6 +132,9 @@ npm run dist:all    # All platforms
 
 ### Main Window Layout
 
+![RageVFX Main Interface](images/main-interface.png)
+*The RageVFX main interface showing the Node Library (left), Node Graph Editor (center), Properties Panel and Viewport (right), and Timeline (bottom).*
+
 ```
 +------------------------------------------------------------------------+
 |                        Menu Bar & Toolbar                               |
@@ -189,6 +192,9 @@ Contains all 140+ nodes organized by category:
 
 ### 3.3 Node Graph Editor (Center)
 
+![Node Graph Editor](images/node-graph.png)
+*The Node Graph Editor showing nodes from different categories connected in a workflow. VFX nodes display animated glow effects.*
+
 **Navigation:**
 - **Pan**: Drag on empty space / Middle Mouse Button
 - **Zoom**: Scroll wheel / +/- buttons
@@ -223,6 +229,9 @@ Shows parameters for selected node:
 
 ### 3.5 Viewport Panel (Right Bottom)
 
+![3D Viewport](images/viewport-3d.png)
+*The 3D Viewport showing camera tools, transform controls, and viewport settings. Supports WASD movement, multiple camera presets, and object manipulation.*
+
 **2D Controls:**
 - Pan: Click and drag
 - Zoom: Scroll wheel
@@ -249,6 +258,9 @@ Shows parameters for selected node:
 - Options: Ground plane, AO, Bounding boxes
 
 ### 3.6 Timeline Panel (Bottom)
+
+![Timeline Panel](images/timeline.png)
+*The Timeline panel showing animation tracks with keyframes. Includes playback controls, frame counter, In/Out points, and zoom controls.*
 
 **Components:**
 - Track area with animation tracks
