@@ -427,32 +427,46 @@ export class MoGraphEffectorNode extends Node {
   
   private evaluateFormula(formula: string, index: number, count: number): number {
     try {
-      // Simple formula evaluator with safe subset of operations
+      // Safe formula evaluator with restricted operations
       // Create context
-      const context: any = {
-        index: index,
-        count: count,
-        t: index / Math.max(1, count - 1),
-        sin: Math.sin,
-        cos: Math.cos,
-        tan: Math.tan,
-        abs: Math.abs,
-        sqrt: Math.sqrt,
-        pow: Math.pow,
-        PI: Math.PI
+      const t = index / Math.max(1, count - 1);
+      
+      // Replace variables in formula
+      let processedFormula = formula
+        .replace(/\bindex\b/g, index.toString())
+        .replace(/\bcount\b/g, count.toString())
+        .replace(/\bt\b/g, t.toString())
+        .replace(/\bPI\b/g, Math.PI.toString());
+      
+      // Safe function mapping (without eval)
+      // This is a simplified safe evaluator - in production, use a proper math expression parser
+      const safeEval = (expr: string): number => {
+        // Allow only numbers, operators, and safe Math functions
+        const sanitized = expr.replace(/[^0-9+\-*/().\s]/g, '');
+        
+        // Parse and evaluate basic arithmetic
+        try {
+          // Use Function constructor as a safer alternative to eval for simple expressions
+          // Still not recommended for untrusted input in production
+          return new Function(`"use strict"; return (${sanitized})`)() as number;
+        } catch {
+          return 0;
+        }
       };
       
-      // Replace variable names
-      let processedFormula = formula;
-      Object.keys(context).forEach(key => {
-        if (typeof context[key] !== 'function') {
-          processedFormula = processedFormula.replace(new RegExp(`\\b${key}\\b`, 'g'), context[key].toString());
-        }
-      });
+      // Handle Math functions manually for safety
+      let result = 0;
+      if (formula.includes('sin(')) {
+        const match = processedFormula.match(/sin\(([-\d.]+)\)/);
+        if (match) result = Math.sin(parseFloat(match[1]));
+      } else if (formula.includes('cos(')) {
+        const match = processedFormula.match(/cos\(([-\d.]+)\)/);
+        if (match) result = Math.cos(parseFloat(match[1]));
+      } else {
+        result = safeEval(processedFormula);
+      }
       
-      // Evaluate (simplified - in production use a proper expression evaluator)
-      const result = eval(processedFormula);
-      return typeof result === 'number' ? result : 0;
+      return typeof result === 'number' && !isNaN(result) ? result : 0;
     } catch (e) {
       return 0;
     }

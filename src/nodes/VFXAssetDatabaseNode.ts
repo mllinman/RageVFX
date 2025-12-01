@@ -403,7 +403,7 @@ export class VFXAssetDatabaseNode extends Node {
   }
   
   private generateAssetId(path: string): string {
-    return `asset_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `asset_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
   }
   
   private extractFileName(path: string): string {

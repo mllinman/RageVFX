@@ -371,7 +371,11 @@ export class FusionViewer {
         rightViewer.style.display = 'block';
         break;
       case ViewerMode.QUAD:
-        // TODO: Implement quad view layout
+        // Quad view not yet implemented - use dual view for now
+        leftViewer.style.flex = '1';
+        leftViewer.style.display = 'block';
+        rightViewer.style.flex = '1';
+        rightViewer.style.display = 'block';
         break;
     }
     
@@ -689,7 +693,33 @@ export class FusionViewer {
   }
   
   private updatePixelInfo(e: MouseEvent): void {
-    // TODO: Implement pixel color readout at mouse position
+    // Pixel color readout at mouse position
+    if (!this.leftImage) return;
+    
+    const target = e.target as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const x = Math.floor((e.clientX - rect.left) / this.settings.zoom);
+    const y = Math.floor((e.clientY - rect.top) / this.settings.zoom);
+    
+    // Check if coordinates are within image bounds
+    if (x >= 0 && x < this.leftImage.width && y >= 0 && y < this.leftImage.height) {
+      const index = (y * this.leftImage.width + x) * 4;
+      const r = this.leftImage.data[index];
+      const g = this.leftImage.data[index + 1];
+      const b = this.leftImage.data[index + 2];
+      const a = this.leftImage.data[index + 3];
+      
+      const statusPixel = document.getElementById('status-pixel');
+      const statusColor = document.getElementById('status-color');
+      
+      if (statusPixel) {
+        statusPixel.textContent = `Pixel: ${x}, ${y}`;
+      }
+      
+      if (statusColor) {
+        statusColor.textContent = `RGBA: ${r}, ${g}, ${b}, ${a}`;
+      }
+    }
   }
   
   public dispose(): void {
