@@ -2,6 +2,116 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.6.0] - 2025-12-01
+
+### Added - Version 3.6 Cinema 4D, Blender, Maya, and Fusion Tools
+
+RageVFX 3.6 introduces comprehensive tools from Cinema 4D (MoGraph), Blender (Geometry Nodes & Physics Particles), Maya (Ocean Modifier), and Fusion (Dual Viewer System), plus a complete VFX Asset Database.
+
+#### Cinema 4D-Style MoGraph Tools (2 nodes)
+- **MoGraphClonerNode**: Professional cloner for procedural duplication
+  - 7 distribution modes: linear, radial, grid, honeycomb, spline, random, object
+  - Per-clone transformation (position, rotation, scale)
+  - Built-in step effector for progressive changes
+  - Color variation (gradient, random, index-based)
+  - Spline path following with auto-alignment
+  - Instance optimization for performance
+  - Matrix data output for rendering
+  - Global transform controls
+
+- **MoGraphEffectorNode**: Modify clones with various effector types
+  - 7 effector types: random, shader, formula, time, plain, target, volume
+  - Random effector with seeded randomization
+  - Shader effector with texture/channel mapping
+  - Formula effector with expression evaluation (sin, cos, custom math)
+  - Time-based animation with multiple modes
+  - Target effector with look-at functionality
+  - Falloff system (linear, smooth, sphere, box, cylinder)
+  - Noise and turbulence modifiers
+  - Blend modes (add, multiply, override, min, max)
+
+#### Blender-Style Tools (2 nodes)
+- **GeometryNodesNode**: Procedural geometry manipulation system
+  - 8 operation modes: transform, extrude, subdivide, bevel, scatter, boolean, curve_to_mesh, primitives
+  - Transform with rotation, scale, translation
+  - Mesh operations (extrude, subdivide, bevel)
+  - Point scatter with Poisson disk, grid, random modes
+  - Primitive generation (cube, sphere, cylinder, plane, grid, torus, cone)
+  - Attribute operations (set, add, multiply, mix)
+  - Selection modes (all, vertices, edges, faces, random, bounding_box)
+  - Noise displacement with octaves
+  - Curve to mesh conversion
+
+- **PhysicsParticlesNode**: Advanced physics-based particle system
+  - 3 particle types: emitter, hair, reactor
+  - 3 physics types: Newtonian, boids, fluid
+  - Emission from vertices, faces, or volume
+  - Configurable lifetime and size with randomization
+  - Initial velocity (normal, tangent, random, object, system)
+  - Force fields: gravity, wind, vortex, turbulence
+  - Collision detection with bounciness and friction
+  - Rotation with angular velocity
+  - Color fading over particle lifetime
+  - Cache system for animation playback
+  - Children particles (simple, interpolated)
+
+#### Maya-Style Tools (1 node)
+- **OceanModifierNode**: FFT-based ocean surface generation
+  - Gerstner wave synthesis with multiple components
+  - Wave parameters: scale, speed, direction, chopiness
+  - 3 spectrum types: Phillips, JONSWAP, Pierson-Moskowitz
+  - Foam generation based on wave curvature
+  - Displacement, foam, and normal map outputs
+  - Small wave detail layers
+  - Wind speed and alignment controls
+  - Configurable resolution (power of 2)
+  - Time controls with looping support
+  - Horizontal displacement for realistic chop
+
+#### Fusion-Style Viewer (1 component)
+- **FusionViewer**: Professional dual viewer system
+  - 7 view modes: single, dual, quad, A/B compare, wipe, difference, onion skin
+  - 6 channel modes: RGB, Red, Green, Blue, Alpha, Luminance
+  - Interactive wipe slider for A/B comparison
+  - Grid overlay with customizable spacing
+  - Composition guides (center cross, rule of thirds)
+  - Safe area visualization
+  - Zoom controls (25%, 50%, 100%, 200%, 400%, Fit)
+  - Pan support (middle mouse button or Alt+drag)
+  - Pixel color readout at cursor position
+  - Status bar with resolution, pixel info, zoom level
+  - Customizable toolbar with button states
+
+#### VFX Asset Database (1 node)
+- **VFXAssetDatabaseNode**: Complete asset management system
+  - 6 asset types: texture, model, material, preset, HDRI, LUT
+  - Automatic thumbnail generation
+  - Tag-based organization and search
+  - Advanced filtering (type, category, rating, date, tags)
+  - Multiple sort modes (name, date, rating, usage, size)
+  - Collection management (create, organize, favorites)
+  - Asset metadata (resolution, format, color space, author, description)
+  - Usage tracking and rating system
+  - Auto-tagging based on filename analysis
+  - Import/export database (JSON format)
+  - 3 view modes: grid, list, detail
+  - Pagination for large asset libraries
+  - Cache management with size limits
+
+### Changed
+- Updated package version from 3.5.0 to 3.6.0
+- Extended industry competition table to include Cinema 4D, Blender, and Fusion
+- Total node count now exceeds 155 nodes
+- Enhanced description to highlight multi-application feature parity
+
+### Technical Details
+- All new nodes follow existing TypeScript patterns
+- Proper dispose() methods for memory cleanup
+- Consistent parameter naming and structure
+- Integration with existing node registry system
+- Web-based Fusion viewer with Canvas API
+- Asset database with Map-based indexing for performance
+
 ## [3.5.0] - 2025-11-29
 
 ### Added - Version 3.5 Motion Graphics & Animation Tools

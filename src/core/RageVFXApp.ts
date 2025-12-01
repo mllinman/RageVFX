@@ -233,6 +233,20 @@ import { ArrayModifierNode } from '../nodes/ArrayModifierNode';
 import { TransitionNode } from '../nodes/TransitionNode';
 import { CurveEditorNode } from '../nodes/CurveEditorNode';
 
+// Version 3.6 - Cinema 4D Tools
+import { MoGraphClonerNode } from '../nodes/MoGraphClonerNode';
+import { MoGraphEffectorNode } from '../nodes/MoGraphEffectorNode';
+
+// Version 3.6 - Blender Tools
+import { GeometryNodesNode } from '../nodes/GeometryNodesNode';
+import { PhysicsParticlesNode } from '../nodes/PhysicsParticlesNode';
+
+// Version 3.6 - Maya Tools
+import { OceanModifierNode } from '../nodes/OceanModifierNode';
+
+// Version 3.6 - Asset Database
+import { VFXAssetDatabaseNode } from '../nodes/VFXAssetDatabaseNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -479,6 +493,20 @@ export class RageVFXApp {
     this.nodeRegistry.set('ArrayModifier', ArrayModifierNode as any);
     this.nodeRegistry.set('Transition', TransitionNode as any);
     this.nodeRegistry.set('CurveEditor', CurveEditorNode as any);
+    
+    // Version 3.6 - Cinema 4D Tools
+    this.nodeRegistry.set('MoGraphCloner', MoGraphClonerNode as any);
+    this.nodeRegistry.set('MoGraphEffector', MoGraphEffectorNode as any);
+    
+    // Version 3.6 - Blender Tools
+    this.nodeRegistry.set('GeometryNodes', GeometryNodesNode as any);
+    this.nodeRegistry.set('PhysicsParticles', PhysicsParticlesNode as any);
+    
+    // Version 3.6 - Maya Tools
+    this.nodeRegistry.set('OceanModifier', OceanModifierNode as any);
+    
+    // Version 3.6 - Asset Database
+    this.nodeRegistry.set('VFXAssetDatabase', VFXAssetDatabaseNode as any);
   }
 
   /**
