@@ -2322,15 +2322,15 @@ class NodeGraphUI {
     }
     
     // Apply animated nodes setting
-    const animatedNodes = (document.getElementById('setting-animated-nodes') as HTMLInputElement)?.checked;
-    if (animatedNodes !== undefined) {
-      this.showConnectionFlow = animatedNodes;
+    const animatedNodesCheckbox = document.getElementById('setting-animated-nodes') as HTMLInputElement;
+    if (animatedNodesCheckbox) {
+      this.showConnectionFlow = animatedNodesCheckbox.checked;
     }
     
     // Apply node shadows setting
-    const nodeShadows = (document.getElementById('setting-node-shadows') as HTMLInputElement)?.checked;
-    if (nodeShadows !== undefined) {
-      this.showNodeShadows = nodeShadows;
+    const nodeShadowsCheckbox = document.getElementById('setting-node-shadows') as HTMLInputElement;
+    if (nodeShadowsCheckbox) {
+      this.showNodeShadows = nodeShadowsCheckbox.checked;
     }
     
     this.render();
