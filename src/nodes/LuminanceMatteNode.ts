@@ -82,14 +82,16 @@ export class LuminanceMatteNode extends Node {
           const lowerEdge = minLum + softness / 2;
           const upperEdge = maxLum - softness / 2;
           
-          if (luminance < lowerEdge) {
-            alpha *= (luminance - minLum) / (softness / 2);
-          } else if (luminance > upperEdge) {
-            alpha *= (maxLum - luminance) / (softness / 2);
+          if (luminance < lowerEdge && luminance >= minLum) {
+            // Smooth fade-in from minLum to lowerEdge
+            alpha *= Math.max(0, (luminance - minLum) / (softness / 2));
+          } else if (luminance > upperEdge && luminance <= maxLum) {
+            // Smooth fade-out from upperEdge to maxLum
+            alpha *= Math.max(0, (maxLum - luminance) / (softness / 2));
           }
         }
         
-        // Clamp
+        // Clamp to ensure valid alpha range
         alpha = Math.max(0, Math.min(1, alpha));
         
         // Invert if needed
