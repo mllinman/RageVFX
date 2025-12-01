@@ -4,42 +4,138 @@
 
 RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-3.4.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.6.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-140%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-155%2B-green)
 
 ## 🏆 Industry Competition
 
-RageVFX 3.4 introduces features that directly compete with industry-standard tools:
+RageVFX 3.6 introduces features that directly compete with industry-standard tools:
 
-| Feature | Nuke | Houdini | Maya | Mari | RageVFX |
-|---------|------|---------|------|------|---------|
-| Node-based compositing | ✅ | ✅ | - | - | ✅ |
-| Deep compositing | ✅ | - | - | - | ✅ |
-| Multishot workflow | ✅ | - | - | - | ✅ 3.0 |
-| IBK-style keying | ✅ | - | - | - | ✅ 3.0 |
-| Procedural terrain | - | ✅ | - | - | ✅ 3.0 |
-| Crowd simulation | - | ✅ | - | - | ✅ 3.0 |
-| Path tracing | - | ✅ | ✅ | - | ✅ 3.0 |
-| Light mixing | - | - | - | - | ✅ 3.0 |
-| Built-in Physics Engine | - | ✅ | ✅ | - | ✅ 3.1 |
-| USD/Alembic Support | ✅ | ✅ | ✅ | ✅ | ✅ 3.1 |
-| Pipeline Integration | ✅ | ✅ | ✅ | ✅ | ✅ 3.1 |
-| CopyCat-like Training | ✅ | - | - | - | ✅ 3.1 |
-| AI Segmentation | - | - | - | - | ✅ 3.1 |
-| **Projection Painting** | - | - | - | ✅ | ✅ 3.2 |
-| **Fluid Dynamics** | - | ✅ | ✅ | - | ✅ 3.2 |
-| **3D Camera Tracking** | ✅ | - | ✅ | - | ✅ 3.2 |
-| **Real-World Camera** | - | - | ✅ | - | ✅ 3.2 |
-| **Model Import/Export** | - | ✅ | ✅ | ✅ | ✅ 3.2 |
-| **8K+ Resolution** | ✅ | ✅ | ✅ | ✅ | ✅ 3.3 |
-| **Stereoscopic 3D** | ✅ | - | ✅ | - | ✅ 3.3 |
-| **Node Backdrops** | ✅ | ✅ | - | - | ✅ 3.4 |
-| **Glitch/Temporal FX** | - | ✅ | - | - | ✅ 3.4 |
-| **Color Matching** | ✅ | - | - | - | ✅ 3.4 |
-| ML-powered tools | ✅ | - | - | - | ✅ |
+| Feature | Nuke | Houdini | Maya | Cinema 4D | Blender | Fusion | RageVFX |
+|---------|------|---------|------|-----------|---------|--------|---------|
+| Node-based compositing | ✅ | ✅ | - | - | ✅ | ✅ | ✅ |
+| Deep compositing | ✅ | - | - | - | - | ✅ | ✅ |
+| Multishot workflow | ✅ | - | - | - | - | - | ✅ 3.0 |
+| IBK-style keying | ✅ | - | - | - | - | - | ✅ 3.0 |
+| Procedural terrain | - | ✅ | - | - | ✅ | - | ✅ 3.0 |
+| Crowd simulation | - | ✅ | - | - | - | - | ✅ 3.0 |
+| Path tracing | - | ✅ | ✅ | - | ✅ | - | ✅ 3.0 |
+| Light mixing | - | - | - | - | - | - | ✅ 3.0 |
+| Built-in Physics Engine | - | ✅ | ✅ | - | ✅ | - | ✅ 3.1 |
+| USD/Alembic Support | ✅ | ✅ | ✅ | - | ✅ | - | ✅ 3.1 |
+| Pipeline Integration | ✅ | ✅ | ✅ | - | - | - | ✅ 3.1 |
+| CopyCat-like Training | ✅ | - | - | - | - | - | ✅ 3.1 |
+| AI Segmentation | - | - | - | - | - | - | ✅ 3.1 |
+| Projection Painting | - | - | - | - | ✅ | - | ✅ 3.2 |
+| Fluid Dynamics | - | ✅ | ✅ | - | ✅ | - | ✅ 3.2 |
+| 3D Camera Tracking | ✅ | - | ✅ | - | - | - | ✅ 3.2 |
+| Real-World Camera | - | - | ✅ | - | - | - | ✅ 3.2 |
+| Model Import/Export | - | ✅ | ✅ | ✅ | ✅ | - | ✅ 3.2 |
+| 8K+ Resolution | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ 3.3 |
+| Stereoscopic 3D | ✅ | - | ✅ | ✅ | ✅ | ✅ | ✅ 3.3 |
+| Node Backdrops | ✅ | ✅ | - | - | - | ✅ | ✅ 3.4 |
+| Glitch/Temporal FX | - | ✅ | - | - | - | - | ✅ 3.4 |
+| Color Matching | ✅ | - | - | - | - | - | ✅ 3.4 |
+| **MoGraph Cloner** | - | - | - | ✅ | - | - | 🆕 3.6 |
+| **MoGraph Effectors** | - | - | - | ✅ | - | - | 🆕 3.6 |
+| **Geometry Nodes** | - | ✅ | - | - | ✅ | - | 🆕 3.6 |
+| **Physics Particles** | - | - | - | - | ✅ | - | 🆕 3.6 |
+| **Ocean Modifier** | - | ✅ | ✅ | - | ✅ | - | 🆕 3.6 |
+| **Dual Viewer System** | - | - | - | - | - | ✅ | 🆕 3.6 |
+| **Asset Database** | - | - | - | - | ✅ | - | 🆕 3.6 |
+| ML-powered tools | ✅ | - | - | - | - | - | ✅ |
+
+## 🆕 What's New in Version 3.6
+
+### Cinema 4D-Style MoGraph Tools
+Professional motion graphics with industry-standard cloner and effector system:
+
+- **MoGraph Cloner**: Procedural duplication system
+  - 7 cloner modes: linear, radial, grid, honeycomb, spline, random, object distribution
+  - Per-clone transformation controls (position, rotation, scale)
+  - Built-in step effector for progressive animation
+  - Color variation modes (gradient, random, index-based)
+  - Instance optimization for massive arrays
+  - Spline path following with alignment
+  - Global transform and animation support
+
+- **MoGraph Effector**: Modify clones with various effector types
+  - Random effector with seeded control
+  - Shader/texture-based effector with channel mapping
+  - Formula effector with expression evaluation
+  - Time-based animation effector
+  - Plain offset effector
+  - Target effector with look-at functionality
+  - Volume/field-based effector
+  - Falloff system (linear, smooth, sphere, box, cylinder)
+  - Noise and turbulence modifiers
+
+### Blender-Style Tools
+Procedural modeling and physics simulation:
+
+- **Geometry Nodes**: Node-based procedural geometry manipulation
+  - Transform operations (translate, rotate, scale)
+  - Mesh operations (extrude, subdivide, bevel, boolean)
+  - Point scatter with various distribution modes
+  - Curve to mesh conversion
+  - Primitive generation (cube, sphere, cylinder, plane, grid)
+  - Attribute operations and custom properties
+  - Proximity-based modifications
+  - Noise displacement and deformation
+
+- **Physics Particles**: Advanced physics-based particle system
+  - Multiple particle types (emitter, hair, reactor)
+  - Physics simulation (Newtonian, boids, fluid)
+  - Force fields (gravity, wind, vortex, turbulence)
+  - Collision detection and response
+  - Lifetime and size controls with randomization
+  - Rotation and angular velocity
+  - Color fading over lifetime
+  - Cache system for playback
+
+### Maya-Style Tools
+Professional fluid simulation:
+
+- **Ocean Modifier**: FFT-based ocean surface generation
+  - Wave parameters (scale, speed, direction, choppiness)
+  - Multiple wave spectrum types (Phillips, JONSWAP, Pierson-Moskowitz)
+  - Foam generation based on wave curvature
+  - Displacement and normal map outputs
+  - Small wave detail layers
+  - Time controls with looping support
+  - Customizable resolution and scale
+  - Wind alignment and fetch distance
+
+### Fusion-Style Dual Viewer System
+Professional viewer interface for accurate comparison:
+
+- **Dual Viewer**: Split-screen viewing with comparison modes
+  - Multiple view modes: single, dual, quad, A/B compare, wipe, difference, onion skin
+  - Channel isolation: RGB, Red, Green, Blue, Alpha, Luminance
+  - Interactive wipe slider for side-by-side comparison
+  - Grid, guides, and safe area overlays
+  - Zoom and pan controls
+  - Real-time pixel color readout
+  - Customizable toolbar and status bar
+  - Mouse wheel zoom and middle-button pan
+
+### VFX Asset Database
+Comprehensive asset management system:
+
+- **Asset Browser**: Organize and search VFX assets
+  - Support for textures, models, materials, HDRIs, LUTs, presets
+  - Automatic thumbnail generation
+  - Tag-based organization and search
+  - Smart filtering by type, category, rating, date
+  - Collection management
+  - Asset metadata extraction
+  - Usage tracking and favorites
+  - Import/export database functionality
+  - Grid and list view modes
+  - Pagination for large libraries
 
 ## 🆕 What's New in Version 3.4
 
