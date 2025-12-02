@@ -2,6 +2,107 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.8.0] - 2025-12-02
+
+### Added - Version 3.8 Complete ROADMAP v3.0 Features
+
+RageVFX 3.8 completes the major ROADMAP v3.0 features with Smart Vector motion-aware painting, OpenVDB volume support, and VEX-style procedural wrangles.
+
+#### Nuke-Rivaling Compositing Enhancement (1 node)
+- **SmartVectorNode**: Motion-aware painting with motion vector integration
+  - Paint effects that stick to motion tracked surfaces
+  - Motion vector integration for paint warping
+  - Sub-frame interpolation for smooth motion
+  - Temporal consistency across frames
+  - Paint stroke lifetime management with fade in/out
+  - Multiple vector field support
+  - Clone source with motion tracking
+  - Multiple paint modes: paint, clone, reveal, conceal
+  - Brush parameters: size, hardness, opacity, color
+  - Motion blur with configurable samples
+  - Blend modes: normal, add, multiply, screen, overlay
+  - Confidence threshold for reliable tracking
+  - Adaptive detail and stroke preservation
+  - Outputs: painted image, stroke mask, motion path
+
+#### Houdini-Rivaling Procedural Tools (2 nodes)
+- **VDBNode**: Industry-standard OpenVDB sparse volume support
+  - VDB file import/export with compression
+  - Level set operations: union, intersect, difference
+  - Fog volume generation and manipulation
+  - VDB filtering and smoothing (Gaussian, median, mean, Laplacian)
+  - Particle to VDB conversion with radius control
+  - Mesh to VDB conversion (level set and fog modes)
+  - VDB to mesh conversion with marching cubes
+  - Sparse volume representation for memory efficiency
+  - Morphology operations: dilate, erode, open, close
+  - Multiple grid types: float, vec3, int32
+  - Configurable voxel size and background values
+  - Interior and exterior band width controls
+  - Adaptivity for mesh conversion quality
+  - Density field visualization output
+
+- **WrangleNode**: VEX-style procedural expression control
+  - Point, primitive, vertex, detail, and attribute wrangles
+  - Custom expression language based on VEX syntax
+  - Attribute manipulation with @ notation
+  - Built-in math functions: sin, cos, tan, sqrt, pow, etc.
+  - Built-in noise functions: noise, fit, clamp, rand
+  - Vector operations: length, normalize, dot, cross, distance
+  - Interpolation functions: lerp, smooth
+  - Geometry modification and deformation
+  - Data channel creation and manipulation
+  - Code compilation with JavaScript backend
+  - Error handling and debugging support
+  - Threading support for performance
+  - Group and selection filtering
+  - Temporal variables: @Time, @Frame
+  - Standard attributes: @P, @N, @Cd, @pscale, @v, @id
+  - Procedural snippets and presets
+
+- **ProceduralCityNode**: Urban environment generation system
+  - Street network generation: L-systems, agent-based, grid, radial, organic
+  - Building footprint placement with lot subdivision
+  - Procedural building facades with style variants
+  - Infrastructure: bridges, tunnels, parking lots, street lights
+  - Vegetation and park generation with tree placement
+  - Traffic and pedestrian flow simulation
+  - Day/night lighting variation
+  - Architecture styles: modern, classic, industrial, mixed
+  - Building types: residential, commercial, industrial, landmark
+  - Configurable city size, density, and block parameters
+  - Terrain adaptation and water body integration
+
+- **AdaptiveSamplerNode**: Intelligent rendering with adaptive sampling
+  - Variance-based sample distribution
+  - Error threshold controls for convergence
+  - Noise estimation per pixel with statistical methods
+  - Region-based sample budgeting
+  - Progressive refinement with multiple passes
+  - Stratified sampling for better distribution
+  - Firefly suppression and clamping
+  - Denoiser integration (bilateral filter)
+  - AOV-aware sampling with weighted importance
+  - Real-time preview sampling modes
+  - Sample and variance map outputs
+  - Comprehensive rendering statistics
+
+### Changed
+- Updated package version from 3.7.0 to 3.8.0
+- Total node count increased from 161 to 166 nodes
+- Enhanced ROADMAP v3.0 completion status (80% complete)
+- Improved procedural and compositing capabilities
+- Added urban environment generation
+- Enhanced rendering optimization with adaptive sampling
+
+### Technical Details
+- SmartVectorNode uses motion accumulation for precise tracking
+- VDBNode implements sparse voxel storage for memory efficiency
+- WrangleNode transforms VEX-style code to JavaScript at runtime
+- All nodes follow existing TypeScript patterns and conventions
+- Proper dispose() methods for resource cleanup
+- Integration with existing node registry system
+
 ## [3.7.0] - 2025-12-02
 
 ### Added - Version 3.7 2D to 3D Stereoscopic Conversion

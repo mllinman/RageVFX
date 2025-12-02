@@ -251,6 +251,13 @@ import { VFXAssetDatabaseNode } from '../nodes/VFXAssetDatabaseNode';
 import { DepthMapGeneratorNode } from '../nodes/DepthMapGeneratorNode';
 import { StereoConverterNode } from '../nodes/StereoConverterNode';
 
+// Version 3.8 - Complete ROADMAP v3.0 Features
+import { SmartVectorNode } from '../nodes/SmartVectorNode';
+import { VDBNode } from '../nodes/VDBNode';
+import { WrangleNode } from '../nodes/WrangleNode';
+import { ProceduralCityNode } from '../nodes/ProceduralCityNode';
+import { AdaptiveSamplerNode } from '../nodes/AdaptiveSamplerNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -515,6 +522,13 @@ export class RageVFXApp {
     // Version 3.7 - 2D to 3D Conversion Enhancement
     this.nodeRegistry.set('DepthMapGenerator', DepthMapGeneratorNode as any);
     this.nodeRegistry.set('StereoConverter', StereoConverterNode as any);
+    
+    // Version 3.8 - Complete ROADMAP v3.0 Features
+    this.nodeRegistry.set('SmartVector', SmartVectorNode as any);
+    this.nodeRegistry.set('VDB', VDBNode as any);
+    this.nodeRegistry.set('Wrangle', WrangleNode as any);
+    this.nodeRegistry.set('ProceduralCity', ProceduralCityNode as any);
+    this.nodeRegistry.set('AdaptiveSampler', AdaptiveSamplerNode as any);
   }
 
   /**
