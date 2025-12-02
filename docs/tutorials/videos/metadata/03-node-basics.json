@@ -1,0 +1,162 @@
+{
+  "episode": 3,
+  "title": "Understanding Nodes",
+  "filename": "03-node-basics.mov",
+  "duration": "18:00",
+  "durationSeconds": 1080,
+  "level": "Beginner",
+  "category": "Fundamentals",
+  "description": "Decode the node system. Learn about data types, categories, how data flows through graphs, and common node patterns that form the foundation of all VFX work.",
+  "prerequisites": [
+    "Episode 1: Getting Started",
+    "Episode 2: Interface Deep Dive",
+    "Basic understanding of RageVFX interface"
+  ],
+  "topics": [
+    "What are nodes?",
+    "Node anatomy (inputs, body, outputs)",
+    "Data types and color coding",
+    "Type compatibility",
+    "Node categories overview",
+    "Data flow concepts",
+    "Left-to-right flow convention",
+    "Sequential processing",
+    "Branching and merging",
+    "Node parameters",
+    "Animation and keyframing",
+    "Parameter connections",
+    "Common node patterns"
+  ],
+  "nodesDemonstrated": [
+    "ImageInput",
+    "Blur",
+    "ColorCorrect",
+    "Merge",
+    "Keyer",
+    "Noise",
+    "Curves",
+    "LUT",
+    "Output",
+    "Various from each category"
+  ],
+  "keyboardShortcuts": [
+    "Cmd/Ctrl + Z - Undo",
+    "Cmd/Ctrl + D - Duplicate nodes",
+    "Delete - Remove node/connection",
+    "Click + drag - Create connection",
+    "F - Frame selected node"
+  ],
+  "learningObjectives": [
+    "Understand node structure and purpose",
+    "Recognize data types by color",
+    "Navigate node categories efficiently",
+    "Understand left-to-right data flow",
+    "Create branching graph structures",
+    "Adjust parameters effectively",
+    "Apply common node patterns",
+    "Think in node-based workflows"
+  ],
+  "practiceExercise": {
+    "title": "Multi-Path Node Graph",
+    "description": "Create a graph with at least 8 nodes from 4 different categories. Include one branch that splits and merges back together. Experiment with different parameter values.",
+    "estimatedTime": "15 minutes",
+    "difficulty": "Medium"
+  },
+  "timestamps": [
+    {
+      "time": "0:00",
+      "title": "Introduction",
+      "description": "Decoding the node system"
+    },
+    {
+      "time": "0:45",
+      "title": "What Are Nodes?",
+      "description": "Node anatomy and purpose"
+    },
+    {
+      "time": "2:30",
+      "title": "Data Types",
+      "description": "Understanding type colors and compatibility"
+    },
+    {
+      "time": "5:00",
+      "title": "Node Categories",
+      "description": "Tour of category organization"
+    },
+    {
+      "time": "8:00",
+      "title": "Data Flow Concepts",
+      "description": "How data moves through graphs"
+    },
+    {
+      "time": "11:00",
+      "title": "Node Parameters",
+      "description": "Controlling behavior and animation"
+    },
+    {
+      "time": "13:30",
+      "title": "Common Node Patterns",
+      "description": "Standard workflows and combinations"
+    },
+    {
+      "time": "16:30",
+      "title": "Summary & Practice",
+      "description": "Recap and exercise"
+    }
+  ],
+  "relatedTutorials": [
+    "02-interface-deep-dive.md",
+    "04-first-vfx-effect.md",
+    "06-compositing-essentials.md"
+  ],
+  "relatedVideos": [
+    "02-interface-deep-dive.mov",
+    "04-first-vfx-effect.mov",
+    "06-compositing-essentials.mov"
+  ],
+  "fileInfo": {
+    "format": "QuickTime Movie",
+    "codec": "H.264",
+    "resolution": "1920x1080",
+    "frameRate": 30,
+    "audioCodec": "AAC",
+    "audioSampleRate": 48000,
+    "audioChannels": 2,
+    "estimatedFileSize": "144 MB"
+  },
+  "productionInfo": {
+    "status": "Planned",
+    "scriptComplete": true,
+    "recordingComplete": false,
+    "editingComplete": false,
+    "publishedDate": null,
+    "lastUpdated": "2025-12-02"
+  },
+  "assets": {
+    "screenshots": [
+      "03-node-basics/node-anatomy.png",
+      "03-node-basics/data-types-color-coding.png",
+      "03-node-basics/category-overview.png",
+      "03-node-basics/data-flow-diagram.png",
+      "03-node-basics/branching-graph.png",
+      "03-node-basics/parameter-controls.png",
+      "03-node-basics/enhancement-chain-pattern.png",
+      "03-node-basics/key-comp-pattern.png",
+      "03-node-basics/multi-level-adjustment-pattern.png"
+    ],
+    "projectFiles": [
+      "examples/03-node-basics/enhancement-chain.json",
+      "examples/03-node-basics/key-comp-example.json",
+      "examples/03-node-basics/branching-example.json"
+    ]
+  },
+  "tags": [
+    "nodes",
+    "fundamentals",
+    "data-flow",
+    "data-types",
+    "patterns",
+    "workflow",
+    "beginner"
+  ]
+}

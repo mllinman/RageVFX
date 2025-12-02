@@ -4,6 +4,14 @@
 
 Welcome to the official RageVFX video tutorial series! This comprehensive collection of tutorials will guide you through every aspect of RageVFX, from basic concepts to advanced professional techniques.
 
+## 🎬 Video Resources
+
+- **[Video Production Guide](VIDEO_PRODUCTION_GUIDE.md)** - Technical specifications and recording guidelines
+- **[Video Scripts](videos/video-scripts.md)** - Detailed narration scripts for all episodes
+- **[Video Files Directory](videos/)** - .mov video files (when available)
+- **[Screenshot Library](screenshots/)** - Tutorial screenshots and UI captures
+- **Video Metadata** - JSON files with episode details, topics, and timestamps
+
 ---
 
 ## 📚 Tutorial Categories

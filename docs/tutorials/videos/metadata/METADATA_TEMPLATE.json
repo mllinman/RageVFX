@@ -1,0 +1,66 @@
+{
+  "episode": 0,
+  "title": "Episode Title",
+  "filename": "00-episode-slug.mov",
+  "duration": "00:00",
+  "durationSeconds": 0,
+  "level": "Beginner|Intermediate|Advanced",
+  "category": "Category Name",
+  "description": "Brief description of what this episode covers.",
+  "prerequisites": [
+    "List of prerequisites"
+  ],
+  "topics": [
+    "Topic 1",
+    "Topic 2"
+  ],
+  "nodesDemonstrated": [
+    "Node1",
+    "Node2"
+  ],
+  "keyboardShortcuts": [
+    "Shortcut - Description"
+  ],
+  "learningObjectives": [
+    "Objective 1",
+    "Objective 2"
+  ],
+  "practiceExercise": {
+    "title": "Exercise Title",
+    "description": "Exercise description",
+    "estimatedTime": "X minutes",
+    "difficulty": "Easy|Medium|Hard"
+  },
+  "timestamps": [
+    {
+      "time": "0:00",
+      "title": "Section Title",
+      "description": "Section description"
+    }
+  ],
+  "relatedTutorials": [],
+  "relatedVideos": [],
+  "fileInfo": {
+    "format": "QuickTime Movie",
+    "codec": "H.264",
+    "resolution": "1920x1080",
+    "frameRate": 30,
+    "audioCodec": "AAC",
+    "audioSampleRate": 48000,
+    "audioChannels": 2,
+    "estimatedFileSize": "XXX MB"
+  },
+  "productionInfo": {
+    "status": "Planned",
+    "scriptComplete": false,
+    "recordingComplete": false,
+    "editingComplete": false,
+    "publishedDate": null,
+    "lastUpdated": "2025-12-02"
+  },
+  "assets": {
+    "screenshots": [],
+    "projectFiles": []
+  },
+  "tags": []
+}
