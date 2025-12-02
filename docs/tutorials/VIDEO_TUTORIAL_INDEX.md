@@ -211,9 +211,10 @@ docs/tutorials/
 
 ## 📊 Estimated Production Timeline
 
-**Phase 1 (Pre-Production):** 2-3 weeks
-- Complete all scripts: 1.5 weeks
-- Create all metadata: 0.5 weeks
+**Phase 1 (Pre-Production):** 3-5 weeks
+- Complete all scripts: 2-4 weeks (detailed scripts require significant effort)
+- Create all metadata: 0.5-1 weeks
+- Note: Timeline depends on resource availability and script complexity
 
 **Phase 2 (Asset Gathering):** 1 week
 - Prepare all example files and media

@@ -407,8 +407,10 @@ VideoInput → DepthEstimator(MiDaS Small, Temporal Smooth)
 - Parallax and Convergence tutorials (available through VFX community resources)
 
 **AI Depth Estimation:**
-- [MiDaS: Towards Robust Monocular Depth Estimation](https://github.com/isl-org/MiDaS)
-- [DPT: Vision Transformers for Dense Prediction](https://github.com/isl-org/DPT)
+- MiDaS: Towards Robust Monocular Depth Estimation - [GitHub Repository](https://github.com/isl-org/MiDaS)
+  - Note: RageVFX integrates compatible versions of these models. Refer to RageVFX documentation for supported versions.
+- DPT: Vision Transformers for Dense Prediction - [GitHub Repository](https://github.com/isl-org/DPT)
+  - Note: Model availability and versions may change over time.
 
 **Viewing Options:**
 - Red/Cyan anaglyph glasses (widely available)

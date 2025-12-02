@@ -23,20 +23,19 @@ Download complete video packs from the [Releases page](https://github.com/mllinm
 ### Option 2: Direct Download
 Individual video files available at:
 ```
-https://ragevfx.com/tutorials/videos/01-getting-started.mov
-https://ragevfx.com/tutorials/videos/02-interface-deep-dive.mov
-...
+[URLs will be provided when videos are published]
+Example: https://downloads.ragevfx.com/tutorials/videos/01-getting-started.mov
 ```
 
 ### Option 3: Streaming
 Watch online without downloading:
-- **YouTube**: [RageVFX Channel](https://youtube.com/@ragevfx)
-- **Vimeo**: [RageVFX Tutorials](https://vimeo.com/ragevfx)
+- **YouTube**: [RageVFX Channel - URL TBD]
+- **Vimeo**: [RageVFX Tutorials - URL TBD]
 
 ### Option 4: Torrent
 For the complete series (fastest for large downloads):
 ```
-magnet:?xt=urn:btih:XXXXX&dn=RageVFX-Tutorial-Series
+[Magnet link will be provided when videos are published]
 ```
 
 ## Video File Naming
