@@ -305,6 +305,11 @@ class NodeGraphUI {
     document.getElementById('fit-btn')?.addEventListener('click', () => this.fitToWindow());
     document.getElementById('snap-btn')?.addEventListener('click', () => this.toggleSnap());
     document.getElementById('minimap-btn')?.addEventListener('click', () => this.toggleMinimap());
+    
+    // Top menu bar buttons
+    document.getElementById('settings-btn')?.addEventListener('click', () => this.showSettings());
+    document.getElementById('theme-toggle')?.addEventListener('click', () => this.toggleTheme());
+    document.getElementById('fullscreen-btn')?.addEventListener('click', () => this.toggleFullscreen());
   }
 
   private setupMenuDropdowns(): void {
@@ -329,8 +334,28 @@ class NodeGraphUI {
     document.getElementById('new-project')?.addEventListener('click', () => this.newProject());
     document.getElementById('save-project')?.addEventListener('click', () => this.saveProject());
     document.getElementById('open-project')?.addEventListener('click', () => this.openProject());
+    document.getElementById('export-output')?.addEventListener('click', () => this.exportOutput());
+    document.getElementById('import-image')?.addEventListener('click', () => this.importImage());
     document.getElementById('about')?.addEventListener('click', () => this.showAbout());
     document.getElementById('keyboard-shortcuts')?.addEventListener('click', () => this.showShortcuts());
+    
+    // Edit menu actions
+    document.getElementById('undo')?.addEventListener('click', () => this.showToast('Undo not yet implemented', 'info'));
+    document.getElementById('redo')?.addEventListener('click', () => this.showToast('Redo not yet implemented', 'info'));
+    document.getElementById('select-all')?.addEventListener('click', () => this.selectAll());
+    document.getElementById('delete-selected')?.addEventListener('click', () => this.deleteSelected());
+    
+    // Node menu actions
+    document.getElementById('add-node')?.addEventListener('click', () => this.showToast('Use node library on the left to add nodes', 'info'));
+    document.getElementById('duplicate-node')?.addEventListener('click', () => this.duplicateSelected());
+    document.getElementById('disable-node')?.addEventListener('click', () => this.showToast('Disable node not yet implemented', 'info'));
+    
+    // View menu actions
+    document.getElementById('zoom-in')?.addEventListener('click', () => this.zoomIn());
+    document.getElementById('zoom-out')?.addEventListener('click', () => this.zoomOut());
+    document.getElementById('fit-to-window')?.addEventListener('click', () => this.fitToWindow());
+    document.getElementById('toggle-grid')?.addEventListener('click', () => this.showToast('Grid is always visible', 'info'));
+    document.getElementById('toggle-minimap')?.addEventListener('click', () => this.toggleMinimap());
   }
 
   private filterNodes(search: string): void {
@@ -2142,6 +2167,39 @@ class NodeGraphUI {
     input.click();
   }
 
+  exportOutput(): void {
+    // Find output nodes in the graph
+    const outputNodes = this.nodes.filter(node => node.type === 'Output');
+    if (outputNodes.length === 0) {
+      this.showToast('No output node found. Add an Output node to export.', 'error');
+      return;
+    }
+    
+    // For now, just show a message
+    this.showToast('Export functionality will render the output node', 'info');
+  }
+
+  importImage(): void {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          // Create an ImageInput node with the loaded image
+          const x = (this.canvas.width / 2 - this.offset.x) / this.scale;
+          const y = (this.canvas.height / 2 - this.offset.y) / this.scale;
+          this.createNode('ImageInput', x, y);
+          this.showToast(`Imported image: ${file.name}`, 'success');
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  }
+
   showAbout(): void {
     this.showModal('About RageVFX', `
       <div class="about-content">
@@ -2190,6 +2248,121 @@ class NodeGraphUI {
         </div>
       </div>
     `);
+  }
+
+  showSettings(): void {
+    const modal = document.getElementById('settings-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      
+      // Setup settings event handlers
+      const closeBtn = document.getElementById('settings-close');
+      const cancelBtn = document.getElementById('settings-cancel');
+      const applyBtn = document.getElementById('settings-apply');
+      const saveBtn = document.getElementById('settings-save');
+      
+      const closeModal = () => modal.classList.add('hidden');
+      
+      closeBtn?.addEventListener('click', closeModal);
+      cancelBtn?.addEventListener('click', closeModal);
+      applyBtn?.addEventListener('click', () => {
+        this.applySettings();
+        this.showToast('Settings applied', 'success');
+      });
+      saveBtn?.addEventListener('click', () => {
+        this.applySettings();
+        this.showToast('Settings saved', 'success');
+        closeModal();
+      });
+      
+      // Settings navigation
+      document.querySelectorAll('.settings-nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const section = (item as HTMLElement).dataset.section;
+          this.showSettingsSection(section || 'general');
+        });
+      });
+      
+      // Close modal when clicking outside
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+  }
+
+  private showSettingsSection(section: string): void {
+    // Hide all sections
+    document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.settings-nav-item').forEach(n => n.classList.remove('active'));
+    
+    // Show selected section
+    const targetSection = document.getElementById(`settings-${section}`);
+    if (targetSection) {
+      targetSection.classList.add('active');
+    }
+    
+    // Highlight nav item
+    const navItem = document.querySelector(`[data-section="${section}"]`);
+    if (navItem) {
+      navItem.classList.add('active');
+    }
+  }
+
+  private applySettings(): void {
+    // Apply theme
+    const theme = (document.getElementById('setting-theme') as HTMLSelectElement)?.value;
+    if (theme) {
+      document.body.dataset.theme = theme;
+    }
+    
+    // Apply connection style
+    const connectionStyle = (document.getElementById('setting-connection-style') as HTMLSelectElement)?.value;
+    if (connectionStyle) {
+      this.connectionStyle = connectionStyle as 'bezier' | 'linear' | 'step';
+    }
+    
+    // Apply animated nodes setting
+    const animatedNodesCheckbox = document.getElementById('setting-animated-nodes') as HTMLInputElement;
+    if (animatedNodesCheckbox) {
+      this.showConnectionFlow = animatedNodesCheckbox.checked;
+    }
+    
+    // Apply node shadows setting
+    const nodeShadowsCheckbox = document.getElementById('setting-node-shadows') as HTMLInputElement;
+    if (nodeShadowsCheckbox) {
+      this.showNodeShadows = nodeShadowsCheckbox.checked;
+    }
+    
+    this.render();
+  }
+
+  toggleTheme(): void {
+    const body = document.body;
+    const currentTheme = body.dataset.theme || 'dark';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    body.dataset.theme = newTheme;
+    
+    // Update theme toggle button
+    const themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) {
+      themeBtn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    }
+    
+    this.showToast(`Theme changed to ${newTheme} mode`, 'info');
+  }
+
+  toggleFullscreen(): void {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        this.showToast('Entered fullscreen mode', 'info');
+      }).catch(() => {
+        this.showToast('Fullscreen not supported', 'error');
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        this.showToast('Exited fullscreen mode', 'info');
+      });
+    }
   }
 
   showModal(title: string, content: string): void {
