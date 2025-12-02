@@ -2,6 +2,72 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.7.0] - 2025-12-02
+
+### Added - Version 3.7 2D to 3D Stereoscopic Conversion
+
+RageVFX 3.7 introduces professional 2D-to-3D conversion capabilities, making RageVFX extremely competitive with industry tools like Nuke and specialized stereoscopic conversion software.
+
+#### 2D to 3D Conversion System (2 nodes)
+- **DepthMapGeneratorNode**: Professional depth map generation from 2D images
+  - 7 depth estimation algorithms: edge-based, luminance, contrast, defocus, atmospheric, multi-cue, hybrid
+  - Multi-cue algorithm combines multiple depth cues for superior results
+  - Edge-based depth: Sobel operator with configurable threshold
+  - Luminance-based: Brightness to depth with gamma control and inversion
+  - Contrast-based: Local contrast analysis with window size control
+  - Defocus-based: Variance analysis for blur-based depth
+  - Atmospheric: Haze/fog analysis for distance estimation
+  - Edge-preserving bilateral filtering for smooth yet sharp depth maps
+  - Gaussian smoothing with adjustable radius
+  - User-guided depth hints with blending strength control
+  - Depth range normalization with bias and contrast
+  - Depth inpainting with diffusion to fill holes
+  - 4 visualization modes: grayscale, heatmap, rainbow, terrain
+  - Quality presets: low, medium, high, ultra
+  - Multiple outputs: depth map, normalized depth, inverted depth, visualized depth
+
+- **StereoConverterNode**: Convert 2D images to stereoscopic 3D using depth maps
+  - 5 conversion algorithms: DIBR, simple shift, layered, multi-plane, advanced
+  - DIBR (Depth Image Based Rendering) - industry-standard forward warping
+  - Intelligent occlusion handling: inpaint, blur, mirror, or none
+  - Occlusion inpainting with configurable radius
+  - Edge-preserving enhancement using source image
+  - Adjustable stereo strength (0-1, percentage of screen width)
+  - Convergence distance control (0=near, 1=far)
+  - Interaxial distance in meters (default 65mm for human vision)
+  - 5 output formats: separate, side-by-side, top-bottom, anaglyph, interlaced
+  - 4 anaglyph modes: red-cyan, green-magenta, optimized, Dubois
+  - Dubois optimized matrices for superior color reproduction
+  - Half-resolution mode for 3D TV compatibility
+  - Eye swap for cross-eye viewing
+  - Antialiasing and subpixel accuracy options
+  - Depth smoothing and contrast adjustment
+  - Supersampling (1x, 2x, 4x) for higher quality
+  - Fast mode for real-time preview
+  - Depth visualization output
+
+#### Competitive Enhancement
+- **Industry-Standard 2D to 3D**: Matches capabilities of specialized conversion tools
+- **8K+ Compatible**: Works seamlessly with existing 8K+ resolution pipeline
+- **Stereoscopic 3D Integration**: Integrates with existing StereoCamera3DNode and StereoCompositorNode
+- **Professional Quality**: DIBR algorithm with occlusion handling matches industry standards
+- **Artist-Friendly**: User hints and multiple quality presets for production workflows
+
+### Changed
+- Updated package version from 3.6.0 to 3.7.0
+- Total node count increased from 159 to 161 nodes
+- Enhanced stereoscopic 3D workflow with conversion capabilities
+- Extended 8K+ support with depth-based stereo conversion
+
+### Technical Details
+- Depth estimation uses multiple computer vision algorithms
+- DIBR forward warping with depth-based pixel shifting
+- Bilateral filtering preserves edges while smoothing depth
+- Inpainting fills disocclusions using diffusion algorithm
+- Dubois matrices provide optimal anaglyph color reproduction
+- All algorithms optimized for real-time processing
+- Memory-efficient processing for 8K+ resolutions
+
 ## [3.6.0] - 2025-12-01
 
 ### Added - Version 3.6 Cinema 4D, Blender, Maya, and Fusion Tools

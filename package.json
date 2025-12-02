@@ -1,7 +1,7 @@
 {
   "name": "ragevfx",
-  "version": "3.6.0",
-  "description": "A powerful Node-based Visual Effects program rivaling Nuke, Houdini, Cinema 4D, Blender, Maya, and Fusion with advanced compositing, procedural generation, MoGraph cloner tools, Blender-style geometry nodes, physics particles, Maya-style ocean simulation, Fusion dual viewers, VFX asset database, motion graphics, and professional pipeline tools",
+  "version": "3.7.0",
+  "description": "A powerful Node-based Visual Effects program rivaling Nuke, Houdini, Cinema 4D, Blender, Maya, and Fusion with advanced compositing, procedural generation, MoGraph cloner tools, Blender-style geometry nodes, physics particles, Maya-style ocean simulation, Fusion dual viewers, VFX asset database, motion graphics, 2D-to-3D stereoscopic conversion, depth map generation, and professional pipeline tools",
   "main": "dist/src/main.js",
   "scripts": {
     "build": "tsc",
