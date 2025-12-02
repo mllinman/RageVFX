@@ -1,0 +1,141 @@
+{
+  "episode": 1,
+  "title": "Getting Started with RageVFX",
+  "filename": "01-getting-started.mov",
+  "duration": "15:00",
+  "durationSeconds": 900,
+  "level": "Beginner",
+  "category": "Introduction",
+  "description": "Get RageVFX installed and running. Learn the basic interface, create your first simple project, and understand the core workflow of node-based compositing.",
+  "prerequisites": [
+    "Node.js 20.0.0 or higher installed",
+    "Basic computer literacy",
+    "8GB RAM minimum"
+  ],
+  "topics": [
+    "System requirements check",
+    "Installation process",
+    "First launch",
+    "Interface overview",
+    "Node Library introduction",
+    "Creating a simple node graph",
+    "Connecting nodes",
+    "Executing the graph",
+    "Saving projects"
+  ],
+  "nodesDemonstrated": [
+    "ImageInput",
+    "ColorCorrect",
+    "Output"
+  ],
+  "keyboardShortcuts": [
+    "Cmd/Ctrl + S - Save project",
+    "Cmd/Ctrl + O - Open project",
+    "Cmd/Ctrl + N - New project",
+    "Mouse wheel - Zoom",
+    "Click + drag - Pan canvas"
+  ],
+  "learningObjectives": [
+    "Install RageVFX successfully",
+    "Identify main interface panels",
+    "Add nodes to the graph",
+    "Create connections between nodes",
+    "Adjust node parameters",
+    "Execute and preview results",
+    "Save and open projects"
+  ],
+  "practiceExercise": {
+    "title": "Your First Blur Effect",
+    "description": "Create a new project with Image Input → Blur → Output. Adjust blur amount and execute.",
+    "estimatedTime": "5 minutes",
+    "difficulty": "Easy"
+  },
+  "timestamps": [
+    {
+      "time": "0:00",
+      "title": "Introduction",
+      "description": "Welcome and overview of what you'll learn"
+    },
+    {
+      "time": "1:00",
+      "title": "System Requirements",
+      "description": "Checking if your system is ready"
+    },
+    {
+      "time": "2:30",
+      "title": "Installation",
+      "description": "Cloning repository and installing dependencies"
+    },
+    {
+      "time": "5:00",
+      "title": "Launching RageVFX",
+      "description": "First launch of the application"
+    },
+    {
+      "time": "6:00",
+      "title": "Interface Tour",
+      "description": "Exploring each panel and its purpose"
+    },
+    {
+      "time": "10:00",
+      "title": "Creating First Project",
+      "description": "Building a simple color correction graph"
+    },
+    {
+      "time": "13:30",
+      "title": "Saving Your Project",
+      "description": "How to save and organize your work"
+    },
+    {
+      "time": "14:30",
+      "title": "Summary & Next Steps",
+      "description": "Recap and preview of Episode 2"
+    }
+  ],
+  "relatedTutorials": [
+    "02-interface-deep-dive.md",
+    "03-node-basics.md"
+  ],
+  "relatedVideos": [
+    "02-interface-deep-dive.mov",
+    "03-node-basics.mov"
+  ],
+  "fileInfo": {
+    "format": "QuickTime Movie",
+    "codec": "H.264",
+    "resolution": "1920x1080",
+    "frameRate": 30,
+    "audioCodec": "AAC",
+    "audioSampleRate": 48000,
+    "audioChannels": 2,
+    "estimatedFileSize": "120 MB"
+  },
+  "productionInfo": {
+    "status": "Planned",
+    "scriptComplete": true,
+    "recordingComplete": false,
+    "editingComplete": false,
+    "publishedDate": null,
+    "lastUpdated": "2025-12-02"
+  },
+  "assets": {
+    "screenshots": [
+      "01-getting-started/interface-overview.png",
+      "01-getting-started/node-library.png",
+      "01-getting-started/first-graph.png",
+      "01-getting-started/properties-panel.png",
+      "01-getting-started/viewport-result.png"
+    ],
+    "projectFiles": [
+      "examples/01-getting-started/my-first-project.json"
+    ]
+  },
+  "tags": [
+    "installation",
+    "beginner",
+    "introduction",
+    "interface",
+    "node-graph",
+    "basics"
+  ]
+}

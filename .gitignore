@@ -17,3 +17,15 @@ coverage/
 *.ico
 *.icns
 build/icons/
+
+# Tutorial media files (too large for git)
+docs/tutorials/videos/*.mov
+docs/tutorials/videos/*.mp4
+docs/tutorials/videos/*.avi
+docs/tutorials/screenshots/*/*.png
+docs/tutorials/screenshots/*/*.jpg
+docs/tutorials/screenshots/*/*.jpeg
+# Keep README and requirements documentation
+!docs/tutorials/screenshots/*/SCREENSHOTS_NEEDED.md
+!docs/tutorials/screenshots/README.md
+!docs/tutorials/videos/README.md

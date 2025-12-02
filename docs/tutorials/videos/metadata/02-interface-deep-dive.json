@@ -1,0 +1,159 @@
+{
+  "episode": 2,
+  "title": "Interface Deep Dive",
+  "filename": "02-interface-deep-dive.mov",
+  "duration": "20:00",
+  "durationSeconds": 1200,
+  "level": "Beginner",
+  "category": "Interface",
+  "description": "Master every aspect of the RageVFX interface. Learn powerful navigation shortcuts, explore each panel in depth, and discover customization options that will make you efficient.",
+  "prerequisites": [
+    "Episode 1: Getting Started completed",
+    "RageVFX installed and running"
+  ],
+  "topics": [
+    "Menu bar complete reference",
+    "Toolbar functions",
+    "Node Library deep dive",
+    "Category organization",
+    "Search functionality",
+    "Node Graph navigation",
+    "Selection techniques",
+    "Connection management",
+    "Backdrop system",
+    "Properties Panel controls",
+    "Viewport modes and settings",
+    "Timeline basics",
+    "Keyboard shortcuts mastery"
+  ],
+  "nodesDemonstrated": [
+    "Various nodes from all categories"
+  ],
+  "keyboardShortcuts": [
+    "Home - Frame all nodes",
+    "F - Frame selected",
+    "D - Disable/enable node",
+    "Cmd/Ctrl + D - Duplicate",
+    "Cmd/Ctrl + A - Select all",
+    "Escape - Deselect",
+    "I - Set timeline in point",
+    "O - Set timeline out point",
+    "Spacebar - Play/pause timeline",
+    "← → - Previous/next frame",
+    "R - Reset viewport",
+    "Shift + drag - Constrained movement"
+  ],
+  "learningObjectives": [
+    "Navigate efficiently using keyboard shortcuts",
+    "Understand Node Library organization",
+    "Master node selection and movement",
+    "Use backdrop system for organization",
+    "Control viewport in 2D and 3D modes",
+    "Understand timeline controls",
+    "Customize interface for workflow"
+  ],
+  "practiceExercise": {
+    "title": "Interface Navigation Challenge",
+    "description": "Create a graph with 8+ nodes from different categories. Use only keyboard shortcuts for all operations. Create backdrops to organize node groups.",
+    "estimatedTime": "10 minutes",
+    "difficulty": "Easy"
+  },
+  "timestamps": [
+    {
+      "time": "0:00",
+      "title": "Introduction",
+      "description": "Overview of interface mastery"
+    },
+    {
+      "time": "0:45",
+      "title": "Menu Bar & Toolbar",
+      "description": "Every menu option explained"
+    },
+    {
+      "time": "3:00",
+      "title": "Node Library Mastery",
+      "description": "Categories, search, and adding nodes"
+    },
+    {
+      "time": "7:00",
+      "title": "Node Graph Navigation",
+      "description": "Pan, zoom, select, move, connect"
+    },
+    {
+      "time": "12:00",
+      "title": "Backdrop System",
+      "description": "Organizing complex graphs"
+    },
+    {
+      "time": "13:30",
+      "title": "Properties Panel",
+      "description": "All parameter control types"
+    },
+    {
+      "time": "15:00",
+      "title": "Viewport Controls",
+      "description": "2D and 3D navigation, WASD controls"
+    },
+    {
+      "time": "17:30",
+      "title": "Timeline Panel",
+      "description": "Playback, scrubbing, in/out points"
+    },
+    {
+      "time": "19:30",
+      "title": "Summary & Practice",
+      "description": "Recap and next steps"
+    }
+  ],
+  "relatedTutorials": [
+    "01-getting-started.md",
+    "03-node-basics.md",
+    "12-animation-timeline.md"
+  ],
+  "relatedVideos": [
+    "01-getting-started.mov",
+    "03-node-basics.mov",
+    "12-animation-timeline.mov"
+  ],
+  "fileInfo": {
+    "format": "QuickTime Movie",
+    "codec": "H.264",
+    "resolution": "1920x1080",
+    "frameRate": 30,
+    "audioCodec": "AAC",
+    "audioSampleRate": 48000,
+    "audioChannels": 2,
+    "estimatedFileSize": "160 MB"
+  },
+  "productionInfo": {
+    "status": "Planned",
+    "scriptComplete": true,
+    "recordingComplete": false,
+    "editingComplete": false,
+    "publishedDate": null,
+    "lastUpdated": "2025-12-02"
+  },
+  "assets": {
+    "screenshots": [
+      "02-interface-deep-dive/menu-bar.png",
+      "02-interface-deep-dive/node-library-categories.png",
+      "02-interface-deep-dive/search-functionality.png",
+      "02-interface-deep-dive/backdrop-system.png",
+      "02-interface-deep-dive/properties-controls.png",
+      "02-interface-deep-dive/viewport-3d-controls.png",
+      "02-interface-deep-dive/timeline-controls.png",
+      "02-interface-deep-dive/keyboard-shortcuts-reference.png"
+    ],
+    "projectFiles": [
+      "examples/02-interface-deep-dive/navigation-practice.json"
+    ]
+  },
+  "tags": [
+    "interface",
+    "navigation",
+    "shortcuts",
+    "workspace",
+    "beginner",
+    "efficiency"
+  ]
+}

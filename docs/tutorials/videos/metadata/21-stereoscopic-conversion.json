@@ -1,0 +1,165 @@
+{
+  "episode": 21,
+  "title": "2D to 3D Stereoscopic Conversion",
+  "filename": "21-stereoscopic-conversion.mov",
+  "duration": "35:00",
+  "durationSeconds": 2100,
+  "level": "Advanced",
+  "category": "3D / AI / Special Techniques",
+  "description": "Master the cutting-edge technique of converting 2D footage into immersive stereoscopic 3D using AI-powered depth estimation. Learn to create professional anaglyph and side-by-side outputs.",
+  "prerequisites": [
+    "Episode 1: Getting Started",
+    "Episode 3: Understanding Nodes",
+    "Episode 16: Advanced 3D Rendering",
+    "Understanding of 3D concepts",
+    "AI/ML nodes familiarity recommended"
+  ],
+  "topics": [
+    "Stereoscopic 3D fundamentals",
+    "Parallax and convergence",
+    "AI depth estimation models",
+    "MiDaS, DPT-BEiT depth networks",
+    "Depth map generation",
+    "Manual depth refinement",
+    "Stereo view generation",
+    "Left and right eye rendering",
+    "Anaglyph compositing",
+    "Side-by-side output",
+    "VR-ready formats",
+    "Quality control and troubleshooting",
+    "Temporal consistency",
+    "Motion compensation"
+  ],
+  "nodesDemonstrated": [
+    "ImageInput",
+    "VideoInput",
+    "DepthEstimatorAI",
+    "DepthEditor",
+    "StereoGenerator",
+    "StereoCompositor",
+    "MotionVectors",
+    "Output"
+  ],
+  "keyboardShortcuts": [
+    "Ctrl/Cmd + Z - Undo depth edits",
+    "B - Brush tool",
+    "E - Eraser tool",
+    "[ ] - Decrease/increase brush size",
+    "X - Switch foreground/background",
+    "Spacebar - Pan canvas"
+  ],
+  "learningObjectives": [
+    "Understand stereoscopic 3D principles",
+    "Use AI models for depth estimation",
+    "Refine depth maps manually",
+    "Generate left and right eye views",
+    "Configure stereo parameters correctly",
+    "Create anaglyph outputs",
+    "Produce VR-ready side-by-side content",
+    "Troubleshoot common stereo issues",
+    "Apply temporal smoothing for video"
+  ],
+  "practiceExercise": {
+    "title": "Portrait to Stereo 3D",
+    "description": "Take a 2D portrait photo, generate a depth map using AI, refine it manually, create stereo views, and output as a color anaglyph. View with red/cyan glasses and iterate to improve quality.",
+    "estimatedTime": "45 minutes",
+    "difficulty": "Hard"
+  },
+  "timestamps": [
+    {
+      "time": "0:00",
+      "title": "Introduction",
+      "description": "2D to 3D conversion overview"
+    },
+    {
+      "time": "1:00",
+      "title": "Stereoscopic 3D Fundamentals",
+      "description": "Theory of parallax, convergence, and formats"
+    },
+    {
+      "time": "5:00",
+      "title": "AI Depth Estimation",
+      "description": "Using depth estimator nodes and AI models"
+    },
+    {
+      "time": "10:00",
+      "title": "Depth Map Refinement",
+      "description": "Manual editing and correction techniques"
+    },
+    {
+      "time": "15:00",
+      "title": "Stereo Generation",
+      "description": "Creating left and right eye views"
+    },
+    {
+      "time": "22:00",
+      "title": "Stereo Compositing",
+      "description": "Anaglyph and side-by-side outputs"
+    },
+    {
+      "time": "28:00",
+      "title": "Quality Control",
+      "description": "Testing and troubleshooting"
+    },
+    {
+      "time": "32:00",
+      "title": "Advanced Techniques",
+      "description": "Multi-layer and motion compensation"
+    }
+  ],
+  "relatedTutorials": [
+    "16-advanced-3d-rendering.md",
+    "14-machine-learning-tools.md",
+    "03-node-basics.md"
+  ],
+  "relatedVideos": [
+    "16-advanced-3d-rendering.mov",
+    "14-machine-learning-tools.mov"
+  ],
+  "fileInfo": {
+    "format": "QuickTime Movie",
+    "codec": "H.264",
+    "resolution": "1920x1080",
+    "frameRate": 30,
+    "audioCodec": "AAC",
+    "audioSampleRate": 48000,
+    "audioChannels": 2,
+    "estimatedFileSize": "280 MB"
+  },
+  "productionInfo": {
+    "status": "Planned",
+    "scriptComplete": true,
+    "recordingComplete": false,
+    "editingComplete": false,
+    "publishedDate": null,
+    "lastUpdated": "2025-12-02"
+  },
+  "assets": {
+    "screenshots": [
+      "21-stereoscopic-conversion/stereoscopic-principles-diagram.png",
+      "21-stereoscopic-conversion/ai-depth-estimation-models.png",
+      "21-stereoscopic-conversion/depth-map-grayscale.png",
+      "21-stereoscopic-conversion/depth-editor-tools.png",
+      "21-stereoscopic-conversion/stereo-generator-parameters.png",
+      "21-stereoscopic-conversion/left-right-eye-views.png",
+      "21-stereoscopic-conversion/anaglyph-result.png",
+      "21-stereoscopic-conversion/side-by-side-output.png",
+      "21-stereoscopic-conversion/complete-workflow-graph.png"
+    ],
+    "projectFiles": [
+      "examples/21-stereoscopic-conversion/portrait-to-stereo.json",
+      "examples/21-stereoscopic-conversion/landscape-stereo.json",
+      "examples/21-stereoscopic-conversion/video-stereo.json"
+    ]
+  },
+  "tags": [
+    "stereoscopic",
+    "3d-conversion",
+    "ai",
+    "depth-estimation",
+    "anaglyph",
+    "vr",
+    "advanced",
+    "machine-learning"
+  ]
+}
