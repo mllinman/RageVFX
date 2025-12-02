@@ -8,7 +8,7 @@ RageVFX is a next-generation visual effects software designed to rival industry 
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-164%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-166%2B-green)
 
 ## 🏆 Industry Competition
 

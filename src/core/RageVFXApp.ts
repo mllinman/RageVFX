@@ -255,6 +255,8 @@ import { StereoConverterNode } from '../nodes/StereoConverterNode';
 import { SmartVectorNode } from '../nodes/SmartVectorNode';
 import { VDBNode } from '../nodes/VDBNode';
 import { WrangleNode } from '../nodes/WrangleNode';
+import { ProceduralCityNode } from '../nodes/ProceduralCityNode';
+import { AdaptiveSamplerNode } from '../nodes/AdaptiveSamplerNode';
 
 import { RenderEngine } from '../renderer/RenderEngine';
 
@@ -525,6 +527,8 @@ export class RageVFXApp {
     this.nodeRegistry.set('SmartVector', SmartVectorNode as any);
     this.nodeRegistry.set('VDB', VDBNode as any);
     this.nodeRegistry.set('Wrangle', WrangleNode as any);
+    this.nodeRegistry.set('ProceduralCity', ProceduralCityNode as any);
+    this.nodeRegistry.set('AdaptiveSampler', AdaptiveSamplerNode as any);
   }
 
   /**

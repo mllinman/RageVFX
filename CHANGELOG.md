@@ -60,11 +60,40 @@ RageVFX 3.8 completes the major ROADMAP v3.0 features with Smart Vector motion-a
   - Standard attributes: @P, @N, @Cd, @pscale, @v, @id
   - Procedural snippets and presets
 
+- **ProceduralCityNode**: Urban environment generation system
+  - Street network generation: L-systems, agent-based, grid, radial, organic
+  - Building footprint placement with lot subdivision
+  - Procedural building facades with style variants
+  - Infrastructure: bridges, tunnels, parking lots, street lights
+  - Vegetation and park generation with tree placement
+  - Traffic and pedestrian flow simulation
+  - Day/night lighting variation
+  - Architecture styles: modern, classic, industrial, mixed
+  - Building types: residential, commercial, industrial, landmark
+  - Configurable city size, density, and block parameters
+  - Terrain adaptation and water body integration
+
+- **AdaptiveSamplerNode**: Intelligent rendering with adaptive sampling
+  - Variance-based sample distribution
+  - Error threshold controls for convergence
+  - Noise estimation per pixel with statistical methods
+  - Region-based sample budgeting
+  - Progressive refinement with multiple passes
+  - Stratified sampling for better distribution
+  - Firefly suppression and clamping
+  - Denoiser integration (bilateral filter)
+  - AOV-aware sampling with weighted importance
+  - Real-time preview sampling modes
+  - Sample and variance map outputs
+  - Comprehensive rendering statistics
+
 ### Changed
 - Updated package version from 3.7.0 to 3.8.0
-- Total node count increased from 161 to 164 nodes
-- Enhanced ROADMAP v3.0 completion status
+- Total node count increased from 161 to 166 nodes
+- Enhanced ROADMAP v3.0 completion status (80% complete)
 - Improved procedural and compositing capabilities
+- Added urban environment generation
+- Enhanced rendering optimization with adaptive sampling
 
 ### Technical Details
 - SmartVectorNode uses motion accumulation for precise tracking
