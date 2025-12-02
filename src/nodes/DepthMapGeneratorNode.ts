@@ -270,7 +270,7 @@ export class DepthMapGeneratorNode extends Node {
         }
 
         const contrast = maxLum - minLum;
-        let depthValue = (contrast / 255) * 255 * weight + bias * 255;
+        let depthValue = contrast * weight + bias * 255;
         depthValue = Math.max(0, Math.min(255, depthValue));
 
         const idx = (y * width + x) * 4;
@@ -564,17 +564,17 @@ export class DepthMapGeneratorNode extends Node {
       // Normalize to 0-1
       let value = (depth.data[i] - min) / range;
       
+      // Apply contrast (before bias to maintain proper centering)
+      value = (value - 0.5) * contrast + 0.5;
+      
       // Apply bias
       value = value + (bias - 0.5);
       
-      // Apply contrast
-      value = (value - 0.5) * contrast + 0.5;
+      // Clamp to 0-1 range
+      value = Math.max(0, Math.min(1, value));
       
       // Scale to target range
       value = depthMin + value * (depthMax - depthMin);
-      
-      // Clamp
-      value = Math.max(0, Math.min(1, value));
       
       const finalValue = value * 255;
       normalized.data[i] = finalValue;

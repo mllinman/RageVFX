@@ -202,8 +202,12 @@ export class StereoConverterNode extends Node {
 
     const leftEye = new ImageData(width, height);
     const rightEye = new ImageData(width, height);
+    
+    // Depth buffers for z-ordering (store normalized depth 0-1)
+    const leftDepthBuffer = new Float32Array(width * height);
+    const rightDepthBuffer = new Float32Array(width * height);
 
-    // Initialize with background color
+    // Initialize with background color and maximum depth
     for (let i = 0; i < leftEye.data.length; i += 4) {
       leftEye.data[i] = 0;
       leftEye.data[i + 1] = 0;
@@ -214,12 +218,17 @@ export class StereoConverterNode extends Node {
       rightEye.data[i + 1] = 0;
       rightEye.data[i + 2] = 0;
       rightEye.data[i + 3] = 0;
+      
+      const bufferIdx = i / 4;
+      leftDepthBuffer[bufferIdx] = 1.0; // Start with maximum depth (farthest)
+      rightDepthBuffer[bufferIdx] = 1.0;
     }
 
     // Forward warp pixels based on depth
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         const idx = (y * width + x) * 4;
+        const bufferIdx = y * width + x;
         
         // Get normalized depth (0-1, where 0=near, 1=far)
         const depthValue = depth.data[idx] / 255;
@@ -235,23 +244,27 @@ export class StereoConverterNode extends Node {
         // Copy pixel to left eye
         if (leftX >= 0 && leftX < width) {
           const leftIdx = (y * width + leftX) * 4;
-          // Only write if target is empty or this pixel is closer (higher depth value)
-          if (leftEye.data[leftIdx + 3] === 0 || depthValue > (leftEye.data[leftIdx] / 255)) {
+          const leftBufferIdx = y * width + leftX;
+          // Only write if target is empty or this pixel is closer (lower depth value = nearer)
+          if (leftEye.data[leftIdx + 3] === 0 || depthValue < leftDepthBuffer[leftBufferIdx]) {
             leftEye.data[leftIdx] = image.data[idx];
             leftEye.data[leftIdx + 1] = image.data[idx + 1];
             leftEye.data[leftIdx + 2] = image.data[idx + 2];
             leftEye.data[leftIdx + 3] = 255;
+            leftDepthBuffer[leftBufferIdx] = depthValue;
           }
         }
 
         // Copy pixel to right eye
         if (rightX >= 0 && rightX < width) {
           const rightIdx = (y * width + rightX) * 4;
-          if (rightEye.data[rightIdx + 3] === 0 || depthValue > (rightEye.data[rightIdx] / 255)) {
+          const rightBufferIdx = y * width + rightX;
+          if (rightEye.data[rightIdx + 3] === 0 || depthValue < rightDepthBuffer[rightBufferIdx]) {
             rightEye.data[rightIdx] = image.data[idx];
             rightEye.data[rightIdx + 1] = image.data[idx + 1];
             rightEye.data[rightIdx + 2] = image.data[idx + 2];
             rightEye.data[rightIdx + 3] = 255;
+            rightDepthBuffer[rightBufferIdx] = depthValue;
           }
         }
       }
@@ -676,9 +689,9 @@ export class StereoConverterNode extends Node {
           const rG = right.data[i + 1] / 255;
           const rB = right.data[i + 2] / 255;
 
-          anaglyph.data[i] = Math.min(255, (0.4561 * lR + 0.500484 * lG + 0.176381 * lB - 0.0434706 * rR - 0.0879388 * rG - 0.00155529 * rB) * 255);
-          anaglyph.data[i + 1] = Math.min(255, (-0.0400822 * lR - 0.0378246 * lG - 0.0157589 * lB + 0.378476 * rR + 0.73364 * rG - 0.0184503 * rB) * 255);
-          anaglyph.data[i + 2] = Math.min(255, (-0.0152161 * lR - 0.0205971 * lG - 0.00546856 * lB - 0.0721527 * rR - 0.112961 * rG + 1.2264 * rB) * 255);
+          anaglyph.data[i] = Math.max(0, Math.min(255, (0.4561 * lR + 0.500484 * lG + 0.176381 * lB - 0.0434706 * rR - 0.0879388 * rG - 0.00155529 * rB) * 255));
+          anaglyph.data[i + 1] = Math.max(0, Math.min(255, (-0.0400822 * lR - 0.0378246 * lG - 0.0157589 * lB + 0.378476 * rR + 0.73364 * rG - 0.0184503 * rB) * 255));
+          anaglyph.data[i + 2] = Math.max(0, Math.min(255, (-0.0152161 * lR - 0.0205971 * lG - 0.00546856 * lB - 0.0721527 * rR - 0.112961 * rG + 1.2264 * rB) * 255));
           break;
       }
       anaglyph.data[i + 3] = 255;
@@ -714,11 +727,12 @@ export class StereoConverterNode extends Node {
   private visualizeDepth(depth: ImageData): ImageData {
     const { width, height } = depth;
     const visualized = new ImageData(width, height);
+    const HSL_HUE_RANGE = 240; // Hue range from blue (240°) to red (0°) in degrees
 
     for (let i = 0; i < depth.data.length; i += 4) {
       const value = depth.data[i];
       // Simple heatmap visualization
-      const hue = ((255 - value) / 255) * 240; // Blue (near) to red (far)
+      const hue = ((255 - value) / 255) * HSL_HUE_RANGE; // Blue (near) to red (far)
       const rgb = this.hslToRgb(hue / 360, 1, 0.5);
       
       visualized.data[i] = rgb[0];
