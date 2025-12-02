@@ -4,15 +4,15 @@
 
 RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-3.6.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.7.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-155%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-161%2B-green)
 
 ## 🏆 Industry Competition
 
-RageVFX 3.6 introduces features that directly compete with industry-standard tools:
+RageVFX 3.7 introduces professional 2D-to-3D stereoscopic conversion, building upon the comprehensive feature set that directly competes with industry-standard tools:
 
 | Feature | Nuke | Houdini | Maya | Cinema 4D | Blender | Fusion | RageVFX |
 |---------|------|---------|------|-----------|---------|--------|---------|
@@ -45,8 +45,36 @@ RageVFX 3.6 introduces features that directly compete with industry-standard too
 | **Physics Particles** | - | - | - | - | ✅ | - | 🆕 3.6 |
 | **Ocean Modifier** | - | ✅ | ✅ | - | ✅ | - | 🆕 3.6 |
 | **Dual Viewer System** | - | - | - | - | - | ✅ | 🆕 3.6 |
-| **Asset Database** | - | - | - | - | ✅ | - | 🆕 3.6 |
+| **Asset Database** | - | - | - | - | ✅ | - | ✅ 3.6 |
+| **2D to 3D Conversion** | ✅ | - | - | - | - | - | 🆕 3.7 |
+| **AI Depth Estimation** | ✅ | - | - | - | - | - | 🆕 3.7 |
 | ML-powered tools | ✅ | - | - | - | - | - | ✅ |
+
+## 🆕 What's New in Version 3.7
+
+### 2D to 3D Stereoscopic Conversion
+Professional conversion system for creating stereoscopic 3D from flat 2D images:
+
+- **Depth Map Generator**: AI/algorithm-based depth estimation
+  - Multiple algorithms: edge-based, luminance, contrast, defocus, atmospheric, multi-cue, hybrid
+  - Edge-preserving bilateral filtering for smooth depth maps
+  - User-guided depth hints for artist control
+  - Depth inpainting to fill holes and discontinuities
+  - Multiple visualization modes: grayscale, heatmap, rainbow, terrain
+  - Quality presets from low to ultra
+  - Adjustable depth range, bias, and contrast controls
+
+- **2D to 3D Converter**: Transform 2D images into stereoscopic 3D
+  - DIBR (Depth Image Based Rendering) - industry-standard method
+  - Multiple conversion algorithms: simple shift, layered depth, multi-plane, advanced
+  - Intelligent occlusion handling with inpainting
+  - Edge-preserving enhancement for sharp details
+  - Support for all output formats: separate eyes, side-by-side, top-bottom, anaglyph, interlaced
+  - Dubois optimized anaglyph for better color reproduction
+  - Adjustable stereo strength and convergence distance
+  - Quality/performance tradeoffs with supersampling options
+  - Subpixel accuracy for highest quality
+  - Compatible with existing 8K+ resolution pipeline
 
 ## 🆕 What's New in Version 3.6
 

@@ -247,6 +247,10 @@ import { OceanModifierNode } from '../nodes/OceanModifierNode';
 // Version 3.6 - Asset Database
 import { VFXAssetDatabaseNode } from '../nodes/VFXAssetDatabaseNode';
 
+// Version 3.7 - 2D to 3D Conversion Enhancement
+import { DepthMapGeneratorNode } from '../nodes/DepthMapGeneratorNode';
+import { StereoConverterNode } from '../nodes/StereoConverterNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -507,6 +511,10 @@ export class RageVFXApp {
     
     // Version 3.6 - Asset Database
     this.nodeRegistry.set('VFXAssetDatabase', VFXAssetDatabaseNode as any);
+    
+    // Version 3.7 - 2D to 3D Conversion Enhancement
+    this.nodeRegistry.set('DepthMapGenerator', DepthMapGeneratorNode as any);
+    this.nodeRegistry.set('StereoConverter', StereoConverterNode as any);
   }
 
   /**
