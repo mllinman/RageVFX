@@ -1,6 +1,6 @@
 # RageVFX Video Tutorial Scripts
 
-This document contains detailed recording scripts for all 20 video tutorials.
+This document contains detailed recording scripts for RageVFX video tutorials. Currently includes complete scripts for Episodes 1-3, with outlines provided for Episodes 4-20.
 
 ---
 

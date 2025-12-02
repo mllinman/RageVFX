@@ -403,8 +403,8 @@ VideoInput → DepthEstimator(MiDaS Small, Temporal Smooth)
 ## 📚 Additional Resources
 
 **Stereoscopic 3D Theory:**
-- [3D Film Production Guide](https://example.com/3d-production)
-- [Parallax and Convergence Explained](https://example.com/parallax)
+- 3D Film Production Guides (search for professional 3D filmmaking resources)
+- Parallax and Convergence tutorials (available through VFX community resources)
 
 **AI Depth Estimation:**
 - [MiDaS: Towards Robust Monocular Depth Estimation](https://github.com/isl-org/MiDaS)
