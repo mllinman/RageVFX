@@ -4,15 +4,15 @@
 
 RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-3.7.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.8.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-161%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-164%2B-green)
 
 ## 🏆 Industry Competition
 
-RageVFX 3.7 introduces professional 2D-to-3D stereoscopic conversion, building upon the comprehensive feature set that directly competes with industry-standard tools:
+RageVFX 3.8 completes major ROADMAP v3.0 features with Smart Vector motion-aware painting, OpenVDB volume support, and VEX-style wrangles, building upon the comprehensive feature set that directly competes with industry-standard tools:
 
 | Feature | Nuke | Houdini | Maya | Cinema 4D | Blender | Fusion | RageVFX |
 |---------|------|---------|------|-----------|---------|--------|---------|
@@ -46,9 +46,43 @@ RageVFX 3.7 introduces professional 2D-to-3D stereoscopic conversion, building u
 | **Ocean Modifier** | - | ✅ | ✅ | - | ✅ | - | 🆕 3.6 |
 | **Dual Viewer System** | - | - | - | - | - | ✅ | 🆕 3.6 |
 | **Asset Database** | - | - | - | - | ✅ | - | ✅ 3.6 |
-| **2D to 3D Conversion** | ✅ | - | - | - | - | - | 🆕 3.7 |
-| **AI Depth Estimation** | ✅ | - | - | - | - | - | 🆕 3.7 |
+| **2D to 3D Conversion** | ✅ | - | - | - | - | - | ✅ 3.7 |
+| **AI Depth Estimation** | ✅ | - | - | - | - | - | ✅ 3.7 |
+| **Smart Vector Paint** | ✅ | - | - | - | - | - | 🆕 3.8 |
+| **OpenVDB Volumes** | - | ✅ | - | - | - | - | 🆕 3.8 |
+| **VEX Wrangles** | - | ✅ | - | - | - | - | 🆕 3.8 |
 | ML-powered tools | ✅ | - | - | - | - | - | ✅ |
+
+## 🆕 What's New in Version 3.8
+
+### Complete ROADMAP v3.0 Features
+Professional tools completing the industry competition roadmap:
+
+- **Smart Vector Node**: Motion-aware painting with motion vector tracking
+  - Paint effects that stick to tracked surfaces
+  - Sub-frame interpolation and temporal consistency
+  - Paint stroke lifetime with fade controls
+  - Clone source with motion tracking
+  - Multiple blend modes and brush parameters
+  - Motion blur and confidence thresholding
+  - Stroke mask and motion path outputs
+
+- **VDB Node**: Industry-standard OpenVDB sparse volume support
+  - Level set operations (union, intersect, difference)
+  - Fog volume generation and manipulation
+  - Advanced filtering (Gaussian, median, Laplacian)
+  - Particle to VDB and mesh to VDB conversion
+  - VDB to mesh with marching cubes
+  - Morphology operations and sparse storage
+  - Configurable voxel size and grid types
+
+- **Wrangle Node**: Houdini-style VEX procedural expressions
+  - Point, primitive, vertex, and detail wrangles
+  - VEX-style syntax with @ attribute notation
+  - Built-in math and noise functions
+  - Vector operations and geometry manipulation
+  - Code compilation and threading support
+  - Standard attributes (@P, @N, @Cd, @pscale, @v)
 
 ## 🆕 What's New in Version 3.7
 
