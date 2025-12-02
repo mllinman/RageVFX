@@ -480,14 +480,15 @@ float dist = length(@P);
       case 'allPoints':
         return geometry.points;
       
-      case 'selectedPoints':
+      case 'selectedPoints': {
         const selection = this.getParameter('pointSelection') as number[];
         return geometry.points.filter((_, i) => selection.includes(i));
+      }
       
-      case 'group':
-        const groupName = this.getParameter('groupName') as string;
+      case 'group': {
         // Would filter by group membership
         return geometry.points;
+      }
       
       default:
         return geometry.points;

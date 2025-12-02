@@ -84,6 +84,22 @@ Professional tools completing the industry competition roadmap:
   - Code compilation and threading support
   - Standard attributes (@P, @N, @Cd, @pscale, @v)
 
+- **Procedural City Node**: Urban environment generation
+  - Multiple street generation methods (L-systems, agent-based, grid, radial, organic)
+  - Building footprint placement and facade generation
+  - Infrastructure (bridges, parking, street lights)
+  - Vegetation and park generation
+  - Architecture styles and building type distribution
+  - Terrain adaptation and water integration
+
+- **Adaptive Sampler Node**: Intelligent rendering optimization
+  - Variance-based adaptive sampling
+  - Progressive refinement with multiple passes
+  - Noise estimation and convergence detection
+  - Firefly suppression and denoising
+  - Sample and variance map visualization
+  - AOV-aware sampling with importance weighting
+
 ## 🆕 What's New in Version 3.7
 
 ### 2D to 3D Stereoscopic Conversion
