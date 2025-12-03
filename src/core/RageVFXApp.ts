@@ -60,6 +60,11 @@ import { SparkNode } from '../nodes/SparkNode';
 import { DissolveNode } from '../nodes/DissolveNode';
 import { LensFlareNode } from '../nodes/LensFlareNode';
 
+// Version 3.9 - Enhanced VFX nodes
+import { BloodSplatterNode } from '../nodes/BloodSplatterNode';
+import { MuzzleFlashNode } from '../nodes/MuzzleFlashNode';
+import { DustNode } from '../nodes/DustNode';
+
 // Tracker nodes
 import { PointTrackerNode } from '../nodes/PointTrackerNode';
 import { PlanarTrackerNode } from '../nodes/PlanarTrackerNode';
@@ -331,6 +336,11 @@ export class RageVFXApp {
     this.nodeRegistry.set('Spark', SparkNode as any);
     this.nodeRegistry.set('Dissolve', DissolveNode as any);
     this.nodeRegistry.set('LensFlare', LensFlareNode as any);
+    
+    // Version 3.9 - Enhanced VFX nodes
+    this.nodeRegistry.set('BloodSplatter', BloodSplatterNode as any);
+    this.nodeRegistry.set('MuzzleFlash', MuzzleFlashNode as any);
+    this.nodeRegistry.set('Dust', DustNode as any);
     
     // Tracker nodes
     this.nodeRegistry.set('PointTracker', PointTrackerNode as any);
