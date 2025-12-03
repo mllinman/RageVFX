@@ -4,15 +4,15 @@
 
 RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-3.8.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.9.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-166%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-169%2B-green)
 
 ## 🏆 Industry Competition
 
-RageVFX 3.8 completes major ROADMAP v3.0 features with Smart Vector motion-aware painting, OpenVDB volume support, and VEX-style wrangles, building upon the comprehensive feature set that directly competes with industry-standard tools:
+RageVFX 3.9 adds comprehensive VFX nodes for realistic blood splatter, muzzle flash, and dust effects with extensive professional settings, building upon version 3.8's Smart Vector motion-aware painting, OpenVDB volume support, and VEX-style wrangles. The comprehensive feature set directly competes with industry-standard tools:
 
 | Feature | Nuke | Houdini | Maya | Cinema 4D | Blender | Fusion | RageVFX |
 |---------|------|---------|------|-----------|---------|--------|---------|
@@ -537,6 +537,33 @@ Comprehensive application customization:
 - **Aurora**: Northern lights with animated curtains
 - **Heat Distortion**: Realistic heat shimmer effects
 - **Debris**: Particle debris for destruction effects
+
+#### 🆕 Enhanced VFX Effects (v3.9)
+- **Blood Splatter**: Realistic blood splatter and spray effects (150+ parameters)
+  - Emission modes: continuous, burst, impact with particle types
+  - Advanced physics: viscosity, drips, pooling, wall collision
+  - Blood aging from fresh to coagulated
+  - Subsurface scattering for translucency
+  - Motion blur and trail systems
+- **Muzzle Flash**: Professional gun muzzle flash effects (100+ parameters)
+  - Multiple weapon types and calibers
+  - Flash components: core, secondary, blast shapes
+  - Spark system with shell ejection
+  - Volumetric smoke with expansion
+  - Shockwave rings and heat distortion
+  - Light emission with glow effects
+- **Dust**: Realistic dust and particle simulation (120+ parameters)
+  - Multiple emission modes and emitter types
+  - Particle types: mote, clump, wisp, cloud, fine
+  - Advanced physics: wind, turbulence, settling
+  - Volumetric rendering with depth layers
+  - Lighting system with backlight
+- **Explosion** (Enhanced): 60+ new parameters
+  - Explosion types including shaped charges
+  - Shockwave, flash, mushroom cloud, embers
+- **Spark** (Enhanced): 70+ new parameters
+  - Types: standard, hot, molten, electric, plasma
+  - Electric branching and molten drips
 
 #### Professional Compositing (v2.3)
 - **Deep Composite**: Depth-aware compositing with per-pixel depth

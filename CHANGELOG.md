@@ -2,6 +2,97 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.9.0] - 2025-12-03
+
+### Added - Version 3.9 Enhanced VFX Nodes
+
+RageVFX 3.9 adds comprehensive VFX nodes for realistic blood, muzzle flash, dust effects, and enhances existing explosion and spark nodes with extensive professional settings.
+
+#### New VFX Nodes (3 nodes)
+- **BloodSplatterNode**: Realistic blood splatter and spray effects (150+ parameters)
+  - Emission modes: continuous, burst, impact
+  - Particle types: droplet, spray, splatter, drip, mist with individual physics
+  - Advanced physics: gravity, drag, viscosity, bounce, wall collision
+  - Drip generation from splatters with pooling simulation
+  - Blood aging effects: fresh to coagulated color transitions
+  - Subsurface scattering for realistic translucency
+  - Motion blur with configurable samples
+  - Trail system with fade rate control
+  - Impact splatter patterns with radial burst and starburst
+  - Pooling system with growth rate and opacity
+  - Texture detail: noise, edge roughness, coagulation
+  - Performance: max particles, culling with margins
+
+- **MuzzleFlashNode**: Professional gun muzzle flash effects (100+ parameters)
+  - Weapon types: rifle, pistol, shotgun, machinegun, cannon, sniper
+  - Caliber settings: small, medium, large, heavy
+  - Flash components: core flash, secondary flash with delay
+  - Blast shapes: starburst, circular, directional, cross with rotation
+  - Spark system with trails, gravity, and shell ejection
+  - Volumetric smoke with expansion and dissipation
+  - Shockwave ring with configurable speed and thickness
+  - Heat distortion effects
+  - Shell ejection with physics, rotation, and bounce
+  - Light emission for background illumination with falloff
+  - Glow and bloom effects
+  - Advanced: chromatic aberration, filmic response, motion blur
+  - Auto-retrigger with timing variation
+
+- **DustNode**: Realistic dust and particle simulation (120+ parameters)
+  - Emission modes: continuous, burst, impact, ambient
+  - Emitter types: point, line, area, volume
+  - Particle types: mote, clump, wisp, cloud, fine with unique behaviors
+  - Advanced physics: gravity, drag, air resistance, brownian motion
+  - Wind system: speed, direction, gusts, size-based affect
+  - Turbulence with 3D Perlin noise and configurable scale
+  - Settling behavior with ground interaction and resuspension
+  - Depth-based parallax with 3D positioning
+  - Volumetric rendering with density layers
+  - Lighting system: ambient, diffuse, backlight with direction/elevation
+  - Depth of field simulation
+  - Level of detail (LOD) system
+  - Ground puffing for impact effects
+  - Motion blur and particle texture options
+
+#### Enhanced Existing VFX Nodes
+- **ExplosionNode**: Enhanced with 60+ parameters
+  - Explosion types: standard, fireball, shockwave, nuclear, shaped charge
+  - Directional shaped charges with charge direction
+  - Shockwave system with speed and intensity
+  - Initial flash with configurable intensity and duration
+  - Heat distortion effects
+  - Ember particles with extended lifetime
+  - Mushroom cloud formation with rise speed and spread
+  - Light emission with radius and falloff
+  - Camera shake output values
+  - Advanced particle physics: vorticity, turbulence, radial force
+  - Color temperature progression: hot to cool
+  - Loop delay for repeated explosions
+
+- **SparkNode**: Enhanced with 70+ parameters
+  - Spark types: standard, hot, molten, electric, plasma
+  - Emission modes: continuous, burst, arc-weld, grinding
+  - Advanced physics: bounce, friction, angular velocity
+  - Electric branching with configurable branch count and length
+  - Molten effects: glow, drips with chance probability
+  - Particle splitting with configurable angle
+  - Color progression: start, mid, end with temperature shift
+  - Flicker effect with frequency and intensity
+  - Trail system with fade rate and width control
+  - Glow effects with radius and intensity
+  - Motion blur with sample count
+  - Performance: max sparks, culling
+
+### Technical Improvements
+- All new nodes follow existing RageVFX patterns and conventions
+- Extensive parameter sets for maximum artist control
+- Seeded random functions for reproducible results
+- Efficient particle systems with culling and LOD
+- Alpha blending and additive blending for proper compositing
+- Perlin noise for realistic turbulence and texture
+- Type-safe TypeScript implementations
+- Proper resource management and particle lifecycle
+
 ## [3.8.0] - 2025-12-02
 
 ### Added - Version 3.8 Complete ROADMAP v3.0 Features
