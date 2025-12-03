@@ -762,20 +762,20 @@ export class DustNode extends Node {
     const v = this.fade(yf);
     const w = this.fade(zf);
     
-    const a = this.permutation[xi] + yi;
-    const b = this.permutation[xi + 1] + yi;
+    const a = (this.permutation[xi] + yi) & 255;
+    const b = (this.permutation[(xi + 1) & 255] + yi) & 255;
     
     return this.lerp(w,
       this.lerp(v,
-        this.lerp(u, this.grad3(this.permutation[a + zi], xf, yf, zf),
-                     this.grad3(this.permutation[b + zi], xf - 1, yf, zf)),
-        this.lerp(u, this.grad3(this.permutation[a + zi + 1], xf, yf - 1, zf),
-                     this.grad3(this.permutation[b + zi + 1], xf - 1, yf - 1, zf))),
+        this.lerp(u, this.grad3(this.permutation[(a + zi) & 255], xf, yf, zf),
+                     this.grad3(this.permutation[(b + zi) & 255], xf - 1, yf, zf)),
+        this.lerp(u, this.grad3(this.permutation[(a + zi + 1) & 255], xf, yf - 1, zf),
+                     this.grad3(this.permutation[(b + zi + 1) & 255], xf - 1, yf - 1, zf))),
       this.lerp(v,
-        this.lerp(u, this.grad3(this.permutation[a + zi + 1], xf, yf, zf - 1),
-                     this.grad3(this.permutation[b + zi + 1], xf - 1, yf, zf - 1)),
-        this.lerp(u, this.grad3(this.permutation[a + zi + 2], xf, yf - 1, zf - 1),
-                     this.grad3(this.permutation[b + zi + 2], xf - 1, yf - 1, zf - 1)))
+        this.lerp(u, this.grad3(this.permutation[(a + zi + 1) & 255], xf, yf, zf - 1),
+                     this.grad3(this.permutation[(b + zi + 1) & 255], xf - 1, yf, zf - 1)),
+        this.lerp(u, this.grad3(this.permutation[(a + zi + 2) & 255], xf, yf - 1, zf - 1),
+                     this.grad3(this.permutation[(b + zi + 2) & 255], xf - 1, yf - 1, zf - 1)))
     );
   }
 
