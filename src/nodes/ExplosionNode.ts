@@ -33,16 +33,82 @@ export class ExplosionNode extends Node {
     this.setParameter('height', 1080);
     this.setParameter('centerX', 0.5);
     this.setParameter('centerY', 0.5);
+    
+    // Explosion type and scale
+    this.setParameter('explosionType', 'standard'); // standard, fireball, shockwave, nuclear, shaped
     this.setParameter('intensity', 1.0);
     this.setParameter('scale', 1.0);
+    this.setParameter('shapeCharge', false);
+    this.setParameter('chargeDirection', 0); // degrees
+    
+    // Particle properties
     this.setParameter('particleCount', 200);
+    this.setParameter('minParticleSize', 3);
+    this.setParameter('maxParticleSize', 25);
+    this.setParameter('sizeVariation', 0.7);
+    
+    // Color settings
     this.setParameter('fireColor', { r: 255, g: 150, b: 50 });
+    this.setParameter('fireColorHot', { r: 255, g: 255, b: 200 });
     this.setParameter('smokeColor', { r: 50, g: 50, b: 50 });
     this.setParameter('sparkColor', { r: 255, g: 255, b: 200 });
+    this.setParameter('debrisColor', { r: 100, g: 80, b: 60 });
+    this.setParameter('shockwaveColor', { r: 255, g: 255, b: 255 });
+    
+    // Timing
     this.setParameter('duration', 2.0);
+    this.setParameter('expansionDuration', 0.3);
+    this.setParameter('fireDuration', 0.8);
+    this.setParameter('smokeDuration', 1.5);
+    
+    // Physics
     this.setParameter('gravity', 0.5);
+    this.setParameter('drag', 0.02);
+    this.setParameter('upwardForce', 1.2);
+    this.setParameter('radialForce', 1.0);
+    this.setParameter('turbulence', 0.5);
+    this.setParameter('vorticity', 0.3);
+    
+    // Particle type ratios
+    this.setParameter('fireRatio', 0.4);
+    this.setParameter('smokeRatio', 0.3);
+    this.setParameter('sparkRatio', 0.2);
+    this.setParameter('debrisRatio', 0.1);
+    
+    // Advanced effects
+    this.setParameter('enableShockwave', true);
+    this.setParameter('shockwaveSpeed', 500);
+    this.setParameter('shockwaveIntensity', 0.8);
+    this.setParameter('enableFlash', true);
+    this.setParameter('flashIntensity', 2.0);
+    this.setParameter('flashDuration', 0.1);
+    this.setParameter('enableHeatDistortion', true);
+    this.setParameter('heatDistortionAmount', 0.4);
+    this.setParameter('enableEmbers', true);
+    this.setParameter('emberCount', 50);
+    this.setParameter('emberLife', 3.0);
+    
+    // Mushroom cloud
+    this.setParameter('enableMushroomCloud', true);
+    this.setParameter('mushroomRiseSpeed', 100);
+    this.setParameter('mushroomSpread', 1.5);
+    
+    // Light emission
+    this.setParameter('enableLight', true);
+    this.setParameter('lightRadius', 400);
+    this.setParameter('lightIntensity', 1.0);
+    this.setParameter('lightColor', { r: 255, g: 200, b: 100 });
+    
+    // Camera shake (output value)
+    this.setParameter('enableCameraShake', true);
+    this.setParameter('shakeIntensity', 0.5);
+    this.setParameter('shakeDuration', 0.5);
+    
+    // Control
     this.setParameter('autoTrigger', true);
     this.setParameter('loop', true);
+    this.setParameter('loopDelay', 3.0);
+    
     this.setParameter('seed', 77777);
     
     this.initPermutation();

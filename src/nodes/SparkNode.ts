@@ -30,21 +30,95 @@ export class SparkNode extends Node {
     
     this.setParameter('width', 1920);
     this.setParameter('height', 1080);
+    
+    // Emitter settings
     this.setParameter('emitterX', 0.5);
     this.setParameter('emitterY', 0.5);
+    this.setParameter('emitterRadius', 10);
+    this.setParameter('emissionMode', 'continuous'); // continuous, burst, arc-weld, grinding
     this.setParameter('emissionRate', 20);
+    this.setParameter('burstCount', 100);
+    this.setParameter('burstDuration', 0.5);
+    
+    // Spark properties
+    this.setParameter('sparkType', 'standard'); // standard, hot, molten, electric, plasma
     this.setParameter('sparkSpeed', 8.0);
     this.setParameter('sparkSpeedVariation', 3.0);
+    this.setParameter('sparkSize', 3);
+    this.setParameter('sparkSizeVariation', 0.5);
+    this.setParameter('minSparkSize', 1);
+    this.setParameter('maxSparkSize', 8);
+    
+    // Direction and spread
     this.setParameter('emissionAngle', 270); // Degrees, 0 = right, 270 = up
     this.setParameter('emissionSpread', 60); // Cone angle
+    this.setParameter('directionVariation', 0.2);
+    this.setParameter('angularVelocity', 0);
+    
+    // Physics
     this.setParameter('gravity', 0.3);
+    this.setParameter('gravityVariation', 0.2);
     this.setParameter('drag', 0.02);
+    this.setParameter('bounce', true);
+    this.setParameter('bounceFactor', 0.4);
+    this.setParameter('friction', 0.8);
+    
+    // Lifetime
     this.setParameter('sparkLife', 1.0);
     this.setParameter('sparkLifeVariation', 0.3);
-    this.setParameter('sparkSize', 3);
+    this.setParameter('fadeIn', true);
+    this.setParameter('fadeInDuration', 0.05);
+    this.setParameter('fadeOut', true);
+    this.setParameter('fadeOutRatio', 0.3);
+    
+    // Trail effects
+    this.setParameter('enableTrails', true);
     this.setParameter('trailLength', 5);
-    this.setParameter('color', { r: 255, g: 200, b: 100 });
+    this.setParameter('trailFadeRate', 0.9);
+    this.setParameter('trailWidth', 0.7);
+    
+    // Color settings
+    this.setParameter('colorStart', { r: 255, g: 240, b: 200 });
+    this.setParameter('colorMid', { r: 255, g: 200, b: 100 });
     this.setParameter('colorEnd', { r: 255, g: 100, b: 50 });
+    this.setParameter('colorVariation', 0.1);
+    this.setParameter('temperatureShift', true);
+    
+    // Advanced effects
+    this.setParameter('enableGlow', true);
+    this.setParameter('glowRadius', 8);
+    this.setParameter('glowIntensity', 0.6);
+    this.setParameter('enableFlicker', true);
+    this.setParameter('flickerFrequency', 10);
+    this.setParameter('flickerIntensity', 0.3);
+    this.setParameter('enableSplitting', false);
+    this.setParameter('splittingChance', 0.05);
+    this.setParameter('splittingAngle', 30);
+    
+    // Electric spark effects (for electric/plasma types)
+    this.setParameter('electricBranching', true);
+    this.setParameter('branchCount', 3);
+    this.setParameter('branchLength', 20);
+    this.setParameter('branchIntensity', 0.5);
+    this.setParameter('electricGlow', true);
+    this.setParameter('electricColor', { r: 150, g: 200, b: 255 });
+    
+    // Molten effects
+    this.setParameter('moltenGlow', true);
+    this.setParameter('moltenColor', { r: 255, g: 100, b: 0 });
+    this.setParameter('moltenDrips', true);
+    this.setParameter('dripChance', 0.1);
+    
+    // Motion blur
+    this.setParameter('motionBlur', true);
+    this.setParameter('motionBlurLength', 0.6);
+    this.setParameter('motionBlurSamples', 4);
+    
+    // Performance
+    this.setParameter('maxSparks', 500);
+    this.setParameter('culling', true);
+    this.setParameter('cullMargin', 50);
+    
     this.setParameter('seed', 55555);
   }
 
