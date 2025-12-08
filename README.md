@@ -11,6 +11,12 @@ RageVFX is a next-generation visual effects software designed to rival industry 
 ![Nodes](https://img.shields.io/badge/nodes-176%2B-green)
 ![Blender](https://img.shields.io/badge/Blender-Integration-blue)
 
+## 🚀 Quick Links
+
+- **[Try Web App](web/index.html)** - Run RageVFX directly in your browser (Free)
+- **[Marketing Website](marketing/index.html)** - Professional landing page with pricing & downloads
+- **[Download Desktop App](#download)** - Windows, macOS, Linux installers (Pro subscription $9.99/month)
+
 ## 🏆 Industry Competition
 
 RageVFX 3.10 adds complete OpenVDB import/export tools, procedural VDB nodes for clouds, smoke, fire, water, and snow, plus a professional Blender integration addon. Building upon 3.9's blood splatter, muzzle flash, and dust effects, and 3.8's Smart Vector painting and VEX wrangles. The comprehensive feature set directly competes with industry-standard tools:
@@ -716,6 +722,29 @@ Try RageVFX directly in your browser without any installation:
    ```bash
    npm run preview:web
    ```
+
+### 💳 Pro Subscription & Downloads
+
+RageVFX offers a **Free tier** (web app) and **Pro tier** ($9.99/month) with desktop app downloads.
+
+**Marketing Website**: Professional landing page with pricing and subscription management:
+```bash
+cd marketing
+python -m http.server 8000
+# Visit http://localhost:8000
+```
+
+**Features by Tier**:
+- **Free**: Web app access, 176+ nodes, 1080p export, basic VFX effects, 5GB cloud storage
+- **Pro**: Everything in Free + Desktop downloads (Windows/macOS/Linux), 8K export, advanced nodes, OpenVDB tools, unlimited storage, commercial license
+
+**Setting up Stripe** (for accepting subscriptions):
+1. Create account at [stripe.com](https://stripe.com)
+2. Get API keys from [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys)
+3. Copy `marketing/config.example.js` to `marketing/config.js` and add keys
+4. Setup backend API (see `marketing/backend/README.md`)
+
+**Learn more**: See `marketing/README.md` for complete setup instructions
 
 ### 💿 Windows Installation
 
