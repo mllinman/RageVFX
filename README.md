@@ -4,15 +4,16 @@
 
 RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
 
-![RageVFX](https://img.shields.io/badge/version-3.9.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.10.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-169%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-176%2B-green)
+![Blender](https://img.shields.io/badge/Blender-Integration-blue)
 
 ## 🏆 Industry Competition
 
-RageVFX 3.9 adds comprehensive VFX nodes for realistic blood splatter, muzzle flash, and dust effects with extensive professional settings, building upon version 3.8's Smart Vector motion-aware painting, OpenVDB volume support, and VEX-style wrangles. The comprehensive feature set directly competes with industry-standard tools:
+RageVFX 3.10 adds complete OpenVDB import/export tools, procedural VDB nodes for clouds, smoke, fire, water, and snow, plus a professional Blender integration addon. Building upon 3.9's blood splatter, muzzle flash, and dust effects, and 3.8's Smart Vector painting and VEX wrangles. The comprehensive feature set directly competes with industry-standard tools:
 
 | Feature | Nuke | Houdini | Maya | Cinema 4D | Blender | Fusion | RageVFX |
 |---------|------|---------|------|-----------|---------|--------|---------|
@@ -48,12 +49,46 @@ RageVFX 3.9 adds comprehensive VFX nodes for realistic blood splatter, muzzle fl
 | **Asset Database** | - | - | - | - | ✅ | - | ✅ 3.6 |
 | **2D to 3D Conversion** | ✅ | - | - | - | - | - | ✅ 3.7 |
 | **AI Depth Estimation** | ✅ | - | - | - | - | - | ✅ 3.7 |
-| **Smart Vector Paint** | ✅ | - | - | - | - | - | 🆕 3.8 |
-| **OpenVDB Volumes** | - | ✅ | - | - | - | - | 🆕 3.8 |
-| **VEX Wrangles** | - | ✅ | - | - | - | - | 🆕 3.8 |
+| **Smart Vector Paint** | ✅ | - | - | - | - | - | ✅ 3.8 |
+| **OpenVDB Volumes** | - | ✅ | - | - | - | - | ✅ 3.8 |
+| **VEX Wrangles** | - | ✅ | - | - | - | - | ✅ 3.8 |
+| **VDB Import/Export** | - | ✅ | - | - | - | - | 🆕 3.10 |
+| **Procedural VDB Nodes** | - | ✅ | - | - | - | - | 🆕 3.10 |
+| **Blender Integration** | - | - | - | - | ✅ | - | 🆕 3.10 |
 | ML-powered tools | ✅ | - | - | - | - | - | ✅ |
 
-## 🆕 What's New in Version 3.8
+## 🆕 What's New in Version 3.10
+
+### VDB Import/Export and Blender Integration
+Professional OpenVDB tools for complete volumetric workflow:
+
+- **VDBImportNode**: Import OpenVDB files with multi-grid support
+  - Import density, velocity, temperature, fuel, pressure grids
+  - Frame sequence support for animations
+  - Memory-efficient caching and streaming
+  - Preview slice generation
+  
+- **VDBExportNode**: Export volumes to OpenVDB format
+  - Multiple compression options (ZIP, Blosc)
+  - Frame sequence export
+  - Metadata embedding
+  - Sparse storage optimization
+
+- **VDB Procedural Nodes** (5 nodes): Generate VDB volumes
+  - **VDBCloudNode**: Realistic clouds (cumulus, cirrus, etc.)
+  - **VDBSmokeNode**: Rising smoke with turbulence
+  - **VDBFireNode**: Fire with fuel, temperature fields
+  - **VDBWaterNode**: Level set liquid simulation
+  - **VDBSnowNode**: Falling snow particles
+
+- **Blender Integration Addon**: Professional VDB workflow
+  - Import/Export .vdb files in Blender 3.0+
+  - Convert mesh to VDB volumes
+  - Frame sequence support
+  - Custom RageVFX sidebar panel
+  - Grid name mapping and settings
+
+## What's New in Version 3.8
 
 ### Complete ROADMAP v3.0 Features
 Professional tools completing the industry competition roadmap:

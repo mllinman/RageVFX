@@ -2,6 +2,105 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.10.0] - 2025-12-08
+
+### Added - Version 3.10 VDB Import/Export and Blender Integration
+
+RageVFX 3.10 adds comprehensive OpenVDB import/export tools, procedural VDB nodes for clouds, smoke, fire, water, and snow, plus a professional Blender integration addon.
+
+#### VDB Import/Export Nodes (2 nodes)
+- **VDBImportNode**: Import OpenVDB files with full grid support
+  - Multi-grid import (density, velocity, temperature, fuel, pressure)
+  - Frame sequence support with pattern-based naming
+  - Automatic grid detection and parsing
+  - Configurable voxel size scaling
+  - Memory-efficient caching and streaming
+  - Clip bounds and resampling options
+  - Preview slice generation
+  - Statistics tracking (voxel count, memory usage)
+
+- **VDBExportNode**: Export volumes to OpenVDB files
+  - Multiple grid export (density, temperature, velocity, fuel, pressure)
+  - Compression options (none, ZIP, Blosc)
+  - Half-float precision for reduced file size
+  - Frame sequence export for animations
+  - Grid type and class specification
+  - Metadata embedding with custom properties
+  - Transform and voxel size control
+  - Inactive voxel pruning for sparse storage
+
+#### Procedural VDB Nodes (5 nodes)
+- **VDBCloudNode**: Procedural cloud generation in VDB format
+  - Cloud types: cumulus, stratocumulus, cumulonimbus, cirrus, stratus
+  - Multi-octave Perlin/Worley noise
+  - Detail noise for wispy features
+  - Wind and turbulence simulation
+  - Density variation and erosion
+  - Anvil top for cumulonimbus
+  - Height and edge falloff controls
+  - Sparse VDB storage with pruning
+
+- **VDBSmokeNode**: Volumetric smoke simulation to VDB
+  - Rising smoke with buoyancy
+  - Turbulence and swirling effects
+  - Temperature-driven advection
+  - Dissipation over time
+  - Multi-octave turbulent noise
+  - VDB fog volume output
+
+- **VDBFireNode**: Fire simulation in VDB format
+  - Combustion simulation with fuel, temperature, density
+  - Flame height and width controls
+  - Flickering and turbulence
+  - Burn rate and fuel density
+  - Multiple VDB grid outputs
+  - Cone-shaped flame profile
+
+- **VDBWaterNode**: Liquid simulation in VDB level set format
+  - Level set surface representation
+  - Wave simulation with amplitude and frequency
+  - Surface tension modeling
+  - Velocity field output
+  - Narrow band storage
+  - Gravity and fluid properties
+
+- **VDBSnowNode**: Snow particle to VDB conversion
+  - Falling snow particle system
+  - Wind drift and turbulence
+  - Snow accumulation
+  - Particle rasterization to VDB
+  - Density and velocity field outputs
+  - Configurable flake size and density
+
+#### Blender Integration Tool
+- **RageVFX Blender Addon**: Professional VDB import/export for Blender
+  - File menu integration (Import/Export > OpenVDB)
+  - VDB import operator with grid selection
+  - VDB export operator with compression options
+  - Frame sequence support for animations
+  - Convert mesh to VDB volume
+  - Custom sidebar panel in 3D View
+  - VDB settings and grid name mapping
+  - Volume properties display
+  - Live preview and auto-import options
+  - Compatible with Blender 3.0+
+
+### UI Improvements
+- Added dedicated "VDB Tools" category in node library
+- Modern icons for VDB nodes (📥📤☁️💨🔥💧❄️)
+- New node category badge with 🆕 indicator
+- Organized VDB nodes separate from general volumetric nodes
+
+### Technical Features
+- Full sparse VDB grid support
+- Multiple grid types (float, vec3, int32, bool)
+- Grid classes (fog, levelset, staggered)
+- Compression algorithms (ZIP, Blosc)
+- Metadata embedding and custom properties
+- Transform and voxel size control
+- Memory-efficient streaming for large files
+- Frame sequence pattern support (####)
+
 ## [3.9.0] - 2025-12-03
 
 ### Added - Version 3.9 Enhanced VFX Nodes
