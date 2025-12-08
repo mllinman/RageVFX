@@ -214,6 +214,11 @@ import { ModelExportNode } from '../nodes/ModelExportNode';
 import { Camera3DTrackingNode } from '../nodes/Camera3DTrackingNode';
 import { RealWorldCameraNode } from '../nodes/RealWorldCameraNode';
 
+// Version 3.11 - Camera Import and Background Card System
+import { CameraImportNode } from '../nodes/CameraImportNode';
+import { CameraFromVideoNode } from '../nodes/CameraFromVideoNode';
+import { BackgroundCardNode } from '../nodes/BackgroundCardNode';
+
 // Version 3.2 - Fluid Physics System (Maya-like)
 import { FluidPhysicsNode } from '../nodes/FluidPhysicsNode';
 import { FluidCacheNode } from '../nodes/FluidCacheNode';
@@ -499,6 +504,11 @@ export class RageVFXApp {
     // Version 3.2 - 3D Camera Tracking and Creation (3DSMax/Maya-like)
     this.nodeRegistry.set('Camera3DTracking', Camera3DTrackingNode as any);
     this.nodeRegistry.set('RealWorldCamera', RealWorldCameraNode as any);
+    
+    // Version 3.11 - Camera Import and Background Card System
+    this.nodeRegistry.set('CameraImport', CameraImportNode as any);
+    this.nodeRegistry.set('CameraFromVideo', CameraFromVideoNode as any);
+    this.nodeRegistry.set('BackgroundCard', BackgroundCardNode as any);
     
     // Version 3.2 - Fluid Physics System (Maya-like)
     this.nodeRegistry.set('FluidPhysics', FluidPhysicsNode as any);
