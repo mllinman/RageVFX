@@ -48,7 +48,7 @@ RageVFX has become a comprehensive industry-level VFX software combining the bes
 | Geometry Nodes | ✅ Procedural modeling | ✅ v3.6 GeometryNodesNode |
 | Ocean simulation | ✅ FFT-based | ✅ v3.6 OceanModifierNode |
 
-### Redshift/V-Ray Features - ✅ COMPLETE  
+### Redshift/V-Ray Features - ✅ COMPLETE
 | Feature | Redshift/V-Ray | RageVFX Status |
 |---------|----------------|----------------|
 | GPU path tracing | ✅ Production quality | ✅ v3.0 PathTracerNode |
