@@ -12,7 +12,7 @@ RageVFX has become a comprehensive industry-level VFX software combining the bes
 
 ## Current Status: Version 3.10.0
 
-**176+ Professional Nodes | 59,000+ Lines of Code | Industry-Leading Feature Set**
+**176+ Professional Nodes | 59,456 Lines of Code | Industry-Leading Feature Set**
 
 ## Competitive Analysis - Achieved Features
 

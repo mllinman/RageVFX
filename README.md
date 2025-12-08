@@ -994,9 +994,9 @@ RageVFX is optimized for professional workflows:
 - [x] Machine learning-powered tools (StyleTransfer, Upscale, Denoise, ObjectDetection, Inpaint, DepthEstimation)
 
 ### Version 3.0 ✅ (Industry Competition Release)
-- [x] **Nuke-rivaling compositing**: MultiShot with graph scope variables, IBK-style keying
-- [x] **Houdini-rivaling procedural tools**: Procedural terrain with erosion, crowd simulation
-- [x] **Redshift/V-Ray-rivaling rendering**: Path tracer with MIS/NEE, interactive light mixer
+- [x] **Nuke-level compositing**: MultiShot with graph scope variables, IBK-style keying
+- [x] **Houdini-level procedural tools**: Procedural terrain with erosion, crowd simulation
+- [x] **Redshift/V-Ray-level rendering**: Path tracer with MIS/NEE, interactive light mixer
 - [x] Comprehensive competitive analysis and roadmap (ROADMAP.md)
 
 ### Version 3.1 ✅ (Advanced Physics & Pipeline Integration)
