@@ -2,6 +2,66 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+## [3.11.0] - 2025-12-08
+
+### Added - Version 3.11 Camera Import and Background Card System
+
+RageVFX 3.11 adds comprehensive camera import capabilities from Nuke, Maya, Blender, and commercial cameras, plus a camera-from-video analyzer and a versatile background card system for VFX placement.
+
+#### Camera Import Node
+- **CameraImportNode**: Import camera data from multiple professional formats
+  - Nuke/NukeX camera import (.nk files with camera node parsing)
+  - Maya camera import (.ma, .mb with ASCII/binary support)
+  - Blender camera import (.blend, FBX exports)
+  - USD/Alembic camera import for pipeline integration
+  - Commercial camera metadata (ARRI, RED, Sony, Canon)
+  - EXIF/XMP metadata extraction from footage
+  - Animation keyframe import with smoothing
+  - Coordinate system conversion (Y-up, Z-up)
+  - Unit conversion (mm, cm, m, inches, feet)
+  - Lens distortion parameter import
+  - Focal length and sensor size extraction
+  - Frame range and timing controls
+  - Camera path generation from keyframes
+
+#### Camera from Video Analysis
+- **CameraFromVideoNode**: Analyze video/images and generate matching 3D camera
+  - Automatic feature tracking (SIFT, ORB, AKAZE, Shi-Tomasi, FAST)
+  - Optical flow and feature matching methods
+  - Structure from Motion (SfM) solver
+  - Bundle adjustment for camera optimization
+  - Essential matrix and homography estimation
+  - PnP (Perspective-n-Point) solving
+  - Distortion model estimation (Brown, fisheye, polynomial)
+  - Principal point estimation
+  - Camera path smoothing and stabilization
+  - Motion constraint options (planar, vertical, horizontal)
+  - Depth prior integration support
+  - Feature point cloud generation
+  - Tracking statistics and quality reports
+  - Reprojection error analysis
+  - Multiple camera models (perspective, fisheye, spherical)
+
+#### Background Card System
+- **BackgroundCardNode**: Create background planes for VFX placement
+  - Multiple modes: 3D, 2D, camera-facing, screen-space
+  - Image and video texture support
+  - Image sequence playback
+  - Automatic aspect ratio preservation
+  - Billboard modes (spherical, cylindrical)
+  - Screen-space positioning and alignment
+  - UV mapping and transformation controls
+  - Material blending modes (normal, additive, multiply, screen)
+  - Texture filtering and wrapping options
+  - Video playback controls (loop, speed, start time)
+  - Color correction (brightness, contrast, saturation, hue)
+  - Subdivision for mesh deformation
+  - Shadow casting and receiving
+  - Double-sided rendering option
+  - Integration with camera nodes for 2D compositing
+
+**New Node Count**: 179 professional nodes (3 new camera/background nodes)
+
 ## [3.10.0] - 2025-12-08
 
 ### Added - Version 3.10 VDB Import/Export and Blender Integration
