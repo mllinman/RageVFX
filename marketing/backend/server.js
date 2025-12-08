@@ -13,7 +13,12 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// In-memory storage (replace with database in production)
+// ⚠️ DEVELOPMENT ONLY: In-memory storage (data lost on restart)
+// For production: Replace with PostgreSQL, MongoDB, or MySQL
+// All subscription data is stored in Stripe - this is just for caching/tracking
+// Example with PostgreSQL:
+//   const { Pool } = require('pg');
+//   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const subscriptions = new Map();
 
 // ============================================================================
@@ -41,7 +46,8 @@ app.post('/api/create-subscription', async (req, res) => {
     }
     
     // Use idempotency key to prevent duplicate requests
-    const idempotencyKey = `${email}-${Date.now()}`;
+    const crypto = require('crypto');
+    const idempotencyKey = crypto.randomUUID();
     
     // Create or retrieve customer
     let customer;
@@ -322,26 +328,42 @@ app.post('/api/generate-download-token', async (req, res) => {
       return res.status(403).json({ error: 'No active subscription' });
     }
     
-    // WARNING: This is NOT cryptographically secure!
-    // Base64 is encoding, not encryption. Anyone can decode and modify this.
-    // For production: Use jsonwebtoken (JWT) with HMAC-SHA256 or RS256
+    // WARNING: This is a basic implementation for demonstration only!
+    // For production: Install and use the 'jsonwebtoken' library
+    // npm install jsonwebtoken
+    // const jwt = require('jsonwebtoken');
+    // const token = jwt.sign({ customerId, platform }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    
     const crypto = require('crypto');
-    const payload = JSON.stringify({
+    
+    // Validate secret is configured
+    const secret = process.env.DOWNLOAD_TOKEN_SECRET;
+    if (!secret || secret === 'your_strong_secret_here_change_in_production') {
+      return res.status(500).json({ 
+        error: 'Server configuration error: DOWNLOAD_TOKEN_SECRET not properly configured',
+      });
+    }
+    
+    // Create payload
+    const payload = {
       customerId,
       platform,
       expires: Date.now() + 3600000, // 1 hour
-    });
+      nonce: crypto.randomUUID(), // Prevent replay attacks
+    };
     
-    // Create a basic HMAC signature (still requires JWT library in production)
-    const secret = process.env.DOWNLOAD_TOKEN_SECRET || 'CHANGE_THIS_SECRET';
+    const payloadString = JSON.stringify(payload);
+    
+    // Create HMAC signature
     const signature = crypto
       .createHmac('sha256', secret)
-      .update(payload)
+      .update(payloadString)
       .digest('hex');
     
+    // Combine payload and signature
     const token = Buffer.from(JSON.stringify({
-      payload,
-      signature,
+      p: payloadString, // payload
+      s: signature,      // signature
     })).toString('base64');
     
     res.json({

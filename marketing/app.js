@@ -6,7 +6,9 @@
 
 // NOTE: Replace with your actual Stripe publishable key
 // For testing, use test mode keys from https://dashboard.stripe.com/test/apikeys
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_KEY_HERE';
+// IMPORTANT: Create config.js from config.example.js and add your real keys
+// Never commit real API keys to version control!
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_KEY_HERE'; // Replace in production or use config.js
 
 // Price IDs from Stripe Dashboard (create products first)
 const STRIPE_PRICES = {
