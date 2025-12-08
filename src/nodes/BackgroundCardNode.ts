@@ -278,9 +278,17 @@ export class BackgroundCardNode extends Node {
   }
 
   private async createVideoTexture(filepath: string): Promise<THREE.VideoTexture> {
+    // Validate filepath before use
+    if (!filepath || typeof filepath !== 'string') {
+      console.warn('BackgroundCardNode: Invalid video filepath');
+      return this.createPlaceholderTexture() as any;
+    }
+    
     // Create video element
     this.videoElement = document.createElement('video');
-    this.videoElement.src = filepath;
+    // Sanitize filepath: only allow safe protocols
+    const sanitizedPath = this.sanitizeFilePath(filepath);
+    this.videoElement.src = sanitizedPath;
     this.videoElement.loop = this.getParameter('videoLoop');
     this.videoElement.muted = this.getParameter('videoMuted');
     this.videoElement.playbackRate = this.getParameter('videoPlaybackRate');
@@ -565,6 +573,32 @@ export class BackgroundCardNode extends Node {
     matrix.fromArray(transform);
     
     this.card.mesh.applyMatrix4(matrix);
+  }
+
+  /**
+   * Sanitize file path to prevent security issues
+   * @param filepath - Raw filepath from user input
+   * @returns Sanitized filepath safe for use
+   */
+  private sanitizeFilePath(filepath: string): string {
+    // Remove any potentially dangerous protocols
+    const dangerous = ['javascript:', 'data:', 'vbscript:', 'file:'];
+    const lower = filepath.toLowerCase();
+    
+    for (const protocol of dangerous) {
+      if (lower.includes(protocol)) {
+        console.warn(`BackgroundCardNode: Blocked dangerous protocol in filepath: ${protocol}`);
+        return '';
+      }
+    }
+    
+    // Only allow http, https, blob, and relative paths
+    if (filepath.match(/^(https?:|blob:)/i) || !filepath.includes(':')) {
+      return filepath;
+    }
+    
+    console.warn('BackgroundCardNode: Filepath protocol not allowed');
+    return '';
   }
 
   // Cleanup method

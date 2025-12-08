@@ -199,9 +199,21 @@ export class CameraFromVideoNode extends Node {
     }
   }
 
+  /**
+   * Track features across video frames for camera solving
+   * @param footage - Input video/image sequence data
+   * @param mask - Optional mask to restrict tracking region
+   * @returns Array of tracked features with 2D positions per frame
+   * @note Current implementation generates simulated tracking data as placeholder
+   * @todo Implement actual feature tracking using:
+   *       - OpenCV.js for SIFT/ORB/AKAZE feature detection
+   *       - Lucas-Kanade optical flow for tracking
+   *       - RANSAC for outlier rejection
+   *       - Bidirectional tracking for validation
+   */
   private async trackFeatures(footage: any, mask?: any): Promise<TrackingFeature[]> {
-    // Simulate feature tracking across video frames
-    // In real implementation would use OpenCV or similar for feature detection and tracking
+    // TODO: Replace with actual feature tracking implementation
+    // Will require OpenCV.js or similar computer vision library
     
     const method = this.getParameter('trackingMethod');
     const detector = this.getParameter('featureDetector');
@@ -249,9 +261,22 @@ export class CameraFromVideoNode extends Node {
     return features;
   }
 
+  /**
+   * Solve camera motion from tracked features using Structure from Motion
+   * @param features - Array of tracked features with 2D positions
+   * @param depthMap - Optional depth prior for scale recovery
+   * @returns Array of solved camera poses per frame
+   * @note Current implementation generates simulated camera path as placeholder
+   * @todo Implement actual SfM solver:
+   *       - Essential matrix estimation for relative pose
+   *       - Triangulation for 3D point reconstruction
+   *       - Bundle adjustment for joint optimization
+   *       - Loop closure detection for drift correction
+   *       - Scale recovery from depth prior or known distances
+   */
   private async solveCameraMotion(features: TrackingFeature[], depthMap?: any): Promise<SolvedCamera[]> {
-    // Simulate camera motion solving using structure from motion (SfM)
-    // In real implementation would use bundle adjustment, PnP, etc.
+    // TODO: Replace with actual Structure from Motion implementation
+    // Consider using libraries like OpenCV.js, ThreeJS, or custom WebGL solver
     
     const method = this.getParameter('solverMethod');
     const maxError = this.getParameter('maxReprojectionError');

@@ -186,9 +186,17 @@ export class CameraImportNode extends Node {
     return formatMap[ext] || 'unknown';
   }
 
+  /**
+   * Load camera data from file based on detected format
+   * @param filepath - Path to the camera file
+   * @param format - Detected camera format (nuke, maya, blender, etc.)
+   * @returns Promise resolving to CameraData or null if loading fails
+   * @note Current implementation provides simulated data as placeholder.
+   *       TODO: Implement actual file parsing for each format using appropriate libraries
+   */
   private async loadCameraData(filepath: string, format: string): Promise<CameraData | null> {
-    // Simulate camera data loading based on format
-    // In real implementation would parse actual file formats
+    // TODO: Replace simulated data with actual file parsing
+    // Will require format-specific parsers for each supported format
     
     switch (format) {
       case 'nuke':
@@ -214,9 +222,20 @@ export class CameraImportNode extends Node {
     }
   }
 
+  /**
+   * Load camera from Nuke/NukeX .nk script file
+   * @param filepath - Path to .nk file
+   * @returns CameraData extracted from Nuke Camera node
+   * @note Nuke .nk files are Tcl-based scripts. Parser would need to:
+   *       - Parse Tcl script to find Camera nodes
+   *       - Extract translate, rotate, focal, haperture, vaperture parameters
+   *       - Handle animated curves (keyframes)
+   *       - Support projection_mode and film_back settings
+   * @todo Implement actual Nuke script parser
+   */
   private loadNukeCamera(filepath: string): CameraData {
-    // Simulate loading Nuke camera from .nk file
-    // Would parse Nuke script format to extract Camera node parameters
+    // TODO: Parse Nuke .nk Tcl script format
+    // Reference: Nuke Python API documentation for Camera node parameters
     
     const cameraName = this.getParameter('nukeNodeName');
     const importAnimation = this.getParameter('importAnimation');
@@ -248,9 +267,20 @@ export class CameraImportNode extends Node {
     return data;
   }
 
+  /**
+   * Load camera from Maya .ma (ASCII) or .mb (binary) file
+   * @param filepath - Path to Maya scene file
+   * @returns CameraData extracted from Maya camera shape
+   * @note Maya files store cameras as shape nodes with transform hierarchy:
+   *       - Camera shape contains lens properties (focal length, film gate)
+   *       - Transform node contains position/rotation with animation curves
+   *       - .ma files are text-based MEL format
+   *       - .mb files are binary format requiring special parser
+   * @todo Implement Maya file parser (consider using maya-py or similar)
+   */
   private loadMayaCamera(filepath: string): CameraData {
-    // Simulate loading Maya camera from .ma or .mb file
-    // Would parse Maya ASCII or binary format
+    // TODO: Parse Maya ASCII (.ma) or binary (.mb) format
+    // Reference: Maya camera node documentation and MEL syntax
     
     const data: CameraData = {
       position: new THREE.Vector3(0, 15, 50),  // Maya uses cm by default
@@ -278,9 +308,20 @@ export class CameraImportNode extends Node {
     return data;
   }
 
+  /**
+   * Load camera from Blender .blend file or FBX export
+   * @param filepath - Path to Blender file
+   * @returns CameraData extracted from Blender camera object
+   * @note Blender specifics:
+   *       - Uses Z-up coordinate system (requires conversion)
+   *       - Cameras stored in .blend binary format (GZIP compressed)
+   *       - FBX export is easier to parse but may lose some data
+   *       - Sensor size, focal length, and DOF settings stored in camera data
+   * @todo Implement .blend file parser or FBX camera extraction
+   */
   private loadBlenderCamera(filepath: string): CameraData {
-    // Simulate loading Blender camera from .blend file
-    // Would parse Blender file format or use FBX export
+    // TODO: Parse Blender .blend format or extract from FBX
+    // Consider using blender-file-reader library or FBX SDK
     
     const data: CameraData = {
       position: new THREE.Vector3(0, 1.5, 5),  // Blender uses meters
