@@ -1,8 +1,8 @@
 # RageVFX
 
-**The Industry-Rivaling Node-Based Visual Effects Platform**
+**The Industry-Leading Node-Based Visual Effects Platform**
 
-RageVFX is a next-generation visual effects software designed to rival industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects.
+RageVFX is a next-generation visual effects software that has achieved feature parity with industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects with 176+ professional nodes.
 
 ![RageVFX](https://img.shields.io/badge/version-3.10.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)

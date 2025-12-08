@@ -25,7 +25,7 @@ RageVFX has become a comprehensive industry-level VFX software combining the bes
 | IBK keying | ✅ Advanced | ✅ v3.0 IBKKeyerNode |
 | Smart Vectors | ✅ Paint + tracking | ✅ v3.8 SmartVectorNode |
 | Cryptomatte | ✅ Standard | ✅ v2.3 CryptomatteNode |
-| 176+ creative nodes | ✅ Comprehensive | ✅ v3.10 (176 nodes) |
+| 176+ creative nodes | ✅ Comprehensive | ✅ v3.10 (176+ nodes) |
 | CopyCat ML | ✅ Neural network training | ✅ v3.1 NeuralNetTrainer |
 | USD integration | ✅ Native | ✅ v3.1 USDNode |
 | Projection painting | ✅ Mari-like | ✅ v3.2 ProjectionPaintNode |
@@ -57,6 +57,7 @@ RageVFX has become a comprehensive industry-level VFX software combining the bes
 | PBR materials | ✅ Advanced | ✅ v2.0 MaterialNode |
 | HDR environment | ✅ IBL | ✅ v2.0 EnvironmentMapNode |
 | Volumetric rendering | ✅ Advanced | ✅ v2.0 VolumetricFog/Light |
+| Out-of-core rendering | ✅ Massive scenes | 🔄 v4.0 Planned |
 
 ### Cinema 4D MoGraph - ✅ COMPLETE
 | Feature | Cinema 4D | RageVFX Status |
