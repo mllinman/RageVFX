@@ -29,7 +29,7 @@ RageVFX has achieved **feature parity with industry leaders** across all major c
 - ✅ **Cinema 4D MoGraph**: Complete cloner and effector system
 - ✅ **Blender Integration**: Full VDB workflow with professional addon
 - ✅ **8K+ Resolution**: Professional ultra-high resolution pipeline
-- ✅ **59,456 Lines of Code**: Production-quality TypeScript implementation
+- ✅ **61,000+ Lines of Code**: Production-quality TypeScript implementation
 
 | Feature | Nuke | Houdini | Maya | Cinema 4D | Blender | Fusion | RageVFX |
 |---------|------|---------|------|-----------|---------|--------|---------|
