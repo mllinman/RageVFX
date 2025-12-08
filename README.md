@@ -2,13 +2,13 @@
 
 **The Industry-Leading Node-Based Visual Effects Platform**
 
-RageVFX is a next-generation visual effects software that has achieved feature parity with industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects with 176+ professional nodes.
+RageVFX is a next-generation visual effects software that has achieved feature parity with industry leaders like **Nuke**, **Houdini**, **Maya**, and **Redshift/V-Ray**. Combining the power of node-based compositing, procedural generation, projection mapping, fluid physics, 3D camera tracking, and GPU-accelerated rendering, RageVFX provides a comprehensive solution for creating blockbuster-quality visual effects with 179+ professional nodes.
 
-![RageVFX](https://img.shields.io/badge/version-3.10.0-orange)
+![RageVFX](https://img.shields.io/badge/version-3.11.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Web-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Nodes](https://img.shields.io/badge/nodes-176%2B-green)
+![Nodes](https://img.shields.io/badge/nodes-179%2B-green)
 ![Blender](https://img.shields.io/badge/Blender-Integration-blue)
 
 ## 🚀 Quick Links
@@ -19,10 +19,10 @@ RageVFX is a next-generation visual effects software that has achieved feature p
 
 ## 🏆 Industry-Leading Feature Set
 
-RageVFX has achieved **feature parity with industry leaders** across all major categories. Version 3.10 completes the professional VDB pipeline with OpenVDB import/export, 5 procedural VDB nodes, and a Blender integration addon. With 176+ nodes spanning compositing, 3D rendering, physics simulation, motion graphics, and AI tools, RageVFX delivers a comprehensive professional VFX platform.
+RageVFX has achieved **feature parity with industry leaders** across all major categories. Version 3.11 adds comprehensive camera import from Nuke/Maya/Blender, camera-from-video analysis, and a versatile background card system for VFX placement. With 179+ nodes spanning compositing, 3D rendering, physics simulation, motion graphics, and AI tools, RageVFX delivers a comprehensive professional VFX platform.
 
 ### Achievement Summary
-- ✅ **176 Professional Nodes**: Complete feature set across 15 categories
+- ✅ **179 Professional Nodes**: Complete feature set across 15 categories
 - ✅ **Nuke Feature Parity**: Multishot, IBK keying, deep comp, smart vectors
 - ✅ **Houdini Feature Parity**: VDB, VEX wrangles, procedural terrain, crowds
 - ✅ **Redshift Feature Parity**: Path tracing, adaptive sampling, light mixer
@@ -68,10 +68,49 @@ RageVFX has achieved **feature parity with industry leaders** across all major c
 | **Smart Vector Paint** | ✅ | - | - | - | - | - | ✅ 3.8 |
 | **OpenVDB Volumes** | - | ✅ | - | - | - | - | ✅ 3.8 |
 | **VEX Wrangles** | - | ✅ | - | - | - | - | ✅ 3.8 |
-| **VDB Import/Export** | - | ✅ | - | - | - | - | 🆕 3.10 |
-| **Procedural VDB Nodes** | - | ✅ | - | - | - | - | 🆕 3.10 |
-| **Blender Integration** | - | - | - | - | ✅ | - | 🆕 3.10 |
+| **VDB Import/Export** | - | ✅ | - | - | - | - | ✅ 3.10 |
+| **Procedural VDB Nodes** | - | ✅ | - | - | - | - | ✅ 3.10 |
+| **Blender Integration** | - | - | - | - | ✅ | - | ✅ 3.10 |
+| **Camera Import** | ✅ | - | ✅ | - | ✅ | - | 🆕 3.11 |
+| **Camera from Video** | ✅ | - | ✅ | - | - | - | 🆕 3.11 |
+| **Background Card System** | - | - | ✅ | - | ✅ | ✅ | 🆕 3.11 |
 | ML-powered tools | ✅ | - | - | - | - | - | ✅ |
+
+## 🆕 What's New in Version 3.11
+
+### Camera Import and Background Card System
+Professional camera import from industry formats and intelligent video analysis:
+
+- **CameraImportNode**: Import cameras from multiple professional formats
+  - Nuke/NukeX camera import (.nk files)
+  - Maya camera import (.ma, .mb files)
+  - Blender camera import (.blend, FBX)
+  - USD/Alembic camera pipeline support
+  - Commercial camera metadata (ARRI, RED, Sony, Canon)
+  - Animation keyframe import with smoothing
+  - Coordinate system conversion (Y-up/Z-up)
+  - Unit conversion support (mm, cm, m, inches, feet)
+  - Lens distortion parameter extraction
+  
+- **CameraFromVideoNode**: Analyze video and generate matching 3D camera
+  - Automatic feature tracking (SIFT, ORB, AKAZE, Shi-Tomasi, FAST)
+  - Structure from Motion (SfM) solver
+  - Bundle adjustment optimization
+  - Motion smoothing and stabilization
+  - Point cloud generation from tracked features
+  - Detailed solve statistics and quality reports
+  - Multiple camera models (perspective, fisheye, spherical)
+  - Reprojection error analysis
+  
+- **BackgroundCardNode**: Versatile background plane for VFX placement
+  - Multiple modes: 3D, 2D, camera-facing, screen-space
+  - Image, video, and image sequence support
+  - Billboard functionality for 2D compositing
+  - UV mapping and transformation controls
+  - Material blending modes (normal, additive, multiply, screen)
+  - Video playback controls (loop, speed, start time)
+  - Color correction (brightness, contrast, saturation, hue)
+  - Shadow casting and receiving options
 
 ## 🆕 What's New in Version 3.10
 
@@ -565,7 +604,7 @@ Comprehensive application customization:
   - ARRI RAW, RED R3D, Blackmagic RAW, Sony RAW
   - Log encoding and wide gamut color spaces
 
-#### Camera Nodes (v2.1)
+#### Camera Nodes (v2.1, v3.2, v3.11)
 - **Camera Preset**: Professional cinema camera presets
   - RED, ARRI, Blackmagic, Sony, Canon cameras
   - Accurate sensor specifications and color science
@@ -576,6 +615,19 @@ Comprehensive application customization:
   - Brown-Conrady, fisheye, anamorphic models
   - GoPro, DJI, cinema lens profiles
   - ST Map generation
+- **Camera Import** (v3.11): Import cameras from professional software
+  - Nuke/NukeX (.nk), Maya (.ma/.mb), Blender (.blend, FBX)
+  - USD, Alembic camera pipeline formats
+  - Commercial camera metadata (ARRI, RED, Sony, Canon)
+  - Animation keyframe import, coordinate conversion
+- **Camera from Video** (v3.11): Analyze video to generate 3D camera
+  - Structure from Motion solver with feature tracking
+  - Bundle adjustment and motion smoothing
+  - Point cloud generation and quality reports
+- **Background Card** (v3.11): Background plane for VFX placement
+  - 3D, 2D, camera-facing, screen-space modes
+  - Image, video, and sequence support
+  - Billboard functionality and material blending
 
 #### Advanced VFX Effects (v2.3)
 - **Anamorphic Flare**: Professional anamorphic lens flares with horizontal streaks
