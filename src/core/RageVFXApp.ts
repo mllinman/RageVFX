@@ -263,6 +263,15 @@ import { WrangleNode } from '../nodes/WrangleNode';
 import { ProceduralCityNode } from '../nodes/ProceduralCityNode';
 import { AdaptiveSamplerNode } from '../nodes/AdaptiveSamplerNode';
 
+// Version 3.10 - VDB Import/Export and Procedural Tools
+import { VDBImportNode } from '../nodes/VDBImportNode';
+import { VDBExportNode } from '../nodes/VDBExportNode';
+import { VDBCloudNode } from '../nodes/VDBCloudNode';
+import { VDBSmokeNode } from '../nodes/VDBSmokeNode';
+import { VDBFireNode } from '../nodes/VDBFireNode';
+import { VDBWaterNode } from '../nodes/VDBWaterNode';
+import { VDBSnowNode } from '../nodes/VDBSnowNode';
+
 import { RenderEngine } from '../renderer/RenderEngine';
 
 export class RageVFXApp {
@@ -539,6 +548,15 @@ export class RageVFXApp {
     this.nodeRegistry.set('Wrangle', WrangleNode as any);
     this.nodeRegistry.set('ProceduralCity', ProceduralCityNode as any);
     this.nodeRegistry.set('AdaptiveSampler', AdaptiveSamplerNode as any);
+    
+    // Version 3.10 - VDB Import/Export and Procedural Tools
+    this.nodeRegistry.set('VDBImport', VDBImportNode as any);
+    this.nodeRegistry.set('VDBExport', VDBExportNode as any);
+    this.nodeRegistry.set('VDBCloud', VDBCloudNode as any);
+    this.nodeRegistry.set('VDBSmoke', VDBSmokeNode as any);
+    this.nodeRegistry.set('VDBFire', VDBFireNode as any);
+    this.nodeRegistry.set('VDBWater', VDBWaterNode as any);
+    this.nodeRegistry.set('VDBSnow', VDBSnowNode as any);
   }
 
   /**
