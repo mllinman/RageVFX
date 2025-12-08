@@ -40,6 +40,9 @@ app.post('/api/create-subscription', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
     
+    // Use idempotency key to prevent duplicate requests
+    const idempotencyKey = `${email}-${Date.now()}`;
+    
     // Create or retrieve customer
     let customer;
     const existingCustomers = await stripe.customers.list({ email, limit: 1 });
@@ -47,10 +50,17 @@ app.post('/api/create-subscription', async (req, res) => {
     if (existingCustomers.data.length > 0) {
       customer = existingCustomers.data[0];
       
-      // Attach payment method to customer
-      await stripe.paymentMethods.attach(paymentMethodId, {
-        customer: customer.id,
-      });
+      // Attach payment method to customer (with error handling for already attached)
+      try {
+        await stripe.paymentMethods.attach(paymentMethodId, {
+          customer: customer.id,
+        });
+      } catch (error) {
+        // Payment method might already be attached, continue
+        if (error.code !== 'resource_already_attached') {
+          throw error;
+        }
+      }
       
       // Set as default payment method
       await stripe.customers.update(customer.id, {
@@ -59,7 +69,7 @@ app.post('/api/create-subscription', async (req, res) => {
         },
       });
     } else {
-      // Create new customer
+      // Create new customer with idempotency key
       customer = await stripe.customers.create({
         email,
         payment_method: paymentMethodId,
@@ -69,6 +79,8 @@ app.post('/api/create-subscription', async (req, res) => {
         metadata: {
           source: 'ragevfx_marketing',
         },
+      }, {
+        idempotencyKey: `create-customer-${idempotencyKey}`,
       });
     }
     
@@ -280,6 +292,16 @@ app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async
  * Generate download token (for authenticated downloads)
  * POST /api/generate-download-token
  * Body: { customerId, platform }
+ * 
+ * SECURITY NOTE: This is a basic implementation for demonstration.
+ * For production, implement proper JWT with cryptographic signing:
+ * 
+ * const jwt = require('jsonwebtoken');
+ * const token = jwt.sign(
+ *   { customerId, platform, expires: Date.now() + 3600000 },
+ *   process.env.JWT_SECRET,
+ *   { expiresIn: '1h' }
+ * );
  */
 app.post('/api/generate-download-token', async (req, res) => {
   try {
@@ -300,17 +322,33 @@ app.post('/api/generate-download-token', async (req, res) => {
       return res.status(403).json({ error: 'No active subscription' });
     }
     
-    // Generate a signed token (implement proper JWT in production)
-    const token = Buffer.from(JSON.stringify({
+    // WARNING: This is NOT cryptographically secure!
+    // Base64 is encoding, not encryption. Anyone can decode and modify this.
+    // For production: Use jsonwebtoken (JWT) with HMAC-SHA256 or RS256
+    const crypto = require('crypto');
+    const payload = JSON.stringify({
       customerId,
       platform,
       expires: Date.now() + 3600000, // 1 hour
+    });
+    
+    // Create a basic HMAC signature (still requires JWT library in production)
+    const secret = process.env.DOWNLOAD_TOKEN_SECRET || 'CHANGE_THIS_SECRET';
+    const signature = crypto
+      .createHmac('sha256', secret)
+      .update(payload)
+      .digest('hex');
+    
+    const token = Buffer.from(JSON.stringify({
+      payload,
+      signature,
     })).toString('base64');
     
     res.json({
       success: true,
       token,
       downloadUrl: `/downloads/${platform}/RageVFX-latest?token=${token}`,
+      note: 'For production, implement proper JWT with jsonwebtoken library',
     });
     
   } catch (error) {

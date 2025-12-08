@@ -94,14 +94,20 @@ Content-Type: application/json
 
 1. **Add Database**: Replace in-memory storage with PostgreSQL/MongoDB
 2. **Add Authentication**: Implement JWT or session-based auth
-3. **Add Rate Limiting**: Prevent API abuse
+3. **Add Rate Limiting**: Prevent API abuse (use express-rate-limit)
 4. **Add Logging**: Use Winston or similar
-5. **Add Input Validation**: Use Joi or similar
+5. **Add Input Validation**: Use Joi or similar for request validation
 6. **Add Error Tracking**: Use Sentry or similar
 7. **Add Tests**: Unit and integration tests
-8. **Secure Download URLs**: Implement signed URLs with expiration
+8. **Secure Download URLs**: Implement proper JWT with jsonwebtoken library
+   ```bash
+   npm install jsonwebtoken
+   ```
+   Use `jwt.sign()` and `jwt.verify()` with RS256 or HS256
 9. **Add Email Service**: Send transactional emails (SendGrid, Postmark)
 10. **Add User Management**: Full CRUD for users
+11. **Add Idempotency**: Already implemented for subscription creation
+12. **Environment Secrets**: Use strong secrets for JWT_SECRET and DOWNLOAD_TOKEN_SECRET
 
 ## Deployment
 
