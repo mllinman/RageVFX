@@ -221,6 +221,18 @@ export class VDBExportNode extends Node {
       Object.assign(metadata, customMetadata);
     }
 
+    // Build compression settings object once
+    const compressionSettings = {
+      type: compressionType,
+      level: compressionLevel,
+      halfFloat
+    };
+
+    const pruneSettings = {
+      enabled: pruneInactive,
+      threshold: pruneThreshold
+    };
+
     return {
       version: '1.0.0',
       grids: this.exportQueue.map(grid => ({
@@ -229,15 +241,8 @@ export class VDBExportNode extends Node {
         class: grid.class,
         data: grid.data,
         transform: this.buildTransform(),
-        compression: {
-          type: compressionType,
-          level: compressionLevel,
-          halfFloat
-        },
-        prune: {
-          enabled: pruneInactive,
-          threshold: pruneThreshold
-        }
+        compression: compressionSettings,
+        prune: pruneSettings
       })),
       metadata
     };
@@ -263,6 +268,17 @@ export class VDBExportNode extends Node {
     // Simulate file size calculation
     let totalSize = 1024; // Header size
     
+    // Check if we have grids to export
+    if (!vdbData.grids || vdbData.grids.length === 0) {
+      console.warn('VDBExportNode: No grids to export');
+      return;
+    }
+
+    // Get compression type from first grid (all use same settings)
+    const compressionType = vdbData.grids[0].compression.type;
+    const compressionRatio = compressionType === 'blosc' ? 0.3 : 
+                            compressionType === 'zip' ? 0.5 : 1.0;
+    
     for (const grid of vdbData.grids) {
       // Estimate grid size based on active voxels
       const baseSize = grid.data?.values?.size || 1000;
@@ -270,9 +286,6 @@ export class VDBExportNode extends Node {
       const gridSize = baseSize * bytesPerVoxel;
       
       // Apply compression ratio
-      const compressionRatio = vdbData.grids[0].compression.type === 'blosc' ? 0.3 : 
-                               vdbData.grids[0].compression.type === 'zip' ? 0.5 : 1.0;
-      
       totalSize += gridSize * compressionRatio;
     }
 

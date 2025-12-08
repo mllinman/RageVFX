@@ -95,18 +95,27 @@ class RAGEVFX_OT_import_vdb(Operator, ImportHelper):
         # In production, would use pyopenvdb to read VDB
         # For now, create a placeholder volume object
         
-        bpy.ops.object.volume_add()
-        volume_obj = context.active_object
-        volume_obj.name = os.path.splitext(os.path.basename(filepath))[0]
-        
-        # Store import settings as custom properties
-        volume_obj["vdb_filepath"] = filepath
-        volume_obj["vdb_import_density"] = self.import_density
-        volume_obj["vdb_import_velocity"] = self.import_velocity
-        volume_obj["vdb_voxel_multiplier"] = self.voxel_size_multiplier
-        
-        self.report({'INFO'}, f"Imported VDB: {filepath}")
-        return {'FINISHED'}
+        try:
+            bpy.ops.object.volume_add()
+            volume_obj = context.active_object
+            
+            if not volume_obj or volume_obj.type != 'VOLUME':
+                self.report({'ERROR'}, "Failed to create volume object")
+                return {'CANCELLED'}
+            
+            volume_obj.name = os.path.splitext(os.path.basename(filepath))[0]
+            
+            # Store import settings as custom properties
+            volume_obj["vdb_filepath"] = filepath
+            volume_obj["vdb_import_density"] = self.import_density
+            volume_obj["vdb_import_velocity"] = self.import_velocity
+            volume_obj["vdb_voxel_multiplier"] = self.voxel_size_multiplier
+            
+            self.report({'INFO'}, f"Imported VDB: {filepath}")
+            return {'FINISHED'}
+        except Exception as e:
+            self.report({'ERROR'}, f"Failed to import VDB: {str(e)}")
+            return {'CANCELLED'}
 
 
 # ============================================================================

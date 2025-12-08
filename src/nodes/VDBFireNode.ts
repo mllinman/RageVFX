@@ -31,7 +31,7 @@ export class VDBFireNode extends Node {
     this.setParameter('voxelSize', 0.05);
     this.setParameter('volumeSize', [10, 20, 10]);
     this.setParameter('intensity', 1.0);
-    this.setParameter('temperature', 1500); // Kelvin
+    this.setParameter('temperature', 1500); // Kelvin above ambient (typically 1200-1800K for flame temperature)
     this.setParameter('flameHeight', 5.0);
     this.setParameter('flameWidth', 2.0);
     this.setParameter('buoyancy', 3.0);

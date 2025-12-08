@@ -167,7 +167,7 @@ export class VDBImportNode extends Node {
     const frame = this.getParameter('frame') as number;
     const pattern = this.getParameter('framePattern') as string;
 
-    // Replace #### with frame number
+    // Replace #### pattern with frame number (zero-padded)
     const paddedFrame = String(frame).padStart(pattern.length, '0');
     return filepath.replace(pattern, paddedFrame);
   }

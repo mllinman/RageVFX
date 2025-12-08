@@ -28,7 +28,7 @@ export class VDBWaterNode extends Node {
 
     this.setParameter('voxelSize', 0.05);
     this.setParameter('volumeSize', [20, 20, 20]);
-    this.setParameter('fluidLevel', 0.3); // 0-1, height of liquid
+    this.setParameter('fluidLevel', 0.3); // 0-1, normalized height of liquid surface relative to volume bounds
     this.setParameter('surfaceTension', 0.072); // N/m
     this.setParameter('viscosity', 0.001); // Pa·s
     this.setParameter('gravity', -9.81);
