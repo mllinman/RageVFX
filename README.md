@@ -15,7 +15,7 @@ RageVFX is a next-generation visual effects software that has achieved feature p
 
 - **[Try Web App](web/index.html)** - Run RageVFX directly in your browser (Free)
 - **[Marketing Website](marketing/index.html)** - Professional landing page with pricing & downloads
-- **[Download Desktop App](#download)** - Windows, macOS, Linux installers (Pro subscription $9.99/month)
+- **[Download Desktop App](#download)** - Windows, macOS, Linux installers (Pro subscription $29.95/month)
 
 ## 🏆 Industry-Leading Feature Set
 
