@@ -16,6 +16,18 @@ const STRIPE_PRICES = {
   pro: 'price_YOUR_PRO_PRICE_ID',
 };
 
+// Pricing display values (for consistency across UI)
+const PRICING_INFO = {
+  standard: {
+    name: 'RageVFX Standard',
+    price: '$9.95/month',
+  },
+  pro: {
+    name: 'RageVFX Pro',
+    price: '$29.95/month',
+  },
+};
+
 // Backend API URL (update for production)
 const API_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:3001/api'
@@ -168,12 +180,10 @@ function openCheckoutModal(plan) {
   const titleElement = document.getElementById('modal-plan-title');
   const priceElement = document.getElementById('modal-plan-price');
   
-  if (plan === 'standard') {
-    if (titleElement) titleElement.textContent = 'Subscribe to RageVFX Standard';
-    if (priceElement) priceElement.textContent = '$9.95/month • Cancel anytime';
-  } else if (plan === 'pro') {
-    if (titleElement) titleElement.textContent = 'Subscribe to RageVFX Pro';
-    if (priceElement) priceElement.textContent = '$29.95/month • Cancel anytime';
+  const planInfo = PRICING_INFO[plan];
+  if (planInfo) {
+    if (titleElement) titleElement.textContent = `Subscribe to ${planInfo.name}`;
+    if (priceElement) priceElement.textContent = `${planInfo.price} • Cancel anytime`;
   }
   
   modal.classList.add('active');
@@ -390,7 +400,7 @@ function initScrollAnimations() {
 
 function initEventListeners() {
   // Subscribe buttons (multiple with data-plan attribute)
-  const subscribeButtons = document.querySelectorAll('[id="subscribe-btn"]');
+  const subscribeButtons = document.querySelectorAll('.subscribe-btn');
   subscribeButtons.forEach(btn => {
     const plan = btn.dataset.plan || 'pro';
     btn.addEventListener('click', () => {
