@@ -242,6 +242,11 @@ async function handlePaymentSubmit(event) {
     const modal = document.getElementById('checkout-modal');
     const selectedPlan = modal?.dataset.selectedPlan || 'pro';
     
+    // Validate selected plan
+    if (!STRIPE_PRICES[selectedPlan]) {
+      throw new Error(`Invalid plan selected: ${selectedPlan}`);
+    }
+    
     // Send to backend to create subscription
     const response = await fetch(`${API_URL}/create-subscription`, {
       method: 'POST',
