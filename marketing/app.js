@@ -12,7 +12,20 @@ const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_KEY_HERE'; // Replace in production
 
 // Price IDs from Stripe Dashboard (create products first)
 const STRIPE_PRICES = {
+  standard: 'price_YOUR_STANDARD_PRICE_ID',
   pro: 'price_YOUR_PRO_PRICE_ID',
+};
+
+// Pricing display values (for consistency across UI)
+const PRICING_INFO = {
+  standard: {
+    name: 'RageVFX Standard',
+    price: '$9.95/month',
+  },
+  pro: {
+    name: 'RageVFX Pro',
+    price: '$29.95/month',
+  },
 };
 
 // Backend API URL (update for production)
@@ -160,6 +173,19 @@ function openCheckoutModal(plan) {
   const modal = document.getElementById('checkout-modal');
   if (!modal) return;
   
+  // Store the selected plan
+  modal.dataset.selectedPlan = plan;
+  
+  // Update modal title and price based on plan
+  const titleElement = document.getElementById('modal-plan-title');
+  const priceElement = document.getElementById('modal-plan-price');
+  
+  const planInfo = PRICING_INFO[plan];
+  if (planInfo) {
+    if (titleElement) titleElement.textContent = `Subscribe to ${planInfo.name}`;
+    if (priceElement) priceElement.textContent = `${planInfo.price} • Cancel anytime`;
+  }
+  
   modal.classList.add('active');
   
   // Mount card element if not already mounted
@@ -212,6 +238,15 @@ async function handlePaymentSubmit(event) {
       return;
     }
     
+    // Get selected plan from modal
+    const modal = document.getElementById('checkout-modal');
+    const selectedPlan = modal?.dataset.selectedPlan || 'pro';
+    
+    // Validate selected plan
+    if (!STRIPE_PRICES[selectedPlan]) {
+      throw new Error(`Invalid plan selected: ${selectedPlan}`);
+    }
+    
     // Send to backend to create subscription
     const response = await fetch(`${API_URL}/create-subscription`, {
       method: 'POST',
@@ -219,7 +254,7 @@ async function handlePaymentSubmit(event) {
       body: JSON.stringify({
         paymentMethodId: paymentMethod.id,
         email: emailInput.value,
-        priceId: STRIPE_PRICES.pro,
+        priceId: STRIPE_PRICES[selectedPlan],
       }),
     });
     
@@ -232,7 +267,7 @@ async function handlePaymentSubmit(event) {
     // Store customer ID for future use
     localStorage.setItem('ragevfx_customer_id', data.customer.id);
     localStorage.setItem('ragevfx_subscription_id', data.subscription.id);
-    localStorage.setItem('ragevfx_tier', 'pro');
+    localStorage.setItem('ragevfx_tier', selectedPlan);
     
     // Show success
     console.log('Subscription created:', data.subscription.id);
@@ -369,13 +404,14 @@ function initScrollAnimations() {
 // ============================================================================
 
 function initEventListeners() {
-  // Subscribe button
-  const subscribeBtn = document.getElementById('subscribe-btn');
-  if (subscribeBtn) {
-    subscribeBtn.addEventListener('click', () => {
-      openCheckoutModal('pro');
+  // Subscribe buttons (multiple with data-plan attribute)
+  const subscribeButtons = document.querySelectorAll('.subscribe-btn');
+  subscribeButtons.forEach(btn => {
+    const plan = btn.dataset.plan || 'pro';
+    btn.addEventListener('click', () => {
+      openCheckoutModal(plan);
     });
-  }
+  });
   
   // Modal close button
   const modalClose = document.querySelector('.modal-close');

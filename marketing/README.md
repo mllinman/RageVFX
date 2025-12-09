@@ -8,7 +8,7 @@ Modern, sleek marketing website for RageVFX with Stripe subscription integration
 - 🎨 Animated hero section with particle effects
 - 💳 Stripe payment integration for subscriptions
 - 📱 Mobile-responsive layout
-- 🎯 Free tier and Pro tier ($9.99/month) pricing
+- 🎯 Free tier, Standard tier ($9.95/month), and Pro tier ($29.95/month) pricing
 - 📦 Download section for desktop apps (Pro users only)
 - 🌐 Web app access for all users
 
@@ -20,13 +20,14 @@ To enable payment functionality:
 
 1. Create a Stripe account at [stripe.com](https://stripe.com)
 2. Get your API keys from the [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys)
-3. Create a product and price for the Pro subscription ($9.99/month)
+3. Create products and prices for Standard ($9.95/month) and Pro ($29.95/month) subscriptions
 4. Update the configuration in `app.js`:
 
 ```javascript
 const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_ACTUAL_KEY';
 const STRIPE_PRICES = {
-  pro: 'price_YOUR_ACTUAL_PRICE_ID',
+  standard: 'price_YOUR_STANDARD_PRICE_ID',
+  pro: 'price_YOUR_PRO_PRICE_ID',
 };
 ```
 
@@ -144,14 +145,21 @@ The website matches the app's professional dark theme:
 
 ### Free Tier
 - Web app access
+- Basic nodes only
+- 720p export
+- Community support
+- 1GB cloud storage
+
+### Standard Tier ($9.95/month)
+- Everything in Free
 - 176+ nodes
 - 1080p export
 - Basic VFX effects
-- Community support
-- Cloud save (5GB)
+- Email support
+- 10GB cloud storage
 
-### Pro Tier ($9.99/month)
-- Everything in Free
+### Pro Tier ($29.95/month)
+- Everything in Standard
 - Desktop app downloads (Windows, macOS, Linux)
 - 8K+ export support
 - Advanced VFX nodes

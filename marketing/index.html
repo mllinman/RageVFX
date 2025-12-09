@@ -252,7 +252,7 @@
               <td>$500+</td>
               <td>$400+</td>
               <td>$300+</td>
-              <td class="highlight-col"><strong>$9.99</strong></td>
+              <td class="highlight-col"><strong>$29.95</strong></td>
             </tr>
           </tbody>
         </table>
@@ -270,24 +270,45 @@
       <div class="pricing-grid">
         <!-- Free Tier -->
         <div class="pricing-card">
-          <div class="pricing-badge">Popular</div>
           <h3 class="pricing-title">Free</h3>
           <div class="pricing-price">
             <span class="price-amount">$0</span>
             <span class="price-period">/forever</span>
           </div>
-          <p class="pricing-description">Perfect for learning and personal projects</p>
+          <p class="pricing-description">For trying out RageVFX</p>
           <ul class="pricing-features">
             <li><span class="feature-check">✓</span> Web app access</li>
-            <li><span class="feature-check">✓</span> 176+ nodes</li>
-            <li><span class="feature-check">✓</span> 1080p export</li>
-            <li><span class="feature-check">✓</span> Basic VFX effects</li>
+            <li><span class="feature-check">✓</span> Basic nodes only</li>
+            <li><span class="feature-check">✓</span> 720p export</li>
             <li><span class="feature-check">✓</span> Community support</li>
-            <li><span class="feature-check">✓</span> Cloud save (5GB)</li>
+            <li><span class="feature-check">✓</span> 1GB cloud storage</li>
           </ul>
           <a href="/web/" class="btn btn-outline btn-block">
             Start Free
           </a>
+        </div>
+
+        <!-- Standard Tier -->
+        <div class="pricing-card">
+          <div class="pricing-badge">Popular</div>
+          <h3 class="pricing-title">Standard</h3>
+          <div class="pricing-price">
+            <span class="price-amount">$9.95</span>
+            <span class="price-period">/month</span>
+          </div>
+          <p class="pricing-description">For hobbyists and indie creators</p>
+          <ul class="pricing-features">
+            <li><span class="feature-check">✓</span> Everything in Free</li>
+            <li><span class="feature-check">✓</span> 176+ nodes</li>
+            <li><span class="feature-check">✓</span> 1080p export</li>
+            <li><span class="feature-check">✓</span> Basic VFX effects</li>
+            <li><span class="feature-check">✓</span> Email support</li>
+            <li><span class="feature-check">✓</span> 10GB cloud storage</li>
+          </ul>
+          <button class="btn btn-outline btn-block subscribe-btn" data-plan="standard">
+            Subscribe Now
+          </button>
+          <p class="pricing-note">Cancel anytime • 7-day free trial</p>
         </div>
 
         <!-- Pro Tier -->
@@ -295,12 +316,12 @@
           <div class="pricing-badge featured">Best Value</div>
           <h3 class="pricing-title">Pro</h3>
           <div class="pricing-price">
-            <span class="price-amount">$9.99</span>
+            <span class="price-amount">$29.95</span>
             <span class="price-period">/month</span>
           </div>
           <p class="pricing-description">For professionals and studios</p>
           <ul class="pricing-features">
-            <li><span class="feature-check">✓</span> Everything in Free</li>
+            <li><span class="feature-check">✓</span> Everything in Standard</li>
             <li><span class="feature-check">✓</span> Desktop app downloads</li>
             <li><span class="feature-check">✓</span> 8K+ export support</li>
             <li><span class="feature-check">✓</span> Advanced VFX nodes</li>
@@ -310,7 +331,7 @@
             <li><span class="feature-check">✓</span> OpenVDB tools</li>
             <li><span class="feature-check">✓</span> Blender integration</li>
           </ul>
-          <button class="btn btn-primary btn-block" id="subscribe-btn" data-plan="pro">
+          <button class="btn btn-primary btn-block subscribe-btn" data-plan="pro">
             Subscribe Now
           </button>
           <p class="pricing-note">Cancel anytime • 7-day free trial</p>
@@ -440,8 +461,8 @@
     <div class="modal-content">
       <button class="modal-close" aria-label="Close modal">&times;</button>
       <div class="modal-header">
-        <h3>Subscribe to RageVFX Pro</h3>
-        <p>$9.99/month • Cancel anytime</p>
+        <h3 id="modal-plan-title">Subscribe to RageVFX Pro</h3>
+        <p id="modal-plan-price">$29.95/month • Cancel anytime</p>
       </div>
       <div class="modal-body">
         <div id="checkout-form">
