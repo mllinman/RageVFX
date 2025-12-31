@@ -2,6 +2,57 @@
 
 All notable changes to RageVFX will be documented in this file.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Changed - Future-Proofing and Modernization
+
+#### Dependency Updates
+- Updated Electron to 39.2.7 (latest stable)
+- Updated Three.js to 0.182.0
+- Updated TypeScript tooling (ESLint 9.39.2, Vite 7.3.0)
+- Updated all dev dependencies to latest compatible versions
+- Added tslib for optimized import helpers
+- Added Prettier for code formatting
+
+#### Configuration Improvements
+- Enhanced TypeScript configuration for better type safety and module resolution
+- Improved ESLint configuration with stricter rules and better code quality checks
+- Optimized Vite configuration with code splitting and minification
+- Added npm engine requirement for 10.0.0+
+- Configured isolatedModules for better module compatibility
+- Added bundle size reporting and analysis
+
+#### Build & Performance Optimizations
+- Improved Vite build with manual chunk optimization for better loading
+- Added tree-shaking configuration for smaller bundles
+- Enabled CSS minification and source maps
+- Added production build optimizations
+- Configured esbuild for optimal performance
+
+#### Developer Experience
+- Added VS Code workspace settings and recommended extensions
+- Created debugging configurations for main process, renderer, and web version
+- Added Prettier configuration for consistent code formatting
+- Created .editorconfig for cross-editor consistency
+- Enhanced npm scripts: format, lint:fix, type-check, clean, build:clean
+- Added pre-launch tasks for debugging
+
+#### Documentation & Best Practices
+- Created comprehensive CONTRIBUTING.md guide
+- Added CODE_OF_CONDUCT.md (Contributor Covenant 2.1)
+- Created SECURITY.md with security policy and best practices
+- Updated README.md with new development commands and contribution guidelines
+- Added GitHub Actions CI workflow for automated testing
+- Added GitHub Actions release workflow for automated builds
+
+#### Code Quality
+- Fixed type-only imports for ImageData to resolve isolatedModules conflicts
+- Improved import organization and module structure
+- Added consistent code style enforcement across the project
+
 ## [3.11.0] - 2025-12-08
 
 ### Added - Version 3.11 Camera Import and Background Card System

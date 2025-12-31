@@ -3,7 +3,7 @@
  */
 
 import { Node, DataType } from '../core/Node';
-import { ImageData } from '../renderer/RenderEngine';
+import type { ImageData } from '../renderer/RenderEngine';
 
 export class SpillSuppressionNode extends Node {
   constructor(id: string) {

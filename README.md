@@ -738,8 +738,9 @@ Comprehensive application customization:
 ## Installation
 
 ### Prerequisites
+
 - Node.js 20.0.0 or higher
-- npm or yarn package manager
+- npm 10.0.0 or higher
 
 ### Quick Start (Development)
 
@@ -763,6 +764,38 @@ Comprehensive application customization:
    ```bash
    npm start
    ```
+
+### 🛠️ Development Commands
+
+```bash
+# Build
+npm run build              # Build TypeScript
+npm run build:clean        # Clean and build
+npm run build:web          # Build web version
+
+# Development
+npm run dev                # Watch mode (TypeScript)
+npm run dev:web            # Start web dev server
+
+# Code Quality
+npm run lint               # Run ESLint
+npm run lint:fix           # Fix ESLint issues
+npm run format             # Format code with Prettier
+npm run format:check       # Check code formatting
+npm run type-check         # TypeScript type checking
+
+# Testing
+npm test                   # Run tests
+npm run test:watch         # Run tests in watch mode
+npm run test:coverage      # Generate coverage report
+
+# Distribution
+npm run dist               # Build for current platform
+npm run dist:win           # Build Windows installer
+npm run dist:mac           # Build macOS app
+npm run dist:linux         # Build Linux packages
+npm run dist:all           # Build for all platforms
+```
 
 ### 🌐 Web Version (No Installation Required)
 
@@ -1105,13 +1138,54 @@ RageVFX is optimized for professional workflows:
 
 ## Contributing
 
-We welcome contributions! Please see our contributing guidelines:
+We welcome contributions from the community! RageVFX is an open-source project, and we appreciate all contributions, whether it's bug fixes, new features, documentation improvements, or feedback.
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Quick Start for Contributors
+
+1. **Read our [Contributing Guide](CONTRIBUTING.md)** - Detailed guidelines for development
+2. **Check our [Code of Conduct](CODE_OF_CONDUCT.md)** - Be respectful and inclusive
+3. **Review [Security Policy](SECURITY.md)** - Report vulnerabilities responsibly
+4. **Browse [Open Issues](https://github.com/mllinman/RageVFX/issues)** - Find something to work on
+
+### Development Setup
+
+```bash
+# Fork and clone the repository
+git clone https://github.com/YOUR_USERNAME/RageVFX.git
+cd RageVFX
+
+# Install dependencies
+npm install
+
+# Start development
+npm run dev
+
+# Run tests
+npm test
+
+# Format and lint
+npm run format
+npm run lint:fix
+```
+
+### Ways to Contribute
+
+- 🐛 **Report bugs** - Help us identify and fix issues
+- 💡 **Suggest features** - Share your ideas for improvements
+- 📝 **Improve documentation** - Help others understand RageVFX
+- 🔧 **Submit code** - Implement features or fix bugs
+- 🎨 **Design improvements** - UI/UX enhancements
+- 🧪 **Write tests** - Improve code quality and coverage
+- 🌍 **Translations** - Help make RageVFX accessible globally
+
+### Contribution Recognition
+
+Contributors are recognized in:
+- CONTRIBUTORS.md file
+- Release notes for significant contributions
+- Application's about dialog
+
+For detailed guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

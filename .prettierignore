@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-web
+release
+build
+coverage
+*.log
+*.min.js
+*.min.css
+package-lock.json
+*.md
+LICENSE

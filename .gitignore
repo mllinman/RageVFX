@@ -9,7 +9,6 @@ release/
 .env.*.local
 coverage/
 *.tsbuildinfo
-.vscode/
 .idea/
 *.swp
 *.swo
