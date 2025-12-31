@@ -27,7 +27,8 @@
         "${workspaceFolder}/dist/src/main.js",
         "--remote-debugging-port=9222"
       ],
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "npm: build"
     },
     {
       "name": "Debug Web Version",
