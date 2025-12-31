@@ -4,6 +4,8 @@
  * Uses a minimal implementation for the web demo
  */
 
+import { subscriptionManager, SubscriptionTier } from './subscription';
+
 // Re-export the DataType enum
 export enum DataType {
   IMAGE = 'image',
@@ -33,12 +35,26 @@ export interface NodeMetadata {
 export class RageVFXApp {
   private nodes: Map<string, WebNode> = new Map();
   private connections: Map<string, WebConnection> = new Map();
+  private currentTier: SubscriptionTier = 'free';
 
   constructor() {
     console.log('RageVFX Web App initialized');
   }
 
+  async initialize(): Promise<void> {
+    // Initialize subscription and get current tier
+    this.currentTier = await subscriptionManager.initialize();
+    console.log(`RageVFX initialized with ${this.currentTier} tier`);
+  }
+
   createNode(nodeType: string, nodeId: string): boolean {
+    // Check if user has access to this node type
+    if (!subscriptionManager.canUseNode(nodeType)) {
+      console.warn(`Node ${nodeType} requires higher tier subscription`);
+      subscriptionManager.showUpgradeDialog(`${nodeType} Node`);
+      return false;
+    }
+
     const node = new WebNode(nodeId, nodeType);
     this.nodes.set(nodeId, node);
     console.log(`Created node: ${nodeType} (${nodeId})`);
