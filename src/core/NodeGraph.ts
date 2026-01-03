@@ -4,6 +4,7 @@
  */
 
 import { Node, DataType } from './Node';
+import { WorkerPool } from '../workers/WorkerPool';
 
 export interface Connection {
   id: string;
@@ -18,6 +19,34 @@ export class NodeGraph {
   private connections: Map<string, Connection> = new Map();
   private executionOrder: string[] = [];
   private dirty: boolean = true;
+  private workerPool: WorkerPool | null = null;
+  private parallelExecution: boolean = false;
+
+  constructor() {
+    this.initializeWorkerPool();
+  }
+
+  /**
+   * Initialize worker pool for parallel execution
+   */
+  private async initializeWorkerPool(): Promise<void> {
+    if (typeof Worker !== 'undefined') {
+      this.workerPool = new WorkerPool({
+        maxWorkers: navigator.hardwareConcurrency || 4,
+        workerScript: './workers/NodeWorker.js'
+      });
+      await this.workerPool.initialize();
+      this.parallelExecution = true;
+      console.log('Parallel node execution enabled');
+    }
+  }
+
+  /**
+   * Set whether to use parallel execution
+   */
+  setParallelExecution(enabled: boolean): void {
+    this.parallelExecution = enabled && this.workerPool !== null;
+  }
 
   /**
    * Add a node to the graph
@@ -64,7 +93,7 @@ export class NodeGraph {
     // Check for type compatibility
     const sourceOutputs = sourceNode.getOutputs();
     const targetInputs = targetNode.getInputs();
-    
+
     const sourceOutput = sourceOutputs.find(o => o.id === sourceOutputId);
     const targetInput = targetInputs.find(i => i.id === targetInputId);
 
@@ -73,8 +102,8 @@ export class NodeGraph {
     }
 
     // Allow connection if types match or one is ANY
-    if (sourceOutput.type !== targetInput.type && 
-        sourceOutput.type !== DataType.ANY && 
+    if (sourceOutput.type !== targetInput.type &&
+        sourceOutput.type !== DataType.ANY &&
         targetInput.type !== DataType.ANY) {
       return false;
     }
@@ -178,24 +207,84 @@ export class NodeGraph {
       this.calculateExecutionOrder();
     }
 
-    // Execute nodes in order, transferring data after each execution
+    if (this.parallelExecution && this.workerPool) {
+      await this.executeParallel();
+    } else {
+      await this.executeSequential();
+    }
+  }
+
+  /**
+   * Execute nodes sequentially in topological order
+   */
+  private async executeSequential(): Promise<void> {
     for (const nodeId of this.executionOrder) {
       const node = this.nodes.get(nodeId);
       if (node && node.isDirty()) {
         await node.process();
-        
-        // Transfer data from this node to connected nodes immediately after processing
-        this.connections.forEach(conn => {
-          if (conn.sourceNodeId === nodeId) {
-            const targetNode = this.nodes.get(conn.targetNodeId);
-            if (targetNode) {
-              const outputValue = node.getOutput(conn.sourceOutputId);
-              targetNode.setInput(conn.targetInputId, outputValue);
-            }
-          }
-        });
+        this.transferOutputs(nodeId);
       }
     }
+  }
+
+  /**
+   * Execute nodes in parallel where possible
+   */
+  private async executeParallel(): Promise<void> {
+    if (!this.workerPool) return;
+
+    for (const nodeId of this.executionOrder) {
+      const node = this.nodes.get(nodeId);
+      if (node && node.isDirty()) {
+        const metadata = node.getMetadata();
+        if (this.isComplexNode(metadata.type)) {
+          const result = await this.workerPool.executeNode({
+            nodeId: nodeId,
+            nodeType: metadata.type,
+            inputs: node.getAllInputs(),
+            parameters: node.getAllParameters()
+          });
+
+          Object.entries(result.outputs).forEach(([id, value]) => {
+            node.setOutput(id, value);
+          });
+          node.markClean();
+        } else {
+          await node.process();
+        }
+
+        this.transferOutputs(nodeId);
+      }
+    }
+  }
+
+  /**
+   * Transfer outputs from a node to its connected targets
+   */
+  private transferOutputs(nodeId: string): void {
+    const node = this.nodes.get(nodeId);
+    if (!node) return;
+
+    this.connections.forEach(conn => {
+      if (conn.sourceNodeId === nodeId) {
+        const targetNode = this.nodes.get(conn.targetNodeId);
+        if (targetNode) {
+          const outputValue = node.getOutput(conn.sourceOutputId);
+          targetNode.setInput(conn.targetInputId, outputValue);
+        }
+      }
+    });
+  }
+
+  /**
+   * Check if a node type is complex enough to warrant worker offloading
+   */
+  private isComplexNode(type: string): boolean {
+    const complexTypes = [
+      'Blur', 'PathTracer', 'FluidPhysics', 'NeuralNet',
+      'BloodSplatter', 'Explosion', 'VDBCloud', 'OceanModifier'
+    ];
+    return complexTypes.some(t => type.includes(t));
   }
 
   /**

@@ -86,3 +86,15 @@ ipcMain.handle('save-project', async (event, filepath: string) => {
 ipcMain.handle('load-project', async (event, filepath: string) => {
   return vfxApp?.loadProject(filepath);
 });
+
+ipcMain.handle('get-node-properties', async (event, nodeId: string) => {
+  return vfxApp?.getNodeProperties(nodeId);
+});
+
+ipcMain.handle('update-node-parameter', async (event, nodeId: string, key: string, value: any) => {
+  return vfxApp?.updateNodeParameter(nodeId, key, value);
+});
+
+ipcMain.handle('group-nodes', async (event, nodeIds: string[], groupName: string) => {
+  return vfxApp?.groupNodes(nodeIds, groupName);
+});

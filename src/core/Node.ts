@@ -164,6 +164,45 @@ export abstract class Node {
   }
 
   /**
+   * Get all inputs as a key-value object
+   */
+  getAllInputs(): Record<string, any> {
+    const result: Record<string, any> = {};
+    this.inputs.forEach((input, id) => {
+      result[id] = input.value;
+    });
+    return result;
+  }
+
+  /**
+   * Get all parameters as a key-value object
+   */
+  getAllParameters(): Record<string, any> {
+    const result: Record<string, any> = {};
+    this.parameters.forEach((value, key) => {
+      result[key] = value;
+    });
+    return result;
+  }
+
+  /**
+   * Set output value
+   */
+  setOutput(id: string, value: any): void {
+    const output = this.outputs.get(id);
+    if (output) {
+      output.value = value;
+    }
+  }
+
+  /**
+   * Mark node as clean (processed)
+   */
+  markClean(): void {
+    this.dirty = false;
+  }
+
+  /**
    * Serialize node to JSON
    */
   serialize(): any {

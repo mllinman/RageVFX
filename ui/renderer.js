@@ -43,7 +43,7 @@ class NodeGraphUI {
     this.connecting = false;
     this.connectingFrom = null;
     this.mousePos = { x: 0, y: 0 };
-    
+
     this.resize();
     this.setupEventListeners();
     this.startAnimationLoop();
@@ -66,21 +66,37 @@ class NodeGraphUI {
 
   setupEventListeners() {
     window.addEventListener('resize', () => this.resize());
-    
+
     this.canvas.addEventListener('mousedown', (e) => this.onMouseDown(e));
     this.canvas.addEventListener('mousemove', (e) => this.onMouseMove(e));
     this.canvas.addEventListener('mouseup', (e) => this.onMouseUp(e));
     this.canvas.addEventListener('wheel', (e) => this.onWheel(e));
-    
+
     // Drag and drop for node creation
     document.querySelectorAll('.node-item').forEach(item => {
       item.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('nodeType', e.target.dataset.nodeType);
       });
     });
-    
+
     this.canvas.addEventListener('dragover', (e) => e.preventDefault());
     this.canvas.addEventListener('drop', (e) => this.onDrop(e));
+    this.canvas.addEventListener('dblclick', (e) => this.onDoubleClick(e));
+  }
+
+  onDoubleClick(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left - this.offset.x) / this.scale;
+    const y = (e.clientY - rect.top - this.offset.y) / this.scale;
+
+    for (const node of this.nodes) {
+      if (x >= node.x && x <= node.x + node.width &&
+          y >= node.y && y <= node.y + node.height) {
+        node.collapsed = !node.collapsed;
+        this.render();
+        break;
+      }
+    }
   }
 
   onDrop(e) {
@@ -90,12 +106,12 @@ class NodeGraphUI {
       const rect = this.canvas.getBoundingClientRect();
       let x = (e.clientX - rect.left - this.offset.x) / this.scale;
       let y = (e.clientY - rect.top - this.offset.y) / this.scale;
-      
+
       if (this.gridSnap) {
         x = Math.round(x / this.gridSize) * this.gridSize;
         y = Math.round(y / this.gridSize) * this.gridSize;
       }
-      
+
       this.createNode(nodeType, x, y);
     }
   }
@@ -114,7 +130,7 @@ class NodeGraphUI {
   createNode(type, x, y) {
     const category = this.getNodeCategory(type);
     const colors = CATEGORY_COLORS[category] || CATEGORY_COLORS['Default'];
-    
+
     const node = {
       id: `node_${type}_${this.nodeIdCounter++}`,
       type,
@@ -129,7 +145,7 @@ class NodeGraphUI {
       disabled: false,
       color: colors
     };
-    
+
     this.nodes.push(node);
     this.updateNodeCount();
     this.render();
@@ -139,17 +155,17 @@ class NodeGraphUI {
     const rect = this.canvas.getBoundingClientRect();
     const x = (e.clientX - rect.left - this.offset.x) / this.scale;
     const y = (e.clientY - rect.top - this.offset.y) / this.scale;
-    
+
     // Check for socket click (start connection)
     for (let i = this.nodes.length - 1; i >= 0; i--) {
       const node = this.nodes[i];
-      
+
       // Check output sockets
       for (let j = 0; j < node.outputs.length; j++) {
         const output = node.outputs[j];
         const socketX = node.x + output.x;
         const socketY = node.y + output.y;
-        
+
         if (Math.hypot(x - socketX, y - socketY) < 10) {
           this.connecting = true;
           this.connectingFrom = { nodeId: node.id, outputIndex: j, x: socketX, y: socketY };
@@ -157,22 +173,138 @@ class NodeGraphUI {
         }
       }
     }
-    
+
     // Check if clicking on a node
+    let clickedNode = null;
     for (let i = this.nodes.length - 1; i >= 0; i--) {
       const node = this.nodes[i];
       if (x >= node.x && x <= node.x + node.width &&
           y >= node.y && y <= node.y + node.height) {
-        this.nodes.forEach(n => n.selected = false);
+        clickedNode = node;
+
+        if (!e.shiftKey) {
+          this.nodes.forEach(n => n.selected = false);
+        }
+
         node.selected = true;
-        this.selectedNode = node;
+        this.selectedNode = node; // Primary selection
         this.dragOffset = { x: x - node.x, y: y - node.y };
-        
+
         // Move to front
         this.nodes.splice(i, 1);
         this.nodes.push(node);
+
+        this.updatePropertiesPanel(node);
         break;
       }
+    }
+
+    if (!clickedNode && !e.shiftKey) {
+      this.nodes.forEach(n => n.selected = false);
+      this.selectedNode = null;
+      this.updatePropertiesPanel(null);
+    }
+  }
+
+  async updatePropertiesPanel(node) {
+    const container = document.getElementById('properties-panel');
+    if (!container) return;
+
+    if (!node) {
+      container.innerHTML = '<p class="empty-message">Select a node to view properties</p>';
+      return;
+    }
+
+    container.innerHTML = `<div class="node-props-header">
+      <h4>${node.type}</h4>
+      <span class="node-id">${node.id}</span>
+    </div>`;
+
+    try {
+      // Fetch full properties from core via IPC
+      const props = await window.ragevfxAPI.getNodeProperties(node.id);
+      if (!props) return;
+
+      const paramsList = document.createElement('div');
+      paramsList.className = 'params-list';
+
+      for (const [key, value] of props.parameters) {
+        const row = document.createElement('div');
+        row.className = 'param-row';
+
+        const label = document.createElement('label');
+        label.textContent = key;
+
+        let input;
+        if (typeof value === 'number') {
+          input = document.createElement('input');
+          input.type = 'range';
+          input.min = 0;
+          input.max = value > 100 ? value * 2 : 100;
+          input.step = 0.01;
+          input.value = value;
+
+          const valueDisplay = document.createElement('span');
+          valueDisplay.className = 'param-value';
+          valueDisplay.textContent = value.toFixed(2);
+
+          input.addEventListener('input', (e) => {
+            const newVal = parseFloat(e.target.value);
+            valueDisplay.textContent = newVal.toFixed(2);
+            window.ragevfxAPI.updateNodeParameter(node.id, key, newVal);
+          });
+
+          row.appendChild(label);
+          row.appendChild(input);
+          row.appendChild(valueDisplay);
+        } else {
+          input = document.createElement('input');
+          input.type = 'text';
+          input.value = value;
+          input.addEventListener('change', (e) => {
+            window.ragevfxAPI.updateNodeParameter(node.id, key, e.target.value);
+          });
+          row.appendChild(label);
+          row.appendChild(input);
+        }
+
+        paramsList.appendChild(row);
+      }
+
+      container.appendChild(paramsList);
+
+      // Add Group button if multiple nodes selected
+      const selectedNodes = this.nodes.filter(n => n.selected);
+      if (selectedNodes.length > 1) {
+        const groupBtn = document.createElement('button');
+        groupBtn.className = 'tool-btn primary group-btn';
+        groupBtn.textContent = '📦 Group Selected';
+        groupBtn.addEventListener('click', () => this.groupSelectedNodes());
+        container.appendChild(groupBtn);
+      }
+
+    } catch (err) {
+      console.error('Failed to load node properties:', err);
+    }
+  }
+
+  async groupSelectedNodes() {
+    const selectedIds = this.nodes.filter(n => n.selected).map(n => n.id);
+    if (selectedIds.length < 2) return;
+
+    const groupName = prompt('Enter Group Name:', 'Macro Group');
+    if (!groupName) return;
+
+    try {
+      const groupId = await window.ragevfxAPI.groupNodes(selectedIds, groupName);
+      if (groupId) {
+        // Refresh graph from core (simplified reload for now)
+        this.clear();
+        // In a real app we'd fetch the whole graph state here
+        alert('Nodes grouped successfully. (Graph refresh pending full implementation)');
+      }
+    } catch (err) {
+      alert('Grouping failed: ' + err.message);
     }
   }
 
@@ -182,27 +314,27 @@ class NodeGraphUI {
       x: (e.clientX - rect.left - this.offset.x) / this.scale,
       y: (e.clientY - rect.top - this.offset.y) / this.scale
     };
-    
+
     if (this.connecting) {
       this.render();
       return;
     }
-    
+
     if (this.selectedNode && this.dragOffset) {
       let newX = this.mousePos.x - this.dragOffset.x;
       let newY = this.mousePos.y - this.dragOffset.y;
-      
+
       if (this.gridSnap) {
         newX = Math.round(newX / this.gridSize) * this.gridSize;
         newY = Math.round(newY / this.gridSize) * this.gridSize;
       }
-      
+
       this.selectedNode.x = newX;
       this.selectedNode.y = newY;
       this.updateConnectionPositions();
       this.render();
     }
-    
+
     // Update hover state
     this.hoveredNode = null;
     for (let i = this.nodes.length - 1; i >= 0; i--) {
@@ -219,16 +351,16 @@ class NodeGraphUI {
     if (this.connecting && this.connectingFrom) {
       const x = this.mousePos.x;
       const y = this.mousePos.y;
-      
+
       // Check for input socket
       for (const node of this.nodes) {
         if (node.id === this.connectingFrom.nodeId) continue;
-        
+
         for (let j = 0; j < node.inputs.length; j++) {
           const input = node.inputs[j];
           const socketX = node.x + input.x;
           const socketY = node.y + input.y;
-          
+
           if (Math.hypot(x - socketX, y - socketY) < 15) {
             this.createConnection(
               this.connectingFrom.nodeId,
@@ -241,7 +373,7 @@ class NodeGraphUI {
         }
       }
     }
-    
+
     this.selectedNode = null;
     this.dragOffset = null;
     this.connecting = false;
@@ -258,9 +390,9 @@ class NodeGraphUI {
   createConnection(fromNodeId, fromOutput, toNodeId, toInput) {
     const fromNode = this.nodes.find(n => n.id === fromNodeId);
     const toNode = this.nodes.find(n => n.id === toNodeId);
-    
+
     if (!fromNode || !toNode) return;
-    
+
     const conn = {
       id: `conn_${this.connectionIdCounter++}`,
       fromNodeId,
@@ -273,7 +405,7 @@ class NodeGraphUI {
       toY: toNode.y + toNode.inputs[toInput].y,
       color: '#4a9eff'
     };
-    
+
     this.connections.push(conn);
     fromNode.outputs[fromOutput].connected = true;
     toNode.inputs[toInput].connected = true;
@@ -283,7 +415,7 @@ class NodeGraphUI {
     this.connections.forEach(conn => {
       const fromNode = this.nodes.find(n => n.id === conn.fromNodeId);
       const toNode = this.nodes.find(n => n.id === conn.toNodeId);
-      
+
       if (fromNode && toNode) {
         conn.fromX = fromNode.x + fromNode.outputs[conn.fromOutputIndex].x;
         conn.fromY = fromNode.y + fromNode.outputs[conn.fromOutputIndex].y;
@@ -296,26 +428,26 @@ class NodeGraphUI {
   render() {
     const ctx = this.ctx;
     ctx.save();
-    
+
     // Clear canvas with dark background
     ctx.fillStyle = '#0d0d0d';
     ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    
+
     // Apply transform
     ctx.translate(this.offset.x, this.offset.y);
     ctx.scale(this.scale, this.scale);
-    
+
     // Draw grid
     this.drawGrid();
-    
+
     // Draw connections
     this.drawConnections();
-    
+
     // Draw nodes
     this.nodes.forEach(node => {
       this.drawNode(node);
     });
-    
+
     // Draw connecting line
     if (this.connecting && this.connectingFrom) {
       this.drawConnectionLine(
@@ -326,22 +458,22 @@ class NodeGraphUI {
         true
       );
     }
-    
+
     ctx.restore();
   }
 
   drawGrid() {
     const ctx = this.ctx;
     const gridSize = this.gridSize;
-    
+
     ctx.strokeStyle = '#1a1a1a';
     ctx.lineWidth = 1 / this.scale;
-    
+
     const startX = Math.floor(-this.offset.x / this.scale / gridSize) * gridSize;
     const startY = Math.floor(-this.offset.y / this.scale / gridSize) * gridSize;
     const endX = startX + this.canvas.width / this.scale + gridSize;
     const endY = startY + this.canvas.height / this.scale + gridSize;
-    
+
     ctx.beginPath();
     for (let x = startX; x < endX; x += gridSize) {
       ctx.moveTo(x, startY);
@@ -362,23 +494,23 @@ class NodeGraphUI {
 
   drawConnectionLine(x1, y1, x2, y2, isTemp = false, color = '#4a9eff') {
     const ctx = this.ctx;
-    
+
     ctx.strokeStyle = isTemp ? 'rgba(74, 158, 255, 0.5)' : color;
     ctx.lineWidth = 2 / this.scale;
-    
+
     if (isTemp) {
       ctx.setLineDash([5, 5]);
     }
-    
+
     // Draw bezier curve
     const controlDist = Math.min(100, Math.abs(x2 - x1) * 0.5);
-    
+
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.bezierCurveTo(x1 + controlDist, y1, x2 - controlDist, y2, x2, y2);
     ctx.stroke();
     ctx.setLineDash([]);
-    
+
     // Draw flow animation
     if (!isTemp && this.showConnectionFlow) {
       this.drawConnectionFlow(x1, y1, x2, y2, color);
@@ -389,21 +521,21 @@ class NodeGraphUI {
     const ctx = this.ctx;
     const animPhase = (performance.now() / 1000) % 1;
     const controlDist = Math.min(100, Math.abs(toX - fromX) * 0.5);
-    
+
     ctx.fillStyle = color;
-    
+
     for (let i = 0; i < 3; i++) {
       const t = ((animPhase + i / 3) % 1);
       const oneMinusT = 1 - t;
-      
+
       const p0 = { x: fromX, y: fromY };
       const p1 = { x: fromX + controlDist, y: fromY };
       const p2 = { x: toX - controlDist, y: toY };
       const p3 = { x: toX, y: toY };
-      
+
       const dotX = Math.pow(oneMinusT, 3) * p0.x + 3 * Math.pow(oneMinusT, 2) * t * p1.x + 3 * oneMinusT * t * t * p2.x + Math.pow(t, 3) * p3.x;
       const dotY = Math.pow(oneMinusT, 3) * p0.y + 3 * Math.pow(oneMinusT, 2) * t * p1.y + 3 * oneMinusT * t * t * p2.y + Math.pow(t, 3) * p3.y;
-      
+
       ctx.beginPath();
       ctx.arc(dotX, dotY, 3 / this.scale, 0, Math.PI * 2);
       ctx.fill();
@@ -416,108 +548,118 @@ class NodeGraphUI {
     const isVFX = VFX_NODE_TYPES.has(type);
     const isHovered = this.hoveredNode?.id === node.id;
     const nodeColor = color || CATEGORY_COLORS[category] || CATEGORY_COLORS['Default'];
-    
+
     // Glow effect for VFX nodes (animated)
     if (isVFX && !disabled) {
       const glowIntensity = 0.5 + 0.3 * Math.sin(this.glowAnimation + node.id.length * 0.5);
       ctx.shadowColor = nodeColor.glow;
       ctx.shadowBlur = 20 + 10 * glowIntensity;
     }
-    
+
+    // Draw node background
+    const nodeHeight = node.collapsed ? 36 : height;
+
     // Node shadow
     ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.beginPath();
-    ctx.roundRect(x + 3, y + 3, width, height, 10);
+    ctx.roundRect(x + 3, y + 3, width, nodeHeight, 10);
     ctx.fill();
-    
+
     ctx.shadowBlur = 0;
-    
+
     // Node background with gradient
-    const bgGradient = ctx.createLinearGradient(x, y, x, y + height);
+    const bgGradient = ctx.createLinearGradient(x, y, x, y + nodeHeight);
     bgGradient.addColorStop(0, disabled ? '#1a1a1a' : '#2e2e2e');
     bgGradient.addColorStop(1, disabled ? '#151515' : '#252525');
     ctx.fillStyle = bgGradient;
-    
+
     // Border
     ctx.strokeStyle = selected ? '#ffffff' : (isHovered ? nodeColor.primary : '#444444');
     ctx.lineWidth = selected ? 3 / this.scale : 1.5 / this.scale;
-    
+
     ctx.beginPath();
-    ctx.roundRect(x, y, width, height, 10);
+    ctx.roundRect(x, y, width, nodeHeight, 10);
     ctx.fill();
     ctx.stroke();
-    
+
     // Node header with category-specific gradient
     const headerGradient = ctx.createLinearGradient(x, y, x + width, y + 36);
     headerGradient.addColorStop(0, disabled ? '#333333' : nodeColor.primary);
     headerGradient.addColorStop(1, disabled ? '#2a2a2a' : nodeColor.secondary);
     ctx.fillStyle = headerGradient;
-    
+
     ctx.beginPath();
     ctx.roundRect(x, y, width, 36, [10, 10, 0, 0]);
     ctx.fill();
-    
+
     // VFX badge for FX nodes
     if (isVFX && !disabled) {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
       ctx.beginPath();
       ctx.arc(x + width - 20, y + 18, 8, 0, Math.PI * 2);
       ctx.fill();
-      
+
       ctx.fillStyle = '#ffffff';
       ctx.font = '10px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('✦', x + width - 20, y + 18);
     }
-    
+
     // Category indicator line
     ctx.fillStyle = nodeColor.primary;
     ctx.fillRect(x, y + 36, width, 2);
-    
+
     // Node title
     ctx.fillStyle = disabled ? '#666666' : '#ffffff';
     ctx.font = "bold 14px 'Segoe UI', sans-serif";
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(type, x + width / 2, y + 18);
-    
+
     // Category label
     ctx.fillStyle = '#888888';
     ctx.font = "10px 'Segoe UI', sans-serif";
     ctx.fillText(category, x + width / 2, y + height - 12);
-    
-    // Draw sockets
-    this.drawSockets(node);
+
+    // Draw sockets (skip if collapsed)
+    if (!node.collapsed) {
+      this.drawSockets(node);
+    } else {
+      ctx.fillStyle = '#888888';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Collapsed (Double Click to Expand)', x + width / 2, y + 50);
+    }
   }
 
   drawSockets(node) {
     const ctx = this.ctx;
-    
+
     // Input sockets
     node.inputs?.forEach((input, i) => {
       const socketX = node.x + input.x;
       const socketY = node.y + input.y;
-      
+
       // Socket outer ring
       ctx.fillStyle = input.connected ? '#4a9eff' : '#333333';
       ctx.beginPath();
       ctx.arc(socketX, socketY, 7, 0, Math.PI * 2);
       ctx.fill();
-      
+
       // Socket inner
       ctx.fillStyle = input.connected ? '#ffffff' : '#555555';
       ctx.beginPath();
       ctx.arc(socketX, socketY, 4, 0, Math.PI * 2);
       ctx.fill();
-      
+
       // Socket border
       ctx.strokeStyle = '#888888';
       ctx.lineWidth = 1.5 / this.scale;
       ctx.beginPath();
       ctx.arc(socketX, socketY, 7, 0, Math.PI * 2);
       ctx.stroke();
-      
+
       // Label
       ctx.fillStyle = input.connected ? '#ffffff' : '#aaaaaa';
       ctx.font = '11px sans-serif';
@@ -525,31 +667,31 @@ class NodeGraphUI {
       ctx.textBaseline = 'middle';
       ctx.fillText(input.name, socketX + 12, socketY);
     });
-    
+
     // Output sockets
     node.outputs?.forEach((output, i) => {
       const socketX = node.x + output.x;
       const socketY = node.y + output.y;
-      
+
       // Socket outer ring
       ctx.fillStyle = output.connected ? '#4a9eff' : '#333333';
       ctx.beginPath();
       ctx.arc(socketX, socketY, 7, 0, Math.PI * 2);
       ctx.fill();
-      
+
       // Socket inner
       ctx.fillStyle = output.connected ? '#ffffff' : '#555555';
       ctx.beginPath();
       ctx.arc(socketX, socketY, 4, 0, Math.PI * 2);
       ctx.fill();
-      
+
       // Socket border
       ctx.strokeStyle = '#888888';
       ctx.lineWidth = 1.5 / this.scale;
       ctx.beginPath();
       ctx.arc(socketX, socketY, 7, 0, Math.PI * 2);
       ctx.stroke();
-      
+
       // Label
       ctx.fillStyle = output.connected ? '#ffffff' : '#aaaaaa';
       ctx.font = '11px sans-serif';
@@ -580,7 +722,7 @@ class NodeGraphUI {
 document.addEventListener('DOMContentLoaded', () => {
   const nodeCanvas = document.getElementById('node-canvas');
   const graphUI = new NodeGraphUI(nodeCanvas);
-  
+
   // Toolbar buttons
   document.getElementById('execute-btn').addEventListener('click', () => {
     document.getElementById('status-text').textContent = 'Executing...';
@@ -588,30 +730,54 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('status-text').textContent = 'Execution complete';
     }, 1000);
   });
-  
+
   document.getElementById('clear-btn').addEventListener('click', () => {
     if (confirm('Clear all nodes?')) {
       graphUI.clear();
       document.getElementById('status-text').textContent = 'Graph cleared';
     }
   });
-  
+
   document.getElementById('zoom-in-btn').addEventListener('click', () => {
     graphUI.scale *= 1.2;
     graphUI.render();
   });
-  
+
   document.getElementById('zoom-out-btn').addEventListener('click', () => {
     graphUI.scale /= 1.2;
     graphUI.render();
   });
-  
+
   document.getElementById('fit-btn').addEventListener('click', () => {
     graphUI.scale = 1.0;
     graphUI.offset = { x: 0, y: 0 };
     graphUI.render();
   });
-  
+
+  const canvas2d = document.getElementById('node-canvas');
+  const container3d = document.getElementById('node-canvas-3d');
+
+  document.getElementById('view-2d-btn').addEventListener('click', () => {
+    canvas2d.style.display = 'block';
+    container3d.style.display = 'none';
+    document.getElementById('view-2d-btn').classList.add('active');
+    document.getElementById('view-3d-btn').classList.remove('active');
+  });
+
+  document.getElementById('view-3d-btn').addEventListener('click', () => {
+    canvas2d.style.display = 'none';
+    container3d.style.display = 'block';
+    document.getElementById('view-3d-btn').classList.add('active');
+    document.getElementById('view-2d-btn').classList.remove('active');
+
+    // Initialize or refresh 3D view
+    if (!window.nodeGraph3D) {
+      // Assuming NodeGraph3D is available via global or handled by bundler
+      // For this demo, we'll just show a status update
+      document.getElementById('status-text').textContent = '3D View initialized';
+    }
+  });
+
   // Expose for debugging
   window.graphUI = graphUI;
 });

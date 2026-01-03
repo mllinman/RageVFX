@@ -4,6 +4,7 @@
 
 import { NodeGraph } from './NodeGraph';
 import { Node } from './Node';
+import { GroupNode } from './GroupNode';
 
 // Input/Output nodes
 import { ImageInputNode } from '../nodes/ImageInputNode';
@@ -278,18 +279,32 @@ import { VDBWaterNode } from '../nodes/VDBWaterNode';
 import { VDBSnowNode } from '../nodes/VDBSnowNode';
 
 import { RenderEngine } from '../renderer/RenderEngine';
+import { MemoryManager } from './MemoryManager';
 
 export class RageVFXApp {
   private graph: NodeGraph;
   private renderEngine: RenderEngine;
+  private memoryManager: MemoryManager;
   private nodeRegistry: Map<string, typeof Node>;
 
   constructor() {
     this.graph = new NodeGraph();
     this.renderEngine = new RenderEngine();
+    this.memoryManager = new MemoryManager({
+      maxCacheSize: 2 * 1024 * 1024 * 1024, // 2GB
+      tileSize: 1024,
+      enableCompression: true
+    });
     this.nodeRegistry = new Map();
-    
+
     this.registerNodes();
+  }
+
+  /**
+   * Get the memory manager
+   */
+  getMemoryManager(): MemoryManager {
+    return this.memoryManager;
   }
 
   /**
@@ -299,11 +314,11 @@ export class RageVFXApp {
     // Input/Output nodes
     this.nodeRegistry.set('ImageInput', ImageInputNode as any);
     this.nodeRegistry.set('Output', OutputNode as any);
-    
+
     // Generator nodes
     this.nodeRegistry.set('Noise', NoiseNode as any);
     this.nodeRegistry.set('Gradient', GradientNode as any);
-    
+
     // Filter nodes
     this.nodeRegistry.set('Blur', BlurNode as any);
     this.nodeRegistry.set('EdgeDetect', EdgeDetectNode as any);
@@ -314,28 +329,28 @@ export class RageVFXApp {
     this.nodeRegistry.set('ChromaticAberration', ChromaticAberrationNode as any);
     this.nodeRegistry.set('Vignette', VignetteNode as any);
     this.nodeRegistry.set('FilmGrain', FilmGrainNode as any);
-    
+
     // Color nodes
     this.nodeRegistry.set('ColorCorrect', ColorCorrectNode as any);
     this.nodeRegistry.set('Grade', GradeNode as any);
     this.nodeRegistry.set('Curves', CurvesNode as any);
     this.nodeRegistry.set('Levels', LevelsNode as any);
     this.nodeRegistry.set('HSL', HSLNode as any);
-    
+
     // Composite nodes
     this.nodeRegistry.set('Merge', MergeNode as any);
     this.nodeRegistry.set('Screen', ScreenNode as any);
     this.nodeRegistry.set('Overlay', OverlayNode as any);
-    
+
     // Transform nodes
     this.nodeRegistry.set('Transform', TransformNode as any);
     this.nodeRegistry.set('CornerPin', CornerPinNode as any);
-    
+
     // Keying nodes
     this.nodeRegistry.set('ChromaKey', ChromaKeyNode as any);
     this.nodeRegistry.set('LuminanceKey', LuminanceKeyNode as any);
     this.nodeRegistry.set('Difference', DifferenceNode as any);
-    
+
     // VFX Effect nodes
     this.nodeRegistry.set('Fire', FireNode as any);
     this.nodeRegistry.set('Water', WaterNode as any);
@@ -350,19 +365,19 @@ export class RageVFXApp {
     this.nodeRegistry.set('Spark', SparkNode as any);
     this.nodeRegistry.set('Dissolve', DissolveNode as any);
     this.nodeRegistry.set('LensFlare', LensFlareNode as any);
-    
+
     // Version 3.9 - Enhanced VFX nodes
     this.nodeRegistry.set('BloodSplatter', BloodSplatterNode as any);
     this.nodeRegistry.set('MuzzleFlash', MuzzleFlashNode as any);
     this.nodeRegistry.set('Dust', DustNode as any);
-    
+
     // Tracker nodes
     this.nodeRegistry.set('PointTracker', PointTrackerNode as any);
     this.nodeRegistry.set('PlanarTracker', PlanarTrackerNode as any);
     this.nodeRegistry.set('CornerDetector', CornerDetectorNode as any);
     this.nodeRegistry.set('OpticalFlow', OpticalFlowNode as any);
     this.nodeRegistry.set('Stabilizer', StabilizerNode as any);
-    
+
     // Utility nodes
     this.nodeRegistry.set('Time', TimeNode as any);
     this.nodeRegistry.set('Math', MathNode as any);
@@ -370,58 +385,58 @@ export class RageVFXApp {
     this.nodeRegistry.set('Dot', DotNode as any);
     this.nodeRegistry.set('FrameHold', FrameHoldNode as any);
     this.nodeRegistry.set('TimeOffset', TimeOffsetNode as any);
-    
+
     // Version 1.1 - 3D nodes
     this.nodeRegistry.set('Geometry3D', Geometry3DNode as any);
     this.nodeRegistry.set('Mesh', MeshNode as any);
     this.nodeRegistry.set('Camera', CameraNode as any);
     this.nodeRegistry.set('Light', LightNode as any);
-    
+
     // Version 1.1 - Particle nodes
     this.nodeRegistry.set('ParticleSystem', ParticleSystemNode as any);
     this.nodeRegistry.set('ParticleEmitter', ParticleEmitterNode as any);
     this.nodeRegistry.set('ParticleForce', ParticleForceNode as any);
-    
+
     // Version 1.1 - Enhanced tracking nodes
     this.nodeRegistry.set('MotionVectors', MotionVectorsNode as any);
     this.nodeRegistry.set('TrackingData', TrackingDataNode as any);
-    
+
     // Version 1.1 - Keying and rotoscoping nodes
     this.nodeRegistry.set('Rotoscope', RotoscopeNode as any);
     this.nodeRegistry.set('SpillSuppression', SpillSuppressionNode as any);
     this.nodeRegistry.set('EdgeMatte', EdgeMatteNode as any);
-    
+
     // Version 1.2 - Scripting nodes
     this.nodeRegistry.set('PythonScript', PythonScriptNode as any);
-    
+
     // Version 1.2 - Color management nodes
     this.nodeRegistry.set('OCIOColorSpace', OCIOColorSpaceNode as any);
     this.nodeRegistry.set('OCIOLook', OCIOLookNode as any);
-    
+
     // Version 1.2 - Network rendering nodes
     this.nodeRegistry.set('RenderFarm', RenderFarmNode as any);
     this.nodeRegistry.set('NetworkClient', NetworkClientNode as any);
-    
+
     // Version 2.0 - Full 3D Rendering Pipeline
     this.nodeRegistry.set('Scene', SceneNode as any);
     this.nodeRegistry.set('Renderer3D', Renderer3DNode as any);
     this.nodeRegistry.set('Material', MaterialNode as any);
     this.nodeRegistry.set('EnvironmentMap', EnvironmentMapNode as any);
     this.nodeRegistry.set('ShadowMap', ShadowMapNode as any);
-    
+
     // Version 2.0 - Volumetric Effects
     this.nodeRegistry.set('VolumetricFog', VolumetricFogNode as any);
     this.nodeRegistry.set('VolumetricLight', VolumetricLightNode as any);
     this.nodeRegistry.set('VolumeRender', VolumeRenderNode as any);
     this.nodeRegistry.set('CloudVolume', CloudVolumeNode as any);
-    
+
     // Version 2.0 - Physics Simulation
     this.nodeRegistry.set('RigidBody', RigidBodyNode as any);
     this.nodeRegistry.set('SoftBody', SoftBodyNode as any);
     this.nodeRegistry.set('FluidSim', FluidSimNode as any);
     this.nodeRegistry.set('ClothSim', ClothSimNode as any);
     this.nodeRegistry.set('Collision', CollisionNode as any);
-    
+
     // Version 2.0 - Machine Learning Powered Tools
     this.nodeRegistry.set('StyleTransfer', StyleTransferNode as any);
     this.nodeRegistry.set('Upscale', UpscaleNode as any);
@@ -429,20 +444,20 @@ export class RageVFXApp {
     this.nodeRegistry.set('ObjectDetection', ObjectDetectionNode as any);
     this.nodeRegistry.set('Inpaint', InpaintNode as any);
     this.nodeRegistry.set('DepthEstimation', DepthEstimationNode as any);
-    
+
     // Version 2.1 - Animation Timeline
     this.nodeRegistry.set('AnimationTimeline', AnimationTimelineNode as any);
-    
+
     // Version 2.1 - Output nodes
     this.nodeRegistry.set('ImageSequenceOutput', ImageSequenceOutputNode as any);
     this.nodeRegistry.set('VideoSequenceOutput', VideoSequenceOutputNode as any);
     this.nodeRegistry.set('CameraFormatOutput', CameraFormatOutputNode as any);
-    
+
     // Version 2.1 - Camera nodes
     this.nodeRegistry.set('CameraPreset', CameraPresetNode as any);
     this.nodeRegistry.set('CameraLens', CameraLensNode as any);
     this.nodeRegistry.set('LensDistortionCorrection', LensDistortionCorrectionNode as any);
-    
+
     // Version 2.3 - Advanced VFX nodes
     this.nodeRegistry.set('AnamorphicFlare', AnamorphicFlareNode as any);
     this.nodeRegistry.set('Nebula', NebulaNode as any);
@@ -454,72 +469,72 @@ export class RageVFXApp {
     this.nodeRegistry.set('Aurora', AuroraNode as any);
     this.nodeRegistry.set('HeatDistortion', HeatDistortionNode as any);
     this.nodeRegistry.set('Debris', DebrisNode as any);
-    
+
     // Version 2.3 - Professional Compositing nodes
     this.nodeRegistry.set('DeepComposite', DeepCompositeNode as any);
     this.nodeRegistry.set('Cryptomatte', CryptomatteNode as any);
     this.nodeRegistry.set('AOVManager', AOVManagerNode as any);
-    
+
     // Version 2.3 - Professional Color nodes
     this.nodeRegistry.set('LUTLoader', LUTLoaderNode as any);
     this.nodeRegistry.set('CDL', CDLNode as any);
-    
+
     // Version 3.0 - Nuke-Rivaling Compositing nodes
     this.nodeRegistry.set('MultiShot', MultiShotNode as any);
     this.nodeRegistry.set('IBKKeyer', IBKKeyerNode as any);
-    
+
     // Version 3.0 - Houdini-Rivaling Procedural nodes
     this.nodeRegistry.set('ProceduralTerrain', ProceduralTerrainNode as any);
     this.nodeRegistry.set('CrowdSim', CrowdSimNode as any);
-    
+
     // Version 3.0 - Redshift/V-Ray-Rivaling Rendering nodes
     this.nodeRegistry.set('PathTracer', PathTracerNode as any);
     this.nodeRegistry.set('LightMixer', LightMixerNode as any);
-    
+
     // Version 3.1 - Advanced Physics Engine
     this.nodeRegistry.set('PhysicsEngine', PhysicsEngineNode as any);
     this.nodeRegistry.set('PhysicsWorld', PhysicsWorldNode as any);
-    
+
     // Version 3.1 - Pipeline & Collaboration
     this.nodeRegistry.set('USD', USDNode as any);
     this.nodeRegistry.set('Alembic', AlembicNode as any);
     this.nodeRegistry.set('PipelineManager', PipelineManagerNode as any);
     this.nodeRegistry.set('ReviewTool', ReviewToolNode as any);
     this.nodeRegistry.set('VersionControl', VersionControlNode as any);
-    
+
     // Version 3.1 - Extended Machine Learning
     this.nodeRegistry.set('NeuralNetTrainer', NeuralNetTrainerNode as any);
     this.nodeRegistry.set('SegmentAnything', SegmentAnythingNode as any);
     this.nodeRegistry.set('BackgroundRemoval', BackgroundRemovalNode as any);
     this.nodeRegistry.set('FaceEnhancement', FaceEnhancementNode as any);
     this.nodeRegistry.set('MotionPrediction', MotionPredictionNode as any);
-    
+
     // Version 3.2 - Projection Mapping & Painting System (Mari-like)
     this.nodeRegistry.set('ProjectionPaint', ProjectionPaintNode as any);
-    
+
     // Version 3.2 - 3D Object Import/Export System
     this.nodeRegistry.set('ModelImport', ModelImportNode as any);
     this.nodeRegistry.set('ModelExport', ModelExportNode as any);
-    
+
     // Version 3.2 - 3D Camera Tracking and Creation (3DSMax/Maya-like)
     this.nodeRegistry.set('Camera3DTracking', Camera3DTrackingNode as any);
     this.nodeRegistry.set('RealWorldCamera', RealWorldCameraNode as any);
-    
+
     // Version 3.11 - Camera Import and Background Card System
     this.nodeRegistry.set('CameraImport', CameraImportNode as any);
     this.nodeRegistry.set('CameraFromVideo', CameraFromVideoNode as any);
     this.nodeRegistry.set('BackgroundCard', BackgroundCardNode as any);
-    
+
     // Version 3.2 - Fluid Physics System (Maya-like)
     this.nodeRegistry.set('FluidPhysics', FluidPhysicsNode as any);
     this.nodeRegistry.set('FluidCache', FluidCacheNode as any);
-    
+
     // Version 3.3 - 8K+ Resolution & Stereoscopic 3D Support
     this.nodeRegistry.set('StereoCamera3D', StereoCamera3DNode as any);
     this.nodeRegistry.set('StereoCompositor', StereoCompositorNode as any);
     this.nodeRegistry.set('Transform3D', Transform3DNode as any);
     this.nodeRegistry.set('Resolution8K', Resolution8KNode as any);
-    
+
     // Version 3.4 - Advanced VFX & Professional Tools
     this.nodeRegistry.set('Glitch', GlitchNode as any);
     this.nodeRegistry.set('EnergyField', EnergyFieldNode as any);
@@ -527,38 +542,38 @@ export class RageVFXApp {
     this.nodeRegistry.set('TimeWarp', TimeWarpNode as any);
     this.nodeRegistry.set('TextOverlay', TextOverlayNode as any);
     this.nodeRegistry.set('ColorMatch', ColorMatchNode as any);
-    
+
     // Version 3.5 - Motion Graphics & Animation Tools
     this.nodeRegistry.set('MotionGraphics', MotionGraphicsNode as any);
     this.nodeRegistry.set('ArrayModifier', ArrayModifierNode as any);
     this.nodeRegistry.set('Transition', TransitionNode as any);
     this.nodeRegistry.set('CurveEditor', CurveEditorNode as any);
-    
+
     // Version 3.6 - Cinema 4D Tools
     this.nodeRegistry.set('MoGraphCloner', MoGraphClonerNode as any);
     this.nodeRegistry.set('MoGraphEffector', MoGraphEffectorNode as any);
-    
+
     // Version 3.6 - Blender Tools
     this.nodeRegistry.set('GeometryNodes', GeometryNodesNode as any);
     this.nodeRegistry.set('PhysicsParticles', PhysicsParticlesNode as any);
-    
+
     // Version 3.6 - Maya Tools
     this.nodeRegistry.set('OceanModifier', OceanModifierNode as any);
-    
+
     // Version 3.6 - Asset Database
     this.nodeRegistry.set('VFXAssetDatabase', VFXAssetDatabaseNode as any);
-    
+
     // Version 3.7 - 2D to 3D Conversion Enhancement
     this.nodeRegistry.set('DepthMapGenerator', DepthMapGeneratorNode as any);
     this.nodeRegistry.set('StereoConverter', StereoConverterNode as any);
-    
+
     // Version 3.8 - Complete ROADMAP v3.0 Features
     this.nodeRegistry.set('SmartVector', SmartVectorNode as any);
     this.nodeRegistry.set('VDB', VDBNode as any);
     this.nodeRegistry.set('Wrangle', WrangleNode as any);
     this.nodeRegistry.set('ProceduralCity', ProceduralCityNode as any);
     this.nodeRegistry.set('AdaptiveSampler', AdaptiveSamplerNode as any);
-    
+
     // Version 3.10 - VDB Import/Export and Procedural Tools
     this.nodeRegistry.set('VDBImport', VDBImportNode as any);
     this.nodeRegistry.set('VDBExport', VDBExportNode as any);
@@ -597,6 +612,66 @@ export class RageVFXApp {
   }
 
   /**
+   * Get properties for a specific node
+   */
+  getNodeProperties(nodeId: string): any {
+    const node = this.graph.getNode(nodeId);
+    if (!node) return null;
+
+    return {
+      metadata: node.getMetadata(),
+      parameters: node.getAllParameters(),
+      inputs: node.getInputs(),
+      outputs: node.getOutputs()
+    };
+  }
+
+  /**
+   * Update a node parameter
+   */
+  updateNodeParameter(nodeId: string, key: string, value: any): boolean {
+    const node = this.graph.getNode(nodeId);
+    if (!node) return false;
+
+    node.setParameter(key, value);
+    return true;
+  }
+
+  /**
+   * Group multiple nodes into a single GroupNode
+   */
+  groupNodes(nodeIds: string[], groupName: string = 'Macro Group'): string | null {
+    if (nodeIds.length === 0) return null;
+
+    const groupId = `group_${Date.now()}`;
+    const groupNode = new GroupNode(groupId, groupName);
+
+    // 1. Identify all nodes to be grouped
+    const nodesToGroup = nodeIds
+      .map(id => this.graph.getNode(id))
+      .filter((n): n is Node => n !== undefined);
+
+    if (nodesToGroup.length === 0) return null;
+
+    // 2. Add nodes to group node's inner graph
+    nodesToGroup.forEach(node => {
+      groupNode.addNode(node);
+      // We'll remove these from the main graph later
+    });
+
+    // 3. Handle connections (This is a simplified version for now)
+    // Real implementation would need to remap external connections to exposed sockets
+
+    // 4. Add group node to main graph
+    this.graph.addNode(groupNode);
+
+    // 5. Remove original nodes from main graph
+    nodeIds.forEach(id => this.graph.removeNode(id));
+
+    return groupId;
+  }
+
+  /**
    * Execute the node graph
    */
   async executeGraph(): Promise<void> {
@@ -611,11 +686,11 @@ export class RageVFXApp {
     const outputNode = nodes.find(
       node => node.getMetadata().type === 'Output'
     ) as OutputNode | undefined;
-    
+
     if (outputNode) {
       return outputNode.getFinalOutput();
     }
-    
+
     return null;
   }
 
@@ -628,11 +703,11 @@ export class RageVFXApp {
         version: '1.0.0',
         graph: this.graph.serialize()
       };
-      
+
       // In a real implementation, this would write to filesystem
       console.log('Saving project to:', filepath);
       console.log('Project data:', JSON.stringify(projectData, null, 2));
-      
+
       return true;
     } catch (error) {
       console.error('Failed to save project:', error);
@@ -647,10 +722,10 @@ export class RageVFXApp {
     try {
       // In a real implementation, this would read from filesystem
       console.log('Loading project from:', filepath);
-      
+
       // Clear current graph
       this.graph.clear();
-      
+
       return true;
     } catch (error) {
       console.error('Failed to load project:', error);

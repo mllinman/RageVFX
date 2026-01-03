@@ -3,6 +3,8 @@
  * Supports WebGL and WebGPU for high-performance image processing and 3D rendering
  */
 
+import { WebGPUEngine } from './WebGPUEngine';
+
 export interface ImageData {
   width: number;
   height: number;
@@ -22,7 +24,8 @@ export interface RenderSettings {
 
 export class RenderEngine {
   private canvas: HTMLCanvasElement | OffscreenCanvas;
-  private gl: WebGL2RenderingContext | null;
+  private gl: WebGL2RenderingContext | null = null;
+  private webgpu: WebGPUEngine | null = null;
   private framebuffers: Map<string, WebGLFramebuffer> = new Map();
   private textures: Map<string, WebGLTexture> = new Map();
   private shaders: Map<string, WebGLProgram> = new Map();
@@ -37,12 +40,33 @@ export class RenderEngine {
       this.canvas.height = height;
     }
 
-    // Initialize WebGL2 context
-    this.gl = this.canvas.getContext('webgl2') as WebGL2RenderingContext;
-    if (!this.gl) {
-      throw new Error('WebGL2 not supported');
+    this.initializeEngines();
+  }
+
+  /**
+   * Initialize rendering engines (WebGPU with WebGL2 fallback)
+   */
+  private async initializeEngines(): Promise<void> {
+    // Try WebGPU first
+    if (this.canvas instanceof HTMLCanvasElement) {
+      this.webgpu = new WebGPUEngine();
+      const success = await this.webgpu.initialize(this.canvas);
+
+      if (success) {
+        console.log('Using WebGPU rendering backend');
+        return;
+      }
+
+      this.webgpu = null;
     }
 
+    // Fallback to WebGL2
+    this.gl = this.canvas.getContext('webgl2') as WebGL2RenderingContext;
+    if (!this.gl) {
+      throw new Error('Neither WebGPU nor WebGL2 is supported');
+    }
+
+    console.log('Using WebGL2 rendering backend (fallback)');
     this.initializeRenderContext();
   }
 
@@ -54,7 +78,7 @@ export class RenderEngine {
 
     // Set up viewport
     this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
-    
+
     // Enable alpha blending
     this.gl.enable(this.gl.BLEND);
     this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
@@ -73,7 +97,7 @@ export class RenderEngine {
     if (!texture) return false;
 
     this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-    
+
     // Set texture parameters
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);

@@ -9,23 +9,33 @@ import { contextBridge, ipcRenderer } from 'electron';
 // ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('ragevfxAPI', {
   // Node operations
-  createNode: (nodeType: string, nodeId: string) => 
+  createNode: (nodeType: string, nodeId: string) =>
     ipcRenderer.invoke('create-node', nodeType, nodeId),
-  
+
   connectNodes: (sourceId: string, sourceOutput: string, targetId: string, targetInput: string) =>
     ipcRenderer.invoke('connect-nodes', sourceId, sourceOutput, targetId, targetInput),
-  
+
   // Graph operations
-  executeGraph: () => 
+  executeGraph: () =>
     ipcRenderer.invoke('execute-graph'),
-  
-  getOutput: () => 
+
+  getOutput: () =>
     ipcRenderer.invoke('get-output'),
-  
+
   // Project operations
-  saveProject: (filepath: string) => 
+  saveProject: (filepath: string) =>
     ipcRenderer.invoke('save-project', filepath),
-  
-  loadProject: (filepath: string) => 
-    ipcRenderer.invoke('load-project', filepath)
+
+  loadProject: (filepath: string) =>
+    ipcRenderer.invoke('load-project', filepath),
+
+  // Property & Grouping operations
+  getNodeProperties: (nodeId: string) =>
+    ipcRenderer.invoke('get-node-properties', nodeId),
+
+  updateNodeParameter: (nodeId: string, key: string, value: any) =>
+    ipcRenderer.invoke('update-node-parameter', nodeId, key, value),
+
+  groupNodes: (nodeIds: string[], groupName: string) =>
+    ipcRenderer.invoke('group-nodes', nodeIds, groupName)
 });
