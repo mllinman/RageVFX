@@ -1739,6 +1739,7 @@ class NodeGraphUI {
     minimap.width = 200;
     minimap.height = 150;
     
+    // Background
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, minimap.width, minimap.height);
     
@@ -1752,22 +1753,74 @@ class NodeGraphUI {
       (minimap.height - padding * 2) / bounds.height
     );
     
-    // Draw nodes
-    ctx.fillStyle = '#ff6b35';
+    // Draw connections first (under nodes)
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.3;
+    this.connections.forEach(conn => {
+      const fromNode = this.nodes.find(n => n.outputs.some(o => o.id === conn.from));
+      const toNode = this.nodes.find(n => n.inputs.some(i => i.id === conn.to));
+      
+      if (fromNode && toNode) {
+        const fromSocket = fromNode.outputs.find(o => o.id === conn.from);
+        const toSocket = toNode.inputs.find(i => i.id === conn.to);
+        
+        if (fromSocket && toSocket) {
+          const x1 = padding + (fromSocket.x - bounds.minX) * scale;
+          const y1 = padding + (fromSocket.y - bounds.minY) * scale;
+          const x2 = padding + (toSocket.x - bounds.minX) * scale;
+          const y2 = padding + (toSocket.y - bounds.minY) * scale;
+          
+          ctx.strokeStyle = '#888';
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+      }
+    });
+    ctx.globalAlpha = 1.0;
+    
+    // Draw nodes with proper category colors
     this.nodes.forEach(node => {
       const x = padding + (node.x - bounds.minX) * scale;
       const y = padding + (node.y - bounds.minY) * scale;
-      const w = node.width * scale;
-      const h = node.height * scale;
+      const w = Math.max(node.width * scale, 2); // Minimum 2px width
+      const h = Math.max(node.height * scale, 2); // Minimum 2px height
+      
+      // Get node color based on category
+      const nodeColor = node.color || CATEGORY_COLORS[node.category] || CATEGORY_COLORS['Default'];
+      
+      // Fill node with category color
+      ctx.fillStyle = nodeColor.primary;
       ctx.fillRect(x, y, w, h);
+      
+      // Draw border for selected nodes
+      if (node.selected) {
+        ctx.strokeStyle = '#ffdd00';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, w, h);
+      }
+      
+      // Draw subtle border for disabled nodes
+      if (node.disabled) {
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(x, y, w, h);
+        ctx.globalAlpha = 1.0;
+      }
     });
     
-    // Draw viewport
+    // Draw viewport indicator
     const viewX = padding + (-this.offset.x / this.scale - bounds.minX) * scale;
     const viewY = padding + (-this.offset.y / this.scale - bounds.minY) * scale;
     const viewW = (this.canvas.width / this.scale) * scale;
     const viewH = (this.canvas.height / this.scale) * scale;
     
+    // Semi-transparent fill for viewport area
+    ctx.fillStyle = 'rgba(74, 158, 255, 0.1)';
+    ctx.fillRect(viewX, viewY, viewW, viewH);
+    
+    // Bright border for viewport
     ctx.strokeStyle = '#4a9eff';
     ctx.lineWidth = 2;
     ctx.strokeRect(viewX, viewY, viewW, viewH);
@@ -2096,9 +2149,57 @@ class NodeGraphUI {
   toggleMinimap(): void {
     this.showMinimap = !this.showMinimap;
     const minimap = document.getElementById('minimap');
-    if (minimap) minimap.classList.toggle('hidden', !this.showMinimap);
+    if (minimap) {
+      minimap.classList.toggle('hidden', !this.showMinimap);
+      
+      // Setup click navigation if showing minimap
+      if (this.showMinimap) {
+        this.setupMinimapNavigation();
+      }
+    }
     const btn = document.getElementById('minimap-btn');
     if (btn) btn.classList.toggle('active', this.showMinimap);
+  }
+
+  private setupMinimapNavigation(): void {
+    const minimapCanvas = document.getElementById('minimap-canvas') as HTMLCanvasElement;
+    if (!minimapCanvas) return;
+    
+    // Remove existing listener if any
+    const newCanvas = minimapCanvas.cloneNode(true) as HTMLCanvasElement;
+    minimapCanvas.parentNode?.replaceChild(newCanvas, minimapCanvas);
+    
+    newCanvas.addEventListener('click', (e) => this.onMinimapClick(e));
+    newCanvas.style.cursor = 'pointer';
+  }
+
+  private onMinimapClick(e: MouseEvent): void {
+    const minimap = e.target as HTMLCanvasElement;
+    const rect = minimap.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+    
+    if (this.nodes.length === 0) return;
+    
+    // Calculate minimap dimensions and scale
+    const minimapWidth = 200;
+    const minimapHeight = 150;
+    const padding = 20;
+    const bounds = this.getNodeBounds();
+    const scale = Math.min(
+      (minimapWidth - padding * 2) / bounds.width,
+      (minimapHeight - padding * 2) / bounds.height
+    );
+    
+    // Convert click position to graph coordinates
+    const graphX = bounds.minX + (clickX - padding) / scale;
+    const graphY = bounds.minY + (clickY - padding) / scale;
+    
+    // Center the viewport on the clicked position
+    this.offset.x = this.canvas.width / 2 - graphX * this.scale;
+    this.offset.y = this.canvas.height / 2 - graphY * this.scale;
+    
+    this.render();
   }
 
   // Project management
