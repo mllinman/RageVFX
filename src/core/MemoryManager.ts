@@ -308,8 +308,8 @@ export class TextureCompression {
    */
   static async compressBC7(
     data: Uint8Array,
-    width: number,
-    height: number
+    _width: number,
+    _height: number
   ): Promise<Uint8Array> {
     // BC7 compression implementation would go here
     // For now, return original data
@@ -324,7 +324,7 @@ export class TextureCompression {
     data: Uint8Array,
     width: number,
     height: number,
-    blockSize: [number, number] = [4, 4]
+    _blockSize: [number, number] = [4, 4]
   ): Promise<Uint8Array> {
     // ASTC compression implementation would go here
     // For now, return original data

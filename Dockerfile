@@ -1,5 +1,6 @@
-# Dockerfile for RageVFX Web App - Railway Deployment
-# Multi-stage build for optimal image size
+# Dockerfile for RageVFX Web App - Alternative to Nixpacks
+# This Dockerfile can be used for local Docker builds or other deployment platforms
+# Railway deployment uses nixpacks.toml by default
 
 # Stage 1: Build the web app
 FROM node:20-alpine AS builder
@@ -10,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install all dependencies (including devDependencies for build)
-RUN npm ci --include=dev --legacy-peer-deps
+RUN npm ci --include=dev
 
 # Copy source files
 COPY web ./web
@@ -30,7 +31,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm ci --omit=dev --legacy-peer-deps
+RUN npm ci --omit=dev
 
 # Copy built web app from builder stage
 COPY --from=builder /app/dist-web ./dist-web

@@ -19,11 +19,9 @@ examples/
 dist/
 node_modules/
 
-# Test files
+# Test files (no longer in repo)
 *.test.ts
 *.spec.ts
-test-*.ts
-test-*.js
 __tests__/
 coverage/
 
@@ -31,6 +29,9 @@ coverage/
 build/
 release/
 blender-tools/
+
+# Dashboard (separate Next.js app - not part of web deployment)
+dashboard/
 
 # Logs and temp files
 *.log
@@ -53,3 +54,6 @@ Thumbs.db
 
 # Electron-specific
 electron-builder.yml
+
+# UI directory (desktop app UI, not web)
+ui/
