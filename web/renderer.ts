@@ -166,6 +166,11 @@ interface UIConnection {
   controlPoints?: { x: number; y: number }[];
 }
 
+// Forward declaration for ViewportManager to avoid circular dependency
+interface IViewportManager {
+  setImage(imageData: ImageData): void;
+}
+
 class NodeGraphUI {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -208,6 +213,8 @@ class NodeGraphUI {
   private connectionStyle: 'bezier' | 'linear' | 'step' = 'bezier';
   private showNodeShadows = true;
   private showConnectionFlow = true;
+  private viewportManager: IViewportManager | null = null;
+  private autoRenderOnExecute = true;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -1995,12 +2002,104 @@ class NodeGraphUI {
     
     try {
       await this.app.executeGraph();
+      
+      // After execution, update render view with output nodes
+      if (this.autoRenderOnExecute && this.viewportManager) {
+        this.updateRenderView();
+      }
+      
       this.showToast('Graph executed successfully!', 'success');
       if (statusText) statusText.textContent = 'Execution complete';
     } catch (error) {
       this.showToast(`Execution failed: ${error}`, 'error');
       if (statusText) statusText.textContent = 'Execution failed';
     }
+  }
+
+  private updateRenderView(): void {
+    // Find output nodes
+    const outputNodes = this.nodes.filter(n => n.type === 'Output' && !n.disabled);
+    
+    if (outputNodes.length === 0) {
+      return;
+    }
+    
+    // For now, generate a sample image for demonstration
+    // In a real implementation, this would get the actual rendered output from the node graph
+    const sampleImage = this.generateSampleOutput(outputNodes[0]);
+    if (sampleImage && this.viewportManager) {
+      this.viewportManager.setImage(sampleImage);
+      
+      // Auto-switch to render view if not already there
+      const viewportMode = (document.getElementById('viewport-mode') as HTMLSelectElement)?.value;
+      if (viewportMode !== 'render') {
+        const modeSelector = document.getElementById('viewport-mode') as HTMLSelectElement;
+        if (modeSelector) {
+          modeSelector.value = 'render';
+          modeSelector.dispatchEvent(new Event('change'));
+        }
+      }
+    }
+  }
+
+  private generateSampleOutput(outputNode: UINode): ImageData | null {
+    // Generate a sample procedural image based on connected nodes
+    // This demonstrates the concept - in production this would use actual node output
+    const width = 512;
+    const height = 512;
+    const imageData = new ImageData(width, height);
+    const data = imageData.data;
+    
+    // Find connected VFX nodes to simulate their output
+    const connectedVFXNodes = this.connections
+      .filter(conn => {
+        const targetNode = this.nodes.find(n => n.inputs.some(i => i.id === conn.to));
+        return targetNode?.id === outputNode.id;
+      })
+      .map(conn => {
+        const sourceNode = this.nodes.find(n => n.outputs.some(o => o.id === conn.from));
+        return sourceNode;
+      })
+      .filter(n => n && VFX_NODE_TYPES.has(n.type));
+    
+    // Generate gradient based on node types
+    const hasFireNode = connectedVFXNodes.some(n => n?.type === 'Fire');
+    const hasWaterNode = connectedVFXNodes.some(n => n?.type === 'Water');
+    const hasCloudNode = connectedVFXNodes.some(n => n?.type === 'Clouds');
+    
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const i = (y * width + x) * 4;
+        
+        // Create a gradient based on connected nodes
+        if (hasFireNode) {
+          data[i] = Math.floor(255 * (1 - y / height)); // Red gradient
+          data[i + 1] = Math.floor(128 * (1 - y / height)); // Orange
+          data[i + 2] = 0;
+        } else if (hasWaterNode) {
+          data[i] = Math.floor(64 * y / height); // Blue gradient
+          data[i + 1] = Math.floor(128 * y / height);
+          data[i + 2] = Math.floor(255 * y / height);
+        } else if (hasCloudNode) {
+          const noise = Math.random() * 128 + 127;
+          data[i] = noise; // White/gray clouds
+          data[i + 1] = noise;
+          data[i + 2] = noise;
+        } else {
+          // Default gradient
+          data[i] = Math.floor(255 * x / width);
+          data[i + 1] = Math.floor(255 * y / height);
+          data[i + 2] = Math.floor(255 * (1 - x / width));
+        }
+        data[i + 3] = 255; // Alpha
+      }
+    }
+    
+    return imageData;
+  }
+
+  setViewportManager(manager: IViewportManager): void {
+    this.viewportManager = manager;
   }
 
   clearGraph(): void {
@@ -2977,6 +3076,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize viewport manager
     const viewportManager = new ViewportManager();
+    
+    // Connect graph UI to viewport manager for real-time rendering
+    graphUI.setViewportManager(viewportManager);
     
     // Initialize timeline manager
     const timelineManager = new TimelineManager();
