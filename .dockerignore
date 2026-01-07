@@ -1,0 +1,69 @@
+# Docker ignore file for RageVFX
+# Excludes unnecessary files from Docker build context
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+dist-web/
+release/
+
+# Development files
+.git/
+.github/
+.vscode/
+.editorconfig
+.prettierrc.json
+.prettierignore
+
+# Documentation
+*.md
+!README.md
+docs/
+examples/
+
+# Test files
+*.test.ts
+*.spec.ts
+test-*.ts
+test-*.js
+test-*.html
+__tests__/
+coverage/
+
+# Desktop app files
+build/
+blender-tools/
+ui/
+
+# Marketing site (not needed for web app)
+marketing/
+
+# Dashboard (separate deployment)
+dashboard/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
