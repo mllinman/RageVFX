@@ -14,8 +14,8 @@ RageVFX is a next-generation visual effects software that has achieved feature p
 ## 🚀 Quick Links
 
 - **[Try Web App](web/index.html)** - Run RageVFX directly in your browser (Free)
-- **[Marketing Website](marketing/index.html)** - Professional landing page with pricing & downloads
-- **[Download Desktop App](#download)** - Windows, macOS, Linux installers (Pro subscription $29.95/month)
+- **[Deploy to Railway](RAILWAY_DEPLOYMENT.md)** - Deploy the web app to Railway cloud platform
+- **[Download Desktop App](#download)** - Windows, macOS, Linux installers
 
 ## 🏆 Industry-Leading Feature Set
 
@@ -851,28 +851,22 @@ Try RageVFX directly in your browser without any installation:
    
    See [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md) for detailed deployment instructions.
 
-### 💳 Pro Subscription & Downloads
+### 💳 Desktop App Downloads
 
-RageVFX offers a **Free tier** (web app) and **Pro tier** ($9.99/month) with desktop app downloads.
+The desktop application (Electron-based) can be built for Windows, macOS, and Linux:
 
-**Marketing Website**: Professional landing page with pricing and subscription management:
 ```bash
-cd marketing
-python -m http.server 8000
-# Visit http://localhost:8000
+# Build for your current platform
+npm run dist
+
+# Build for specific platforms
+npm run dist:win    # Windows
+npm run dist:mac    # macOS
+npm run dist:linux  # Linux
+npm run dist:all    # All platforms
 ```
 
-**Features by Tier**:
-- **Free**: Web app access, 176+ nodes, 1080p export, basic VFX effects, 5GB cloud storage
-- **Pro**: Everything in Free + Desktop downloads (Windows/macOS/Linux), 8K export, advanced nodes, OpenVDB tools, unlimited storage, commercial license
-
-**Setting up Stripe** (for accepting subscriptions):
-1. Create account at [stripe.com](https://stripe.com)
-2. Get API keys from [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys)
-3. Copy `marketing/config.example.js` to `marketing/config.js` and add keys
-4. Setup backend API (see `marketing/backend/README.md`)
-
-**Learn more**: See `marketing/README.md` for complete setup instructions
+Desktop installers will be created in the `release/` directory.
 
 ### 💿 Windows Installation
 
