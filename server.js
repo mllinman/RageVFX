@@ -30,15 +30,18 @@ if (!fs.existsSync(INDEX_PATH)) {
 // Serve static files from dist-web
 app.use(express.static(DIST_DIR));
 
-// Handle client-side routing - serve index.html for all routes
-// Use a middleware approach instead of app.get('*')
+// Handle client-side routing - serve index.html for all other routes
+// This middleware runs only when no static file matches
 app.use((req, res, next) => {
-  res.sendFile(INDEX_PATH, (err) => {
-    if (err) {
-      console.error('Error serving index.html:', err);
-      res.status(500).send('Internal Server Error');
-    }
-  });
+  // Only serve index.html if response hasn't been sent (i.e., no static file matched)
+  if (!res.headersSent) {
+    res.sendFile(INDEX_PATH, (err) => {
+      if (err) {
+        console.error('Error serving index.html:', err);
+        res.status(500).send('Internal Server Error');
+      }
+    });
+  }
 });
 
 // Start server
