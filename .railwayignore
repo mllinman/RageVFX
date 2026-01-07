@@ -1,0 +1,55 @@
+# Railway deployment ignore file
+# Excludes files from Railway builds to speed up deployment
+
+# Development files
+.git/
+.github/
+.vscode/
+.editorconfig
+.prettierrc.json
+.prettierignore
+
+# Documentation (not needed for runtime)
+*.md
+!README.md
+docs/
+examples/
+
+# Build artifacts (will be rebuilt)
+dist/
+node_modules/
+
+# Test files
+*.test.ts
+*.spec.ts
+test-*.ts
+test-*.js
+__tests__/
+coverage/
+
+# Desktop app files (not needed for web deployment)
+build/
+release/
+blender-tools/
+
+# Logs and temp files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files (use Railway dashboard for env vars)
+.env
+.env.local
+.env.*.local
+
+# Electron-specific
+electron-builder.yml

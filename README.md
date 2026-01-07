@@ -818,6 +818,20 @@ Try RageVFX directly in your browser without any installation:
    npm run preview:web
    ```
 
+4. **Deploy to Railway** 🚂
+   
+   Deploy the web version to Railway for public access:
+   ```bash
+   npm start
+   ```
+   
+   The web app is ready for Railway deployment with:
+   - `railway.json` - Railway configuration
+   - `nixpacks.toml` - Build configuration
+   - `server.js` - Production server
+   
+   See [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md) for detailed deployment instructions.
+
 ### 💳 Pro Subscription & Downloads
 
 RageVFX offers a **Free tier** (web app) and **Pro tier** ($9.99/month) with desktop app downloads.
