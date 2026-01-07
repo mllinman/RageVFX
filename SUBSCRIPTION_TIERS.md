@@ -12,68 +12,60 @@ RageVFX uses a tiered subscription model to monetize features while providing a 
 - **Features**: See feature matrix below
 
 ### Pro Tier
-- **Price**: $29.95/month or $299/year (save $60)
+- **Price**: $25/month or $250/year (save $50)
 - **Access**: Web app + Desktop apps (Windows/macOS/Linux)
-- **Features**: See feature matrix below
-
-### Enterprise Tier
-- **Price**: Custom (starting at $99/user/month)
-- **Access**: Everything in Pro + Enterprise features
 - **Features**: See feature matrix below
 
 ## Feature Matrix
 
-| Feature Category | Free | Pro | Enterprise |
-|-----------------|------|-----|------------|
+| Feature Category | Free | Pro |
+|-----------------|------|-----|
 | **Platform Access** |
-| Web Application | ✅ | ✅ | ✅ |
-| Desktop App (Windows) | ❌ | ✅ | ✅ |
-| Desktop App (macOS) | ❌ | ✅ | ✅ |
-| Desktop App (Linux) | ❌ | ✅ | ✅ |
-| Offline Mode | ❌ | ✅ | ✅ |
+| Web Application | ✅ | ✅ |
+| Desktop App (Windows) | ❌ | ✅ |
+| Desktop App (macOS) | ❌ | ✅ |
+| Desktop App (Linux) | ❌ | ✅ |
+| Offline Mode | ❌ | ✅ |
 | **Node Access** |
-| Basic Nodes (75) | ✅ | ✅ | ✅ |
-| Standard Nodes (50) | ⚠️ Limited | ✅ | ✅ |
-| Advanced Nodes (51+) | ❌ | ✅ | ✅ |
-| Total Nodes | 75 | 176+ | 176+ |
+| Basic Nodes (75) | ✅ | ✅ |
+| Standard Nodes (50) | ⚠️ Limited | ✅ |
+| Advanced Nodes (51+) | ❌ | ✅ |
+| Total Nodes | 75 | 176+ |
 | **Export Quality** |
-| Max Resolution | 1080p | 8K+ (16K) | 8K+ (16K) |
-| Format Support | PNG, JPEG | All formats | All formats |
-| Bit Depth | 8-bit | 8/16/32-bit | 8/16/32-bit |
-| Image Sequences | ❌ | ✅ | ✅ |
-| Video Export | ❌ | ✅ | ✅ |
+| Max Resolution | 1080p | 8K+ (16K) |
+| Format Support | PNG, JPEG | All formats |
+| Bit Depth | 8-bit | 8/16/32-bit |
+| Image Sequences | ❌ | ✅ |
+| Video Export | ❌ | ✅ |
 | **VFX Effects** |
-| Basic Effects | ✅ | ✅ | ✅ |
-| Advanced Effects | ❌ | ✅ | ✅ |
-| Blood Splatter | ❌ | ✅ | ✅ |
-| Muzzle Flash | ❌ | ✅ | ✅ |
-| Explosions | ⚠️ Basic | ✅ Advanced | ✅ Advanced |
-| Fluid Simulation | ❌ | ✅ | ✅ |
+| Basic Effects | ✅ | ✅ |
+| Advanced Effects | ❌ | ✅ |
+| Blood Splatter | ❌ | ✅ |
+| Muzzle Flash | ❌ | ✅ |
+| Explosions | ⚠️ Basic | ✅ Advanced |
+| Fluid Simulation | ❌ | ✅ |
 | **3D & Rendering** |
-| Basic 3D | ✅ | ✅ | ✅ |
-| Path Tracing | ❌ | ✅ | ✅ |
-| Volumetric Effects | ❌ | ✅ | ✅ |
-| GPU Acceleration | ⚠️ Limited | ✅ Full | ✅ Full |
+| Basic 3D | ✅ | ✅ |
+| Path Tracing | ❌ | ✅ |
+| Volumetric Effects | ❌ | ✅ |
+| GPU Acceleration | ⚠️ Limited | ✅ Full |
 | **Tools** |
-| MoGraph Tools | ❌ | ✅ | ✅ |
-| Physics Engine | ⚠️ Basic | ✅ Full | ✅ Full |
-| OpenVDB Support | ❌ | ✅ | ✅ |
-| Blender Integration | ❌ | ✅ | ✅ |
-| Camera Tracking | ❌ | ✅ | ✅ |
+| MoGraph Tools | ❌ | ✅ |
+| Physics Engine | ⚠️ Basic | ✅ Full |
+| OpenVDB Support | ❌ | ✅ |
+| Blender Integration | ❌ | ✅ |
+| Camera Tracking | ❌ | ✅ |
 | **Storage** |
-| Cloud Storage | 5GB | Unlimited | Unlimited |
-| Cloud Projects | 3 | Unlimited | Unlimited |
-| Project Sharing | ❌ | ✅ | ✅ |
+| Cloud Storage | 5GB | Unlimited |
+| Cloud Projects | 3 | Unlimited |
+| Project Sharing | ❌ | ✅ |
 | **Support** |
-| Community Support | ✅ | ✅ | ✅ |
-| Email Support | ❌ | ✅ | ✅ |
-| Priority Support | ❌ | ❌ | ✅ |
+| Community Support | ✅ | ✅ |
+| Email Support | ❌ | ✅ |
+| Priority Support | ❌ | ✅ |
 | **Licensing** |
-| Personal Use | ✅ | ✅ | ✅ |
-| Commercial Use | ❌ | ✅ | ✅ |
-| Team Collaboration | ❌ | ❌ | ✅ |
-| SSO Integration | ❌ | ❌ | ✅ |
-| Centralized License | ❌ | ❌ | ✅ |
+| Personal Use | ✅ | ✅ |
+| Commercial Use | ❌ | ✅ |
 
 ## Node Categories & Access
 
@@ -173,8 +165,6 @@ RageVFX uses a tiered subscription model to monetize features while providing a 
 ### Pro Tier Additional Nodes (101 nodes)
 
 All Free tier nodes plus:
-
-**Advanced Compositing (8)**:
 - MergeNode (all blend modes)
 - DeepCompositeNode (full)
 - CryptomatteNode (advanced)
@@ -296,34 +286,6 @@ All Free tier nodes plus:
 
 ⭐ = Flagship Pro features
 
-### Enterprise Tier Additional Features
-
-All Pro tier features plus:
-
-**Collaboration**:
-- Real-time multi-user editing
-- Team project management
-- Centralized asset library
-- Version control integration
-
-**Security**:
-- SSO integration (SAML, OAuth)
-- Role-based access control
-- Audit logging
-- IP restrictions
-
-**Administration**:
-- Centralized license management
-- Usage analytics dashboard
-- Custom branding
-- API access
-
-**Support**:
-- Priority support (24/7)
-- Dedicated account manager
-- Custom training
-- Pipeline consulting
-
 ## Implementation
 
 ### Subscription Verification
@@ -340,7 +302,7 @@ async function getSubscriptionTier(): Promise<Tier> {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     const data = await response.json();
-    return data.tier; // 'free' | 'pro' | 'enterprise'
+    return data.tier; // 'free' | 'pro'
   } catch {
     return 'free';
   }
@@ -355,7 +317,7 @@ interface NodeDefinition {
   id: string;
   name: string;
   category: string;
-  minTier: 'free' | 'pro' | 'enterprise';
+  minTier: 'free' | 'pro';
   description: string;
 }
 
@@ -375,7 +337,7 @@ function canUseNode(nodeId: string, userTier: Tier): boolean {
 }
 
 function compareTiers(userTier: Tier, requiredTier: Tier): number {
-  const tierOrder = { free: 0, pro: 1, enterprise: 2 };
+  const tierOrder = { free: 0, pro: 1 };
   return tierOrder[userTier] - tierOrder[requiredTier];
 }
 ```
@@ -386,7 +348,6 @@ function getMaxResolution(tier: Tier): number {
   switch (tier) {
     case 'free': return 1920; // 1080p max width
     case 'pro': return 16384; // 16K max width
-    case 'enterprise': return 16384; // 16K max width
     default: return 1920;
   }
 }
@@ -591,7 +552,7 @@ function showLicenseActivation() {
 ```typescript
 // Returns user's current subscription tier
 {
-  tier: 'free' | 'pro' | 'enterprise',
+  tier: 'free' | 'pro',
   status: 'active' | 'canceled' | 'past_due',
   periodEnd: '2025-01-31T00:00:00Z',
   cancelAtPeriodEnd: false
@@ -676,10 +637,6 @@ const testUsers = {
     email: 'pro@test.com',
     token: 'test_token_pro',
     licenseKey: 'RAGEVFX-PRO-TEST-TEST-TEST-TEST'
-  },
-  enterprise: {
-    email: 'enterprise@test.com',
-    token: 'test_token_enterprise'
   }
 };
 ```
