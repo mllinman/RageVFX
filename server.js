@@ -13,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const DIST_DIR = path.join(__dirname, 'dist-web');
 const INDEX_PATH = path.join(DIST_DIR, 'index.html');
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 // Load package.json once at startup
 const packageJson = require('./package.json');
@@ -58,7 +59,7 @@ app.use(limiter);
 app.get('/health', (req, res) => {
   const assetsDir = path.join(DIST_DIR, 'assets');
   const assetsExist = fs.existsSync(assetsDir);
-  
+
   res.json({
     status: 'ok',
     version: packageJson.version,
@@ -72,9 +73,21 @@ app.get('/health', (req, res) => {
 });
 
 // Logging middleware for debugging (only in development)
-if (process.env.NODE_ENV !== 'production') {
+if (!IS_PRODUCTION) {
   app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
+    next();
+  });
+} else {
+  // Minimal logging for production (errors only)
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+      if (res.statusCode >= 400) {
+        const duration = Date.now() - start;
+        console.error(`${req.method} ${req.url} - ${res.statusCode} (${duration}ms)`);
+      }
+    });
     next();
   });
 }
@@ -115,8 +128,44 @@ app.use((req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`RageVFX web server running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Serving from: ${DIST_DIR}`);
-  console.log(`Visit: http://localhost:${PORT}`);
+  if (IS_PRODUCTION) {
+    console.log(`Railway deployment ready`);
+  } else {
+    console.log(`Visit: http://localhost:${PORT}`);
+  }
+});
+
+// Graceful shutdown handling for Railway
+const gracefulShutdown = (signal) => {
+  console.log(`\n${signal} received. Starting graceful shutdown...`);
+
+  server.close(() => {
+    console.log('HTTP server closed');
+    process.exit(0);
+  });
+
+  // Force shutdown after 10 seconds
+  setTimeout(() => {
+    console.error('Forced shutdown after timeout');
+    process.exit(1);
+  }, 10000);
+};
+
+// Handle shutdown signals
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// Handle uncaught errors
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  gracefulShutdown('UNCAUGHT_EXCEPTION');
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  gracefulShutdown('UNHANDLED_REJECTION');
 });

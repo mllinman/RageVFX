@@ -12,3 +12,7 @@ cmds = ["npm run build:web"]
 
 [start]
 cmd = "node server.js"
+
+# Environment variables for production
+[variables]
+NODE_ENV = "production"
