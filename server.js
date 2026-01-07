@@ -5,6 +5,7 @@
  */
 
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const path = require('path');
 const fs = require('fs');
 
@@ -27,6 +28,18 @@ if (!fs.existsSync(INDEX_PATH)) {
   process.exit(1);
 }
 
+// Rate limiting middleware - prevents abuse
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // Limit each IP to 1000 requests per windowMs
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: 'Too many requests from this IP, please try again later.'
+});
+
+// Apply rate limiting to all requests
+app.use(limiter);
+
 // Serve static files from dist-web
 app.use(express.static(DIST_DIR));
 
@@ -38,9 +51,14 @@ app.use((req, res, next) => {
     res.sendFile(INDEX_PATH, (err) => {
       if (err) {
         console.error('Error serving index.html:', err);
-        res.status(500).send('Internal Server Error');
+        if (!res.headersSent) {
+          res.status(500).send('Internal Server Error');
+        }
       }
     });
+  } else {
+    // Response already sent by static middleware
+    next();
   }
 });
 
