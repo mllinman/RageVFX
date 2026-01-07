@@ -7,7 +7,7 @@
     "build": "tsc",
     "build:clean": "npm run clean && npm run build",
     "clean": "rimraf dist dist-web",
-    "start": "node server.js",
+    "start": "npm run build:web && node server.js",
     "start:electron": "npm run build && electron .",
     "dev": "tsc --watch",
     "test": "jest",
