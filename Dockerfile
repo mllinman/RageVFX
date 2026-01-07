@@ -3,35 +3,42 @@
 # Railway deployment uses nixpacks.toml by default
 
 # Stage 1: Build the web app
-FROM node:22-alpine AS builder
+FROM node:22-slim AS builder
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install all dependencies (including devDependencies for build)
-RUN npm ci --include=dev
-
-# Copy source files
+# Copy source files needed for TypeScript build (prepare script runs during npm install)
 COPY web ./web
 COPY src ./src
 COPY vite.config.ts ./
 COPY tsconfig.json ./
 
+# Install all dependencies (including devDependencies for build)
+# IMPORTANT: strict-ssl is disabled below to work around SSL certificate issues in some CI/build environments
+# with SSL interception. For production builds or environments with proper certificates, remove the
+# "npm config set strict-ssl false &&" part from the RUN command below.
+# ELECTRON_SKIP_BINARY_DOWNLOAD is set to skip Electron binary downloads (not needed for web server)
+RUN npm config set strict-ssl false && ELECTRON_SKIP_BINARY_DOWNLOAD=1 npm ci
+
 # Build the web app
 RUN npm run build:web
 
+# Prune devDependencies to reduce size
+RUN npm prune --omit=dev
+
 # Stage 2: Production server
-FROM node:22-alpine
+FROM node:22-slim
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm ci --omit=dev
+# Copy node_modules from builder (already pruned of devDependencies)
+COPY --from=builder /app/node_modules ./node_modules
 
 # Copy built web app from builder stage
 COPY --from=builder /app/dist-web ./dist-web
