@@ -3,7 +3,7 @@
 # Railway deployment uses nixpacks.toml by default
 
 # Stage 1: Build the web app
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -23,7 +23,7 @@ COPY tsconfig.json ./
 RUN npm run build:web
 
 # Stage 2: Production server
-FROM node:20-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 

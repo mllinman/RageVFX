@@ -2,7 +2,7 @@
 # https://nixpacks.com/docs/configuration/file
 
 [phases.setup]
-nixPkgs = ["nodejs-20_x"]
+nixPkgs = ["nodejs-22_x"]
 
 [phases.install]
 cmds = ["npm ci --include=dev"]
