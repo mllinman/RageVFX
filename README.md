@@ -766,7 +766,7 @@ Comprehensive application customization:
    ```bash
    npm start
    ```
-   Starts the production web server on port 3000
+   Builds the web app (if not already built) and starts the production web server on port 3000
    
    **For Desktop/Electron Version**:
    ```bash
