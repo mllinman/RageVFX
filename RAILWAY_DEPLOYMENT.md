@@ -165,6 +165,45 @@ npm install --save express
 ls -la dist-web/
 ```
 
+### White Page / App Not Loading
+
+**Problem**: The deployed app shows a white page with basic HTML but no interactive UI
+**Cause**: This happens when the build step fails silently, resulting in missing JavaScript/CSS assets. Railway sets `NODE_ENV=production` which causes `npm ci` to skip dev dependencies unless explicitly instructed to include them.
+
+**Solution**: Ensure `nixpacks.toml` includes the `--include=dev` flag:
+```toml
+[phases.install]
+cmds = ["npm ci --include=dev"]
+```
+
+**Why this is needed**: Vite (the build tool) is a dev dependency. When Railway runs the build in production mode, `npm ci` without `--include=dev` will skip vite, causing `npm run build:web` to fail.
+
+**Verification**: After deployment, check the `/health` endpoint to verify the build completed:
+```bash
+curl https://your-app.railway.app/health
+```
+
+Expected response:
+```json
+{
+  "status": "ok",
+  "version": "3.11.0",
+  "indexExists": true,
+  "assetsExists": true,
+  "assetCount": 7
+}
+```
+
+If `assetsExists` is false or `assetCount` is 0, the build failed.
+
+### Cached Old Version
+
+**Problem**: Deployment succeeds but the app shows an old version
+**Solution**: 
+1. Clear Railway's build cache from the dashboard
+2. Trigger a redeploy
+3. Check the `/health` endpoint to verify the new version number
+
 ## Performance Optimization
 
 ### Enable Compression
@@ -189,7 +228,24 @@ After deployment, monitor your application:
 
 1. **Railway Dashboard**: View logs, metrics, and deployment status
 2. **Application Logs**: Check for errors in the Railway logs
-3. **Health Check**: Railway automatically performs health checks
+3. **Health Check Endpoint**: The app provides a `/health` endpoint for monitoring
+   - Access: `https://your-app.railway.app/health`
+   - Returns: JSON with version, build status, and asset information
+   - Example response:
+   ```json
+   {
+     "status": "ok",
+     "version": "3.11.0",
+     "distDir": "/app/dist-web",
+     "indexExists": true,
+     "assetsExists": true,
+     "assetCount": 7,
+     "timestamp": "2026-01-07T14:00:00.000Z",
+     "nodeEnv": "production"
+   }
+   ```
+   - Use this to verify deployments and monitor build status
+4. **Railway Health Checks**: Railway automatically performs health checks on the root endpoint
 
 ## Custom Domain
 
