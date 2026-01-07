@@ -762,11 +762,17 @@ Comprehensive application customization:
 
 4. **Start RageVFX**
    
-   **For Web Version (Default)**:
+   **For Web Version (Production)**:
    ```bash
    npm start
    ```
-   Builds the web app (if not already built) and starts the production web server on port 3000
+   Builds the web app and starts the production web server on port 3000
+   
+   **For Web Version (Development)**:
+   ```bash
+   npm run dev:web
+   ```
+   Starts Vite dev server with hot reload at http://localhost:3000
    
    **For Desktop/Electron Version**:
    ```bash
