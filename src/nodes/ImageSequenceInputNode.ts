@@ -142,6 +142,12 @@ export class ImageSequenceInputNode extends Node {
     endFrame: number
   ): Promise<void> {
     // TODO: Implement actual file loading
+    // Requirements for production implementation:
+    // 1. Parse file pattern (####, %04d, etc.)
+    // 2. Check filesystem for available frames
+    // 3. Load images using appropriate decoder (OpenEXR, TIFF, etc.)
+    // 4. Handle missing frames per missingFrameMode setting
+    // 5. Apply color space conversions as needed
     // For now, generate sample frames
     console.log(`Loading sequence from ${directory}/${filePattern}`);
     console.log(`Frame range: ${startFrame}-${endFrame}`);
@@ -226,12 +232,18 @@ export class ImageSequenceInputNode extends Node {
       gamma: number;
     }
   ): ImageData {
+    // TODO: Implement actual image transformations
+    // Required operations:
+    // 1. Flip operations: rearrange pixel data based on flags
+    // 2. Exposure adjustment: multiply RGB values by 2^exposure
+    // 3. Gamma correction: apply power curve to RGB values
+    // 4. Preserve alpha channel
     // Clone image data for transformation
     const newData = new Uint8Array(imageData.data.length);
     newData.set(imageData.data as Uint8Array);
     
-    // TODO: Implement actual transformations
-    // For now, just return the original
+    // Placeholder: return original data
+    // In production, apply transformations to newData
     
     return {
       ...imageData,

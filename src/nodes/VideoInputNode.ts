@@ -111,6 +111,12 @@ export class VideoInputNode extends Node {
 
   private async loadVideo(filepath: string): Promise<void> {
     // TODO: Implement actual video loading with FFmpeg or browser Video API
+    // Requirements for production implementation:
+    // 1. Use FFmpeg.js or native <video> element for decoding
+    // 2. Extract frame data at specified framerate
+    // 3. Apply codec-specific decompression
+    // 4. Handle color space conversion
+    // 5. Support all listed codecs (H.264, H.265, ProRes, VP9, AV1)
     // For now, generate sample frames
     console.log(`Loading video: ${filepath}`);
     

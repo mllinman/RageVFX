@@ -166,7 +166,8 @@ interface UIConnection {
   controlPoints?: { x: number; y: number }[];
 }
 
-// Forward declaration for ViewportManager to avoid circular dependency
+// Interface for viewport manager to allow decoupled dependency injection
+// Prevents circular dependency between NodeGraphUI and ViewportManager
 interface IViewportManager {
   setImage(imageData: ImageData): void;
 }
@@ -1746,7 +1747,7 @@ class NodeGraphUI {
     minimap.width = 200;
     minimap.height = 150;
     
-    // Background
+    // Draw minimap background with dark theme
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, minimap.width, minimap.height);
     
@@ -2043,6 +2044,11 @@ class NodeGraphUI {
   }
 
   private generateSampleOutput(outputNode: UINode): ImageData | null {
+    // TODO: Implement actual node graph output rendering
+    // This currently generates procedural preview - in production this should:
+    // 1. Traverse the node graph from output node backwards
+    // 2. Execute each connected node to get actual rendered data
+    // 3. Return the final composited image from the graph
     // Generate a sample procedural image based on connected nodes
     // This demonstrates the concept - in production this would use actual node output
     const width = 512;
