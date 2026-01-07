@@ -95,7 +95,7 @@ The following files are used for Railway deployment:
 nixPkgs = ["nodejs-20_x"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = ["npm ci --include=dev"]
 
 [phases.build]
 cmds = ["npm run build:web"]
@@ -103,6 +103,8 @@ cmds = ["npm run build:web"]
 [start]
 cmd = "node server.js"
 ```
+
+**Note**: The `--include=dev` flag is required in the install phase because vite and other build tools are in devDependencies.
 
 ### package.json (relevant scripts)
 ```json

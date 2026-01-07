@@ -6,18 +6,39 @@
 
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DIST_DIR = path.join(__dirname, 'dist-web');
+const INDEX_PATH = path.join(DIST_DIR, 'index.html');
+
+// Check if build directory exists
+if (!fs.existsSync(DIST_DIR)) {
+  console.error(`Error: Build directory not found at ${DIST_DIR}`);
+  console.error('Please run "npm run build:web" first to generate the web app.');
+  process.exit(1);
+}
+
+// Check if index.html exists
+if (!fs.existsSync(INDEX_PATH)) {
+  console.error(`Error: index.html not found at ${INDEX_PATH}`);
+  console.error('Please run "npm run build:web" to generate the web app.');
+  process.exit(1);
+}
 
 // Serve static files from dist-web
 app.use(express.static(DIST_DIR));
 
 // Handle client-side routing - serve index.html for all routes
 // Use a middleware approach instead of app.get('*')
-app.use((req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
+app.use((req, res, next) => {
+  res.sendFile(INDEX_PATH, (err) => {
+    if (err) {
+      console.error('Error serving index.html:', err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
 });
 
 // Start server
