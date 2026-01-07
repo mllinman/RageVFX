@@ -14,6 +14,7 @@ RUN npm ci --include=dev
 
 # Copy source files
 COPY web ./web
+COPY src ./src
 COPY vite.config.ts ./
 COPY tsconfig.json ./
 
