@@ -24,7 +24,7 @@ const PRICING_INFO = {
   },
   pro: {
     name: 'RageVFX Pro',
-    price: '$29.95/month',
+    price: '$25/month',
   },
 };
 
