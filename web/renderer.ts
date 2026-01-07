@@ -166,6 +166,12 @@ interface UIConnection {
   controlPoints?: { x: number; y: number }[];
 }
 
+// Interface for viewport manager to allow decoupled dependency injection
+// Prevents circular dependency between NodeGraphUI and ViewportManager
+interface IViewportManager {
+  setImage(imageData: ImageData): void;
+}
+
 class NodeGraphUI {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -208,6 +214,8 @@ class NodeGraphUI {
   private connectionStyle: 'bezier' | 'linear' | 'step' = 'bezier';
   private showNodeShadows = true;
   private showConnectionFlow = true;
+  private viewportManager: IViewportManager | null = null;
+  private autoRenderOnExecute = true;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -1739,6 +1747,7 @@ class NodeGraphUI {
     minimap.width = 200;
     minimap.height = 150;
     
+    // Draw minimap background with dark theme
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, minimap.width, minimap.height);
     
@@ -1752,22 +1761,74 @@ class NodeGraphUI {
       (minimap.height - padding * 2) / bounds.height
     );
     
-    // Draw nodes
-    ctx.fillStyle = '#ff6b35';
+    // Draw connections first (under nodes)
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.3;
+    this.connections.forEach(conn => {
+      const fromNode = this.nodes.find(n => n.outputs.some(o => o.id === conn.from));
+      const toNode = this.nodes.find(n => n.inputs.some(i => i.id === conn.to));
+      
+      if (fromNode && toNode) {
+        const fromSocket = fromNode.outputs.find(o => o.id === conn.from);
+        const toSocket = toNode.inputs.find(i => i.id === conn.to);
+        
+        if (fromSocket && toSocket) {
+          const x1 = padding + (fromSocket.x - bounds.minX) * scale;
+          const y1 = padding + (fromSocket.y - bounds.minY) * scale;
+          const x2 = padding + (toSocket.x - bounds.minX) * scale;
+          const y2 = padding + (toSocket.y - bounds.minY) * scale;
+          
+          ctx.strokeStyle = '#888';
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+      }
+    });
+    ctx.globalAlpha = 1.0;
+    
+    // Draw nodes with proper category colors
     this.nodes.forEach(node => {
       const x = padding + (node.x - bounds.minX) * scale;
       const y = padding + (node.y - bounds.minY) * scale;
-      const w = node.width * scale;
-      const h = node.height * scale;
+      const w = Math.max(node.width * scale, 2); // Minimum 2px width
+      const h = Math.max(node.height * scale, 2); // Minimum 2px height
+      
+      // Get node color based on category
+      const nodeColor = node.color || CATEGORY_COLORS[node.category] || CATEGORY_COLORS['Default'];
+      
+      // Fill node with category color
+      ctx.fillStyle = nodeColor.primary;
       ctx.fillRect(x, y, w, h);
+      
+      // Draw border for selected nodes
+      if (node.selected) {
+        ctx.strokeStyle = '#ffdd00';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, w, h);
+      }
+      
+      // Draw subtle border for disabled nodes
+      if (node.disabled) {
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(x, y, w, h);
+        ctx.globalAlpha = 1.0;
+      }
     });
     
-    // Draw viewport
+    // Draw viewport indicator
     const viewX = padding + (-this.offset.x / this.scale - bounds.minX) * scale;
     const viewY = padding + (-this.offset.y / this.scale - bounds.minY) * scale;
     const viewW = (this.canvas.width / this.scale) * scale;
     const viewH = (this.canvas.height / this.scale) * scale;
     
+    // Semi-transparent fill for viewport area
+    ctx.fillStyle = 'rgba(74, 158, 255, 0.1)';
+    ctx.fillRect(viewX, viewY, viewW, viewH);
+    
+    // Bright border for viewport
     ctx.strokeStyle = '#4a9eff';
     ctx.lineWidth = 2;
     ctx.strokeRect(viewX, viewY, viewW, viewH);
@@ -1942,12 +2003,109 @@ class NodeGraphUI {
     
     try {
       await this.app.executeGraph();
+      
+      // After execution, update render view with output nodes
+      if (this.autoRenderOnExecute && this.viewportManager) {
+        this.updateRenderView();
+      }
+      
       this.showToast('Graph executed successfully!', 'success');
       if (statusText) statusText.textContent = 'Execution complete';
     } catch (error) {
       this.showToast(`Execution failed: ${error}`, 'error');
       if (statusText) statusText.textContent = 'Execution failed';
     }
+  }
+
+  private updateRenderView(): void {
+    // Find output nodes
+    const outputNodes = this.nodes.filter(n => n.type === 'Output' && !n.disabled);
+    
+    if (outputNodes.length === 0) {
+      return;
+    }
+    
+    // For now, generate a sample image for demonstration
+    // In a real implementation, this would get the actual rendered output from the node graph
+    const sampleImage = this.generateSampleOutput(outputNodes[0]);
+    if (sampleImage && this.viewportManager) {
+      this.viewportManager.setImage(sampleImage);
+      
+      // Auto-switch to render view if not already there
+      const viewportMode = (document.getElementById('viewport-mode') as HTMLSelectElement)?.value;
+      if (viewportMode !== 'render') {
+        const modeSelector = document.getElementById('viewport-mode') as HTMLSelectElement;
+        if (modeSelector) {
+          modeSelector.value = 'render';
+          modeSelector.dispatchEvent(new Event('change'));
+        }
+      }
+    }
+  }
+
+  private generateSampleOutput(outputNode: UINode): ImageData | null {
+    // TODO: Implement actual node graph output rendering
+    // This currently generates procedural preview - in production this should:
+    // 1. Traverse the node graph from output node backwards
+    // 2. Execute each connected node to get actual rendered data
+    // 3. Return the final composited image from the graph
+    // Generate a sample procedural image based on connected nodes
+    // This demonstrates the concept - in production this would use actual node output
+    const width = 512;
+    const height = 512;
+    const imageData = new ImageData(width, height);
+    const data = imageData.data;
+    
+    // Find connected VFX nodes to simulate their output
+    const connectedVFXNodes = this.connections
+      .filter(conn => {
+        const targetNode = this.nodes.find(n => n.inputs.some(i => i.id === conn.to));
+        return targetNode?.id === outputNode.id;
+      })
+      .map(conn => {
+        const sourceNode = this.nodes.find(n => n.outputs.some(o => o.id === conn.from));
+        return sourceNode;
+      })
+      .filter(n => n && VFX_NODE_TYPES.has(n.type));
+    
+    // Generate gradient based on node types
+    const hasFireNode = connectedVFXNodes.some(n => n?.type === 'Fire');
+    const hasWaterNode = connectedVFXNodes.some(n => n?.type === 'Water');
+    const hasCloudNode = connectedVFXNodes.some(n => n?.type === 'Clouds');
+    
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const i = (y * width + x) * 4;
+        
+        // Create a gradient based on connected nodes
+        if (hasFireNode) {
+          data[i] = Math.floor(255 * (1 - y / height)); // Red gradient
+          data[i + 1] = Math.floor(128 * (1 - y / height)); // Orange
+          data[i + 2] = 0;
+        } else if (hasWaterNode) {
+          data[i] = Math.floor(64 * y / height); // Blue gradient
+          data[i + 1] = Math.floor(128 * y / height);
+          data[i + 2] = Math.floor(255 * y / height);
+        } else if (hasCloudNode) {
+          const noise = Math.random() * 128 + 127;
+          data[i] = noise; // White/gray clouds
+          data[i + 1] = noise;
+          data[i + 2] = noise;
+        } else {
+          // Default gradient
+          data[i] = Math.floor(255 * x / width);
+          data[i + 1] = Math.floor(255 * y / height);
+          data[i + 2] = Math.floor(255 * (1 - x / width));
+        }
+        data[i + 3] = 255; // Alpha
+      }
+    }
+    
+    return imageData;
+  }
+
+  setViewportManager(manager: IViewportManager): void {
+    this.viewportManager = manager;
   }
 
   clearGraph(): void {
@@ -2096,9 +2254,57 @@ class NodeGraphUI {
   toggleMinimap(): void {
     this.showMinimap = !this.showMinimap;
     const minimap = document.getElementById('minimap');
-    if (minimap) minimap.classList.toggle('hidden', !this.showMinimap);
+    if (minimap) {
+      minimap.classList.toggle('hidden', !this.showMinimap);
+      
+      // Setup click navigation if showing minimap
+      if (this.showMinimap) {
+        this.setupMinimapNavigation();
+      }
+    }
     const btn = document.getElementById('minimap-btn');
     if (btn) btn.classList.toggle('active', this.showMinimap);
+  }
+
+  private setupMinimapNavigation(): void {
+    const minimapCanvas = document.getElementById('minimap-canvas') as HTMLCanvasElement;
+    if (!minimapCanvas) return;
+    
+    // Remove existing listener if any
+    const newCanvas = minimapCanvas.cloneNode(true) as HTMLCanvasElement;
+    minimapCanvas.parentNode?.replaceChild(newCanvas, minimapCanvas);
+    
+    newCanvas.addEventListener('click', (e) => this.onMinimapClick(e));
+    newCanvas.style.cursor = 'pointer';
+  }
+
+  private onMinimapClick(e: MouseEvent): void {
+    const minimap = e.target as HTMLCanvasElement;
+    const rect = minimap.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+    
+    if (this.nodes.length === 0) return;
+    
+    // Calculate minimap dimensions and scale
+    const minimapWidth = 200;
+    const minimapHeight = 150;
+    const padding = 20;
+    const bounds = this.getNodeBounds();
+    const scale = Math.min(
+      (minimapWidth - padding * 2) / bounds.width,
+      (minimapHeight - padding * 2) / bounds.height
+    );
+    
+    // Convert click position to graph coordinates
+    const graphX = bounds.minX + (clickX - padding) / scale;
+    const graphY = bounds.minY + (clickY - padding) / scale;
+    
+    // Center the viewport on the clicked position
+    this.offset.x = this.canvas.width / 2 - graphX * this.scale;
+    this.offset.y = this.canvas.height / 2 - graphY * this.scale;
+    
+    this.render();
   }
 
   // Project management
@@ -2876,6 +3082,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize viewport manager
     const viewportManager = new ViewportManager();
+    
+    // Connect graph UI to viewport manager for real-time rendering
+    graphUI.setViewportManager(viewportManager);
     
     // Initialize timeline manager
     const timelineManager = new TimelineManager();
