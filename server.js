@@ -14,6 +14,9 @@ const PORT = process.env.PORT || 3000;
 const DIST_DIR = path.join(__dirname, 'dist-web');
 const INDEX_PATH = path.join(DIST_DIR, 'index.html');
 
+// Load package.json once at startup
+const packageJson = require('./package.json');
+
 // Check if build directory exists
 if (!fs.existsSync(DIST_DIR)) {
   console.error(`Error: Build directory not found at ${DIST_DIR}`);
@@ -53,16 +56,16 @@ app.use(limiter);
 
 // Health check endpoint (before logging middleware)
 app.get('/health', (req, res) => {
-  const packageJson = require('./package.json');
+  const assetsDir = path.join(DIST_DIR, 'assets');
+  const assetsExist = fs.existsSync(assetsDir);
+  
   res.json({
     status: 'ok',
     version: packageJson.version,
     distDir: DIST_DIR,
     indexExists: fs.existsSync(INDEX_PATH),
-    assetsExists: fs.existsSync(path.join(DIST_DIR, 'assets')),
-    assetCount: fs.existsSync(path.join(DIST_DIR, 'assets')) 
-      ? fs.readdirSync(path.join(DIST_DIR, 'assets')).length 
-      : 0,
+    assetsExists: assetsExist,
+    assetCount: assetsExist ? fs.readdirSync(assetsDir).length : 0,
     timestamp: new Date().toISOString(),
     nodeEnv: process.env.NODE_ENV || 'development'
   });
