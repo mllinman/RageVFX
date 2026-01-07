@@ -761,9 +761,18 @@ Comprehensive application customization:
    ```
 
 4. **Start RageVFX**
+   
+   **For Web Version (Default)**:
    ```bash
    npm start
    ```
+   Starts the production web server on port 3000
+   
+   **For Desktop/Electron Version**:
+   ```bash
+   npm run start:electron
+   ```
+   Launches the Electron desktop application
 
 ### 🛠️ Development Commands
 
@@ -772,6 +781,10 @@ Comprehensive application customization:
 npm run build              # Build TypeScript
 npm run build:clean        # Clean and build
 npm run build:web          # Build web version
+
+# Start/Run
+npm start                  # Start web server (production)
+npm run start:electron     # Start desktop app (Electron)
 
 # Development
 npm run dev                # Watch mode (TypeScript)
@@ -817,6 +830,20 @@ Try RageVFX directly in your browser without any installation:
    ```bash
    npm run preview:web
    ```
+
+4. **Deploy to Railway** 🚂
+   
+   Deploy the web version to Railway for public access:
+   ```bash
+   npm start
+   ```
+   
+   The web app is ready for Railway deployment with:
+   - `railway.json` - Railway configuration
+   - `nixpacks.toml` - Build configuration
+   - `server.js` - Production server
+   
+   See [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md) for detailed deployment instructions.
 
 ### 💳 Pro Subscription & Downloads
 
