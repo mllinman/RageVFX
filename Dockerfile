@@ -17,9 +17,10 @@ COPY vite.config.ts ./
 COPY tsconfig.json ./
 
 # Install all dependencies (including devDependencies for build)
-# Disable strict SSL to work around certificate issues in build environment
-# ELECTRON_SKIP_BINARY_DOWNLOAD is set to skip Electron binary downloads
-RUN npm config set strict-ssl false && ELECTRON_SKIP_BINARY_DOWNLOAD=1 npm install
+# NOTE: In some build environments with SSL interception, certificate errors may occur.
+# If you encounter "self-signed certificate" errors, add: npm config set strict-ssl false &&
+# ELECTRON_SKIP_BINARY_DOWNLOAD is set to skip Electron binary downloads (not needed for web server)
+RUN npm config set strict-ssl false && ELECTRON_SKIP_BINARY_DOWNLOAD=1 npm ci
 
 # Build the web app
 RUN npm run build:web
