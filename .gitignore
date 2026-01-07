@@ -14,10 +14,8 @@ coverage/
 *.swo
 *~
 
-# Marketing website config (contains API keys)
-marketing/config.js
-
-# Next.js dashboard build artifacts
+# Dashboard dependencies (separate Next.js app)
+dashboard/node_modules/
 dashboard/.next/
 dashboard/out/
 

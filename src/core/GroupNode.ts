@@ -3,7 +3,7 @@
  * Allows for organization, macros, and reusable custom node sets
  */
 
-import { Node, DataType, NodeMetadata } from './Node';
+import { Node, DataType } from './Node';
 import { NodeGraph } from './NodeGraph';
 
 export class GroupNode extends Node {
