@@ -51,11 +51,30 @@ const limiter = rateLimit({
 // Apply rate limiting to all requests
 app.use(limiter);
 
-// Logging middleware for debugging
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
+// Health check endpoint (before logging middleware)
+app.get('/health', (req, res) => {
+  const packageJson = require('./package.json');
+  res.json({
+    status: 'ok',
+    version: packageJson.version,
+    distDir: DIST_DIR,
+    indexExists: fs.existsSync(INDEX_PATH),
+    assetsExists: fs.existsSync(path.join(DIST_DIR, 'assets')),
+    assetCount: fs.existsSync(path.join(DIST_DIR, 'assets')) 
+      ? fs.readdirSync(path.join(DIST_DIR, 'assets')).length 
+      : 0,
+    timestamp: new Date().toISOString(),
+    nodeEnv: process.env.NODE_ENV || 'development'
+  });
 });
+
+// Logging middleware for debugging (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+  });
+}
 
 // Serve static files from dist-web with proper headers
 app.use(express.static(DIST_DIR, {
