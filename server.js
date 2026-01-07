@@ -18,6 +18,8 @@ const INDEX_PATH = path.join(DIST_DIR, 'index.html');
 if (!fs.existsSync(DIST_DIR)) {
   console.error(`Error: Build directory not found at ${DIST_DIR}`);
   console.error('Please run "npm run build:web" first to generate the web app.');
+  console.error('Current directory:', __dirname);
+  console.error('Directory contents:', fs.readdirSync(__dirname));
   process.exit(1);
 }
 
@@ -25,7 +27,16 @@ if (!fs.existsSync(DIST_DIR)) {
 if (!fs.existsSync(INDEX_PATH)) {
   console.error(`Error: index.html not found at ${INDEX_PATH}`);
   console.error('Please run "npm run build:web" to generate the web app.');
+  console.error('dist-web contents:', fs.readdirSync(DIST_DIR));
   process.exit(1);
+}
+
+// Log build directory contents for debugging
+console.log('Build directory exists:', DIST_DIR);
+console.log('Files in dist-web:', fs.readdirSync(DIST_DIR));
+const assetsDir = path.join(DIST_DIR, 'assets');
+if (fs.existsSync(assetsDir)) {
+  console.log('Assets found:', fs.readdirSync(assetsDir).length, 'files');
 }
 
 // Rate limiting middleware - prevents abuse
@@ -40,8 +51,27 @@ const limiter = rateLimit({
 // Apply rate limiting to all requests
 app.use(limiter);
 
-// Serve static files from dist-web
-app.use(express.static(DIST_DIR));
+// Logging middleware for debugging
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
+// Serve static files from dist-web with proper headers
+app.use(express.static(DIST_DIR, {
+  setHeaders: (res, filepath) => {
+    // Set proper MIME types
+    if (filepath.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    } else if (filepath.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css; charset=utf-8');
+    }
+    // Enable caching for assets
+    if (filepath.includes('/assets/')) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  }
+}));
 
 // Handle client-side routing - serve index.html for all other routes
 // This middleware runs only when no static file matches
