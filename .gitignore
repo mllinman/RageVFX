@@ -17,6 +17,10 @@ coverage/
 # Marketing website config (contains API keys)
 marketing/config.js
 
+# Next.js dashboard build artifacts
+dashboard/.next/
+dashboard/out/
+
 # Build artifacts
 *.ico
 *.icns
