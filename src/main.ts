@@ -98,3 +98,36 @@ ipcMain.handle('update-node-parameter', async (event, nodeId: string, key: strin
 ipcMain.handle('group-nodes', async (event, nodeIds: string[], groupName: string) => {
   return vfxApp?.groupNodes(nodeIds, groupName);
 });
+
+ipcMain.handle('apply-preset', async (event, nodeId: string, presetParams: any) => {
+  if (!vfxApp) return false;
+  
+  try {
+    for (const [key, value] of Object.entries(presetParams)) {
+      await vfxApp.updateNodeParameter(nodeId, key, value);
+    }
+    return true;
+  } catch (error) {
+    console.error('Failed to apply preset:', error);
+    return false;
+  }
+});
+
+ipcMain.handle('clear-render-view', async () => {
+  // Clear any cached render data
+  return true;
+});
+
+ipcMain.handle('set-timeline', async (event, start: number, end: number, fps: number) => {
+  // Store timeline settings
+  return { start, end, fps };
+});
+
+ipcMain.handle('create-camera', async (event, cameraId: string) => {
+  return vfxApp?.createNode('Camera', cameraId);
+});
+
+ipcMain.handle('set-active-camera', async (event, cameraId: string) => {
+  // Set the active camera for rendering
+  return true;
+});

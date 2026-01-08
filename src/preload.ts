@@ -37,5 +37,24 @@ contextBridge.exposeInMainWorld('ragevfxAPI', {
     ipcRenderer.invoke('update-node-parameter', nodeId, key, value),
 
   groupNodes: (nodeIds: string[], groupName: string) =>
-    ipcRenderer.invoke('group-nodes', nodeIds, groupName)
+    ipcRenderer.invoke('group-nodes', nodeIds, groupName),
+
+  // Preset operations
+  applyPreset: (nodeId: string, presetParams: any) =>
+    ipcRenderer.invoke('apply-preset', nodeId, presetParams),
+
+  // View operations
+  clearRenderView: () =>
+    ipcRenderer.invoke('clear-render-view'),
+
+  // Timeline operations
+  setTimeline: (start: number, end: number, fps: number) =>
+    ipcRenderer.invoke('set-timeline', start, end, fps),
+
+  // Camera operations
+  createCamera: (cameraId: string) =>
+    ipcRenderer.invoke('create-camera', cameraId),
+
+  setActiveCamera: (cameraId: string) =>
+    ipcRenderer.invoke('set-active-camera', cameraId)
 });

@@ -221,6 +221,45 @@ class NodeGraphUI {
     </div>`;
 
     try {
+      // Add preset selector if presets are available for this node type
+      const presets = this.getPresetsForNode(node.type);
+      if (presets && presets.length > 0) {
+        const presetSection = document.createElement('div');
+        presetSection.className = 'preset-section';
+        
+        const presetLabel = document.createElement('label');
+        presetLabel.textContent = '🎨 Presets';
+        presetLabel.className = 'preset-label';
+        
+        const presetSelect = document.createElement('select');
+        presetSelect.className = 'preset-select';
+        
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = '-- Select Preset --';
+        presetSelect.appendChild(defaultOption);
+        
+        presets.forEach((preset, index) => {
+          const option = document.createElement('option');
+          option.value = index;
+          option.textContent = `${preset.name} - ${preset.description}`;
+          presetSelect.appendChild(option);
+        });
+        
+        presetSelect.addEventListener('change', async (e) => {
+          if (e.target.value !== '') {
+            const preset = presets[parseInt(e.target.value)];
+            await this.applyPresetToNode(node, preset);
+            // Refresh the properties panel to show updated values
+            this.updatePropertiesPanel(node);
+          }
+        });
+        
+        presetSection.appendChild(presetLabel);
+        presetSection.appendChild(presetSelect);
+        container.appendChild(presetSection);
+      }
+
       // Fetch full properties from core via IPC
       const props = await window.ragevfxAPI.getNodeProperties(node.id);
       if (!props) return;
@@ -257,6 +296,22 @@ class NodeGraphUI {
           row.appendChild(label);
           row.appendChild(input);
           row.appendChild(valueDisplay);
+        } else if (typeof value === 'object' && value !== null) {
+          // Handle color objects
+          const valueStr = JSON.stringify(value);
+          input = document.createElement('input');
+          input.type = 'text';
+          input.value = valueStr;
+          input.addEventListener('change', (e) => {
+            try {
+              const parsed = JSON.parse(e.target.value);
+              window.ragevfxAPI.updateNodeParameter(node.id, key, parsed);
+            } catch (err) {
+              console.error('Invalid JSON:', err);
+            }
+          });
+          row.appendChild(label);
+          row.appendChild(input);
         } else {
           input = document.createElement('input');
           input.type = 'text';
@@ -286,6 +341,101 @@ class NodeGraphUI {
     } catch (err) {
       console.error('Failed to load node properties:', err);
     }
+  }
+
+  // Get presets for a specific node type
+  getPresetsForNode(nodeType) {
+    // Preset definitions for various node types
+    const presets = {
+      Fire: [
+        {
+          name: 'Campfire',
+          description: 'Small, warm campfire',
+          parameters: { intensity: 0.8, speed: 0.6, turbulence: 1.5, scale: 0.008, height_falloff: 0.8 }
+        },
+        {
+          name: 'Explosion',
+          description: 'Intense explosion fire',
+          parameters: { intensity: 1.5, speed: 3.0, turbulence: 4.0, scale: 0.003, height_falloff: 0.4 }
+        },
+        {
+          name: 'Dragon Fire',
+          description: 'Magical blue-tinted fire',
+          parameters: { intensity: 1.2, speed: 1.5, turbulence: 3.0, scale: 0.004, height_falloff: 0.6 }
+        },
+        {
+          name: 'Torch',
+          description: 'Medieval torch flame',
+          parameters: { intensity: 0.9, speed: 0.8, turbulence: 2.0, scale: 0.007, height_falloff: 0.75 }
+        }
+      ],
+      Clouds: [
+        {
+          name: 'Cumulus',
+          description: 'Puffy white clouds',
+          parameters: { coverage: 0.5, scale: 0.003, speed: 0.2, layers: 3, fluffiness: 0.6, type: 'cumulus' }
+        },
+        {
+          name: 'Storm Clouds',
+          description: 'Dark storm clouds',
+          parameters: { coverage: 0.8, scale: 0.002, speed: 1.5, layers: 4, fluffiness: 0.8, type: 'cumulus' }
+        },
+        {
+          name: 'Wispy Cirrus',
+          description: 'High-altitude thin clouds',
+          parameters: { coverage: 0.3, scale: 0.001, speed: 2.0, layers: 2, fluffiness: 0.3, type: 'cirrus' }
+        }
+      ],
+      Water: [
+        {
+          name: 'Ocean Surface',
+          description: 'Calm ocean waves',
+          parameters: { waveHeight: 0.5, waveSpeed: 0.8, waveFrequency: 2.0, turbulence: 1.0 }
+        },
+        {
+          name: 'Storm Waves',
+          description: 'Rough ocean during storm',
+          parameters: { waveHeight: 2.5, waveSpeed: 2.0, waveFrequency: 4.0, turbulence: 3.5 }
+        }
+      ],
+      Smoke: [
+        {
+          name: 'Cigarette Smoke',
+          description: 'Thin wispy smoke',
+          parameters: { density: 0.3, rise_speed: 0.5, turbulence: 1.5, dissipation: 0.8 }
+        },
+        {
+          name: 'Industrial Smoke',
+          description: 'Heavy black emissions',
+          parameters: { density: 1.2, rise_speed: 0.8, turbulence: 2.5, dissipation: 0.3 }
+        }
+      ],
+      Explosion: [
+        {
+          name: 'Small Blast',
+          description: 'Grenade explosion',
+          parameters: { size: 1.0, speed: 1.5, shockwave: 0.8, fire_intensity: 1.0 }
+        },
+        {
+          name: 'Car Explosion',
+          description: 'Vehicle explosion',
+          parameters: { size: 3.0, speed: 1.2, shockwave: 1.5, fire_intensity: 1.5 }
+        }
+      ]
+    };
+    
+    return presets[nodeType] || [];
+  }
+
+  // Apply preset to node
+  async applyPresetToNode(node, preset) {
+    if (!preset || !preset.parameters) return;
+    
+    for (const [key, value] of Object.entries(preset.parameters)) {
+      await window.ragevfxAPI.updateNodeParameter(node.id, key, value);
+    }
+    
+    document.getElementById('status-text').textContent = `Applied preset: ${preset.name}`;
   }
 
   async groupSelectedNodes() {
@@ -544,6 +694,31 @@ class NodeGraphUI {
 
   drawNode(node) {
     const ctx = this.ctx;
+    
+    // Handle backdrop rendering differently
+    if (node.isBackdrop) {
+      const { x, y, width, height, color, name } = node;
+      
+      // Draw backdrop background
+      ctx.fillStyle = color || '#2a2a3e';
+      ctx.globalAlpha = 0.3;
+      ctx.fillRect(x, y, width, height);
+      ctx.globalAlpha = 1.0;
+      
+      // Draw backdrop border
+      ctx.strokeStyle = color || '#2a2a3e';
+      ctx.lineWidth = 2 / this.scale;
+      ctx.strokeRect(x, y, width, height);
+      
+      // Draw backdrop name
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `${16 / this.scale}px Arial`;
+      ctx.fillText(name || 'Backdrop', x + 10, y + 20);
+      
+      return;
+    }
+    
+    // Normal node rendering
     const { x, y, width, height, type, selected, disabled, category, color } = node;
     const isVFX = VFX_NODE_TYPES.has(type);
     const isHovered = this.hoveredNode?.id === node.id;
@@ -776,6 +951,113 @@ document.addEventListener('DOMContentLoaded', () => {
       // For this demo, we'll just show a status update
       document.getElementById('status-text').textContent = '3D View initialized';
     }
+  });
+
+  // Camera controls
+  document.getElementById('create-camera-btn').addEventListener('click', () => {
+    const x = 100;
+    const y = 100;
+    graphUI.createNode('Camera', x, y);
+    document.getElementById('status-text').textContent = 'Camera node created';
+  });
+
+  document.getElementById('look-through-camera-btn').addEventListener('click', () => {
+    const cameraNodes = graphUI.nodes.filter(n => n.type === 'Camera');
+    if (cameraNodes.length === 0) {
+      alert('No camera nodes found. Create a camera first.');
+      return;
+    }
+    
+    if (cameraNodes.length === 1) {
+      document.getElementById('status-text').textContent = `Looking through ${cameraNodes[0].id}`;
+    } else {
+      // If multiple cameras, use selected one or show dialog
+      const selectedCamera = cameraNodes.find(n => n.selected);
+      if (selectedCamera) {
+        document.getElementById('status-text').textContent = `Looking through ${selectedCamera.id}`;
+      } else {
+        alert(`Multiple cameras found (${cameraNodes.length}). Select one and try again.`);
+      }
+    }
+  });
+
+  // Backdrop creation
+  document.getElementById('create-backdrop-btn').addEventListener('click', () => {
+    const selectedNodes = graphUI.nodes.filter(n => n.selected);
+    if (selectedNodes.length === 0) {
+      alert('Select nodes first to create a backdrop around them.');
+      return;
+    }
+    
+    const backdropName = prompt('Enter backdrop name:', 'Backdrop');
+    if (!backdropName) return;
+    
+    const backdropColor = prompt('Enter backdrop color (hex):', '#2a2a3e');
+    
+    // Calculate bounding box of selected nodes
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    selectedNodes.forEach(node => {
+      minX = Math.min(minX, node.x);
+      minY = Math.min(minY, node.y);
+      maxX = Math.max(maxX, node.x + node.width);
+      maxY = Math.max(maxY, node.y + node.height);
+    });
+    
+    // Add padding
+    const padding = 40;
+    const backdrop = {
+      id: `backdrop_${Date.now()}`,
+      name: backdropName,
+      x: minX - padding,
+      y: minY - padding,
+      width: maxX - minX + padding * 2,
+      height: maxY - minY + padding * 2,
+      color: backdropColor,
+      isBackdrop: true
+    };
+    
+    // Add to beginning of nodes array so it renders behind
+    graphUI.nodes.unshift(backdrop);
+    graphUI.render();
+    document.getElementById('status-text').textContent = `Backdrop "${backdropName}" created`;
+  });
+
+  // Viewport controls
+  document.getElementById('refresh-viewport-btn').addEventListener('click', () => {
+    document.getElementById('status-text').textContent = 'Viewport refreshed';
+  });
+
+  document.getElementById('clear-viewport-btn').addEventListener('click', () => {
+    const previewCanvas = document.getElementById('preview-canvas');
+    const ctx = previewCanvas.getContext('2d');
+    ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+    document.getElementById('status-text').textContent = 'Viewport cleared';
+  });
+
+  document.getElementById('fullscreen-viewport-btn').addEventListener('click', () => {
+    const viewport = document.querySelector('.viewport');
+    if (viewport.requestFullscreen) {
+      viewport.requestFullscreen();
+    }
+  });
+
+  // Timeline controls
+  document.getElementById('timeline-apply-btn').addEventListener('click', () => {
+    const start = document.getElementById('timeline-start').value;
+    const end = document.getElementById('timeline-end').value;
+    const fps = document.getElementById('timeline-fps').value;
+    document.getElementById('status-text').textContent = `Timeline: ${start}-${end} @ ${fps}fps`;
+  });
+
+  // Lighting and grid toggles
+  document.getElementById('show-lighting-toggle').addEventListener('change', (e) => {
+    document.getElementById('status-text').textContent = `Lighting ${e.target.checked ? 'enabled' : 'disabled'}`;
+  });
+
+  document.getElementById('show-grid-toggle').addEventListener('change', (e) => {
+    document.getElementById('status-text').textContent = `Grid ${e.target.checked ? 'enabled' : 'disabled'}`;
   });
 
   // Expose for debugging
