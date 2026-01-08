@@ -92,7 +92,7 @@ The following files are used for Railway deployment:
 ### nixpacks.toml
 ```toml
 [phases.setup]
-nixPkgs = ["nodejs-20_x"]
+nixPkgs = ["nodejs-22_x"]
 
 [phases.install]
 cmds = ["npm ci --include=dev"]
@@ -102,6 +102,9 @@ cmds = ["npm run build:web"]
 
 [start]
 cmd = "node server.js"
+
+[variables]
+NODE_ENV = "production"
 ```
 
 **Note**: The `--include=dev` flag is required in the install phase because vite and other build tools are in devDependencies.
