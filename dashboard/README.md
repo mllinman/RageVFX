@@ -15,6 +15,21 @@ Production-ready data dashboard built with Next.js 16, React 19, and the latest 
 
 ## Getting Started
 
+### Environment Setup
+
+1. Copy the example environment file:
+```bash
+cp .env.example .env.local
+```
+
+2. Update the environment variables in `.env.local`:
+   - `NEXTAUTH_SECRET`: Generate a secret with `openssl rand -base64 32`
+   - `NEXTAUTH_URL`: Set to your deployment URL (use `http://localhost:3000` for local development)
+   - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`: (Optional) Your Stripe publishable key
+   - `STRIPE_SECRET_KEY`: (Optional) Your Stripe secret key
+
+**Important**: Never commit `.env.local` to version control. It's already included in `.gitignore`.
+
 ### Development
 
 ```bash
