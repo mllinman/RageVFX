@@ -72,8 +72,6 @@ export class KeyframeManager {
     value: any,
     interpolation: 'linear' | 'bezier' | 'step' | 'smooth' = 'linear'
   ): void {
-    const trackKey = `${nodeId}_${parameterKey}`;
-    
     if (!this.tracks.has(nodeId)) {
       this.tracks.set(nodeId, []);
     }
@@ -177,64 +175,43 @@ export class KeyframeManager {
         return prevValue;
 
       case 'linear':
-        if (typeof prevValue === 'number' && typeof nextValue === 'number') {
-          return prevValue + (nextValue - prevValue) * t;
-        }
-        // For objects (like colors, vectors), interpolate each component
-        if (typeof prevValue === 'object' && typeof nextValue === 'object') {
-          const result: any = {};
-          for (const key in prevValue) {
-            if (typeof prevValue[key] === 'number' && typeof nextValue[key] === 'number') {
-              result[key] = prevValue[key] + (nextValue[key] - prevValue[key]) * t;
-            } else {
-              result[key] = t < 0.5 ? prevValue[key] : nextValue[key];
-            }
-          }
-          return result;
-        }
-        return t < 0.5 ? prevValue : nextValue;
+        return this.interpolateValue(prevValue, nextValue, t);
 
       case 'smooth':
         // Smooth step (ease-in-out)
         const smoothT = t * t * (3 - 2 * t);
-        if (typeof prevValue === 'number' && typeof nextValue === 'number') {
-          return prevValue + (nextValue - prevValue) * smoothT;
-        }
-        if (typeof prevValue === 'object' && typeof nextValue === 'object') {
-          const result: any = {};
-          for (const key in prevValue) {
-            if (typeof prevValue[key] === 'number' && typeof nextValue[key] === 'number') {
-              result[key] = prevValue[key] + (nextValue[key] - prevValue[key]) * smoothT;
-            } else {
-              result[key] = smoothT < 0.5 ? prevValue[key] : nextValue[key];
-            }
-          }
-          return result;
-        }
-        return smoothT < 0.5 ? prevValue : nextValue;
+        return this.interpolateValue(prevValue, nextValue, smoothT);
 
       case 'bezier':
         // Simple bezier (could be enhanced with control points)
         const bezierT = t * t * t * (t * (t * 6 - 15) + 10);
-        if (typeof prevValue === 'number' && typeof nextValue === 'number') {
-          return prevValue + (nextValue - prevValue) * bezierT;
-        }
-        if (typeof prevValue === 'object' && typeof nextValue === 'object') {
-          const result: any = {};
-          for (const key in prevValue) {
-            if (typeof prevValue[key] === 'number' && typeof nextValue[key] === 'number') {
-              result[key] = prevValue[key] + (nextValue[key] - prevValue[key]) * bezierT;
-            } else {
-              result[key] = bezierT < 0.5 ? prevValue[key] : nextValue[key];
-            }
-          }
-          return result;
-        }
-        return bezierT < 0.5 ? prevValue : nextValue;
+        return this.interpolateValue(prevValue, nextValue, bezierT);
 
       default:
         return prevValue;
     }
+  }
+
+  /**
+   * Helper method to interpolate a value
+   */
+  private interpolateValue(prevValue: any, nextValue: any, t: number): any {
+    if (typeof prevValue === 'number' && typeof nextValue === 'number') {
+      return prevValue + (nextValue - prevValue) * t;
+    }
+    // For objects (like colors, vectors), interpolate each component
+    if (typeof prevValue === 'object' && typeof nextValue === 'object') {
+      const result: any = {};
+      for (const key in prevValue) {
+        if (typeof prevValue[key] === 'number' && typeof nextValue[key] === 'number') {
+          result[key] = prevValue[key] + (nextValue[key] - prevValue[key]) * t;
+        } else {
+          result[key] = t < 0.5 ? prevValue[key] : nextValue[key];
+        }
+      }
+      return result;
+    }
+    return t < 0.5 ? prevValue : nextValue;
   }
 
   /**

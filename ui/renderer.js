@@ -977,19 +977,19 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('look-through-camera-btn').addEventListener('click', () => {
     const cameraNodes = graphUI.nodes.filter(n => n.type === 'Camera');
     if (cameraNodes.length === 0) {
-      alert('No camera nodes found. Create a camera first.');
+      document.getElementById('status-text').textContent = 'No camera nodes found. Create a camera first.';
       return;
     }
     
     if (cameraNodes.length === 1) {
       document.getElementById('status-text').textContent = `Looking through ${cameraNodes[0].id}`;
     } else {
-      // If multiple cameras, use selected one or show dialog
+      // If multiple cameras, use selected one or show message
       const selectedCamera = cameraNodes.find(n => n.selected);
       if (selectedCamera) {
         document.getElementById('status-text').textContent = `Looking through ${selectedCamera.id}`;
       } else {
-        alert(`Multiple cameras found (${cameraNodes.length}). Select one and try again.`);
+        document.getElementById('status-text').textContent = `Multiple cameras found (${cameraNodes.length}). Select one and try again.`;
       }
     }
   });
@@ -1209,7 +1209,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.getElementById('add-track-btn').addEventListener('click', () => {
-    alert('To add a track, select a node and click the keyframe button (◆) next to a parameter.');
+    document.getElementById('status-text').textContent = 'To add a track, select a node and click the keyframe button (◆) next to a parameter.';
   });
 
   document.getElementById('clear-tracks-btn').addEventListener('click', async () => {
