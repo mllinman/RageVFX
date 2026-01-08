@@ -280,11 +280,13 @@ import { VDBSnowNode } from '../nodes/VDBSnowNode';
 
 import { RenderEngine } from '../renderer/RenderEngine';
 import { MemoryManager } from './MemoryManager';
+import { KeyframeManager } from './KeyframeManager';
 
 export class RageVFXApp {
   private graph: NodeGraph;
   private renderEngine: RenderEngine;
   private memoryManager: MemoryManager;
+  private keyframeManager: KeyframeManager;
   private nodeRegistry: Map<string, typeof Node>;
 
   constructor() {
@@ -295,6 +297,7 @@ export class RageVFXApp {
       tileSize: 1024,
       enableCompression: true
     });
+    this.keyframeManager = new KeyframeManager();
     this.nodeRegistry = new Map();
 
     this.registerNodes();
@@ -305,6 +308,13 @@ export class RageVFXApp {
    */
   getMemoryManager(): MemoryManager {
     return this.memoryManager;
+  }
+
+  /**
+   * Get the keyframe manager
+   */
+  getKeyframeManager(): KeyframeManager {
+    return this.keyframeManager;
   }
 
   /**
@@ -753,5 +763,54 @@ export class RageVFXApp {
   dispose(): void {
     this.graph.clear();
     this.renderEngine.dispose();
+  }
+
+  /**
+   * Add a keyframe for a node parameter
+   */
+  addKeyframe(nodeId: string, parameterKey: string, frame: number, value: any, interpolation: 'linear' | 'bezier' | 'step' | 'smooth' = 'linear'): void {
+    this.keyframeManager.addKeyframe(nodeId, parameterKey, frame, value, interpolation);
+  }
+
+  /**
+   * Remove a keyframe
+   */
+  removeKeyframe(nodeId: string, parameterKey: string, frame: number): void {
+    this.keyframeManager.removeKeyframe(nodeId, parameterKey, frame);
+  }
+
+  /**
+   * Set the current frame and update all animated parameters
+   */
+  setCurrentFrame(frame: number): void {
+    this.keyframeManager.setCurrentFrame(frame);
+    
+    // Update all nodes with animated parameters
+    const nodes = this.graph.getAllNodes();
+    nodes.forEach(node => {
+      const tracks = this.keyframeManager.getNodeTracks(node.getMetadata().id);
+      tracks.forEach(track => {
+        if (track.enabled) {
+          const value = this.keyframeManager.getValueAtFrame(node.getMetadata().id, track.parameterKey, frame);
+          if (value !== null) {
+            node.setParameter(track.parameterKey, value);
+          }
+        }
+      });
+    });
+  }
+
+  /**
+   * Get keyframe manager
+   */
+  getKeyframes(): any {
+    return this.keyframeManager.exportAnimation();
+  }
+
+  /**
+   * Set timeline range
+   */
+  setTimelineRange(start: number, end: number, fps: number): void {
+    this.keyframeManager.setTimelineRange(start, end, fps);
   }
 }

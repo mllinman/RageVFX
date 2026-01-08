@@ -56,5 +56,21 @@ contextBridge.exposeInMainWorld('ragevfxAPI', {
     ipcRenderer.invoke('create-camera', cameraId),
 
   setActiveCamera: (cameraId: string) =>
-    ipcRenderer.invoke('set-active-camera', cameraId)
+    ipcRenderer.invoke('set-active-camera', cameraId),
+
+  // Keyframe operations
+  addKeyframe: (nodeId: string, parameterKey: string, frame: number, value: any, interpolation: string) =>
+    ipcRenderer.invoke('add-keyframe', nodeId, parameterKey, frame, value, interpolation),
+
+  removeKeyframe: (nodeId: string, parameterKey: string, frame: number) =>
+    ipcRenderer.invoke('remove-keyframe', nodeId, parameterKey, frame),
+
+  setCurrentFrame: (frame: number) =>
+    ipcRenderer.invoke('set-current-frame', frame),
+
+  getKeyframes: () =>
+    ipcRenderer.invoke('get-keyframes'),
+
+  setTimelineRange: (start: number, end: number, fps: number) =>
+    ipcRenderer.invoke('set-timeline-range', start, end, fps)
 });

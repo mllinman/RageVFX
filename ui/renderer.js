@@ -293,9 +293,22 @@ class NodeGraphUI {
             window.ragevfxAPI.updateNodeParameter(node.id, key, newVal);
           });
 
+          // Add keyframe button for numeric parameters
+          const keyframeBtn = document.createElement('button');
+          keyframeBtn.className = 'keyframe-btn';
+          keyframeBtn.textContent = '◆';
+          keyframeBtn.title = 'Add Keyframe';
+          keyframeBtn.addEventListener('click', async () => {
+            const currentFrame = parseInt(document.getElementById('timeline-start').value) || 1;
+            await window.ragevfxAPI.addKeyframe(node.id, key, currentFrame, parseFloat(input.value), 'smooth');
+            keyframeBtn.classList.add('has-keyframe');
+            document.getElementById('status-text').textContent = `Keyframe added for ${key} at frame ${currentFrame}`;
+          });
+
           row.appendChild(label);
           row.appendChild(input);
           row.appendChild(valueDisplay);
+          row.appendChild(keyframeBtn);
         } else if (typeof value === 'object' && value !== null) {
           // Handle color objects
           const valueStr = JSON.stringify(value);
@@ -1044,12 +1057,75 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Timeline controls
-  document.getElementById('timeline-apply-btn').addEventListener('click', () => {
-    const start = document.getElementById('timeline-start').value;
-    const end = document.getElementById('timeline-end').value;
-    const fps = document.getElementById('timeline-fps').value;
+  let isPlaying = false;
+  let playbackInterval = null;
+
+  document.getElementById('timeline-apply-btn').addEventListener('click', async () => {
+    const start = parseInt(document.getElementById('timeline-start').value);
+    const end = parseInt(document.getElementById('timeline-end').value);
+    const fps = parseInt(document.getElementById('timeline-fps').value);
+    
+    await window.ragevfxAPI.setTimelineRange(start, end, fps);
     document.getElementById('status-text').textContent = `Timeline: ${start}-${end} @ ${fps}fps`;
   });
+
+  // Add playback controls to timeline
+  const timelineControls = document.querySelector('.timeline-controls');
+  
+  const playBtn = document.createElement('button');
+  playBtn.className = 'icon-btn';
+  playBtn.id = 'timeline-play-btn';
+  playBtn.textContent = '▶️';
+  playBtn.title = 'Play/Pause';
+  playBtn.addEventListener('click', () => {
+    isPlaying = !isPlaying;
+    playBtn.textContent = isPlaying ? '⏸️' : '▶️';
+    
+    if (isPlaying) {
+      const fps = parseInt(document.getElementById('timeline-fps').value) || 24;
+      const frameTime = 1000 / fps;
+      const start = parseInt(document.getElementById('timeline-start').value);
+      const end = parseInt(document.getElementById('timeline-end').value);
+      let currentFrame = start;
+      
+      playbackInterval = setInterval(async () => {
+        currentFrame++;
+        if (currentFrame > end) {
+          currentFrame = start;
+        }
+        
+        document.getElementById('timeline-start').value = currentFrame;
+        await window.ragevfxAPI.setCurrentFrame(currentFrame);
+        document.getElementById('status-text').textContent = `Playing... Frame: ${currentFrame}`;
+      }, frameTime);
+    } else {
+      if (playbackInterval) {
+        clearInterval(playbackInterval);
+        playbackInterval = null;
+      }
+      document.getElementById('status-text').textContent = 'Playback paused';
+    }
+  });
+  
+  const stopBtn = document.createElement('button');
+  stopBtn.className = 'icon-btn';
+  stopBtn.id = 'timeline-stop-btn';
+  stopBtn.textContent = '⏹️';
+  stopBtn.title = 'Stop';
+  stopBtn.addEventListener('click', () => {
+    isPlaying = false;
+    if (playbackInterval) {
+      clearInterval(playbackInterval);
+      playbackInterval = null;
+    }
+    playBtn.textContent = '▶️';
+    const start = parseInt(document.getElementById('timeline-start').value);
+    document.getElementById('timeline-start').value = start;
+    document.getElementById('status-text').textContent = 'Playback stopped';
+  });
+  
+  timelineControls.appendChild(playBtn);
+  timelineControls.appendChild(stopBtn);
 
   // Lighting and grid toggles
   document.getElementById('show-lighting-toggle').addEventListener('change', (e) => {
