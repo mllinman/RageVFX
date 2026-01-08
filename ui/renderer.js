@@ -1136,6 +1136,100 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('status-text').textContent = `Grid ${e.target.checked ? 'enabled' : 'disabled'}`;
   });
 
+  // Track management
+  async function updateTracksPanel() {
+    const tracksPanel = document.getElementById('tracks-panel');
+    if (!tracksPanel) return;
+
+    const keyframesData = await window.ragevfxAPI.getKeyframes();
+    if (!keyframesData || !keyframesData.tracks || keyframesData.tracks.length === 0) {
+      tracksPanel.innerHTML = '<p class="empty-message">No animation tracks. Add keyframes to create tracks.</p>';
+      return;
+    }
+
+    tracksPanel.innerHTML = '';
+    
+    keyframesData.tracks.forEach(track => {
+      const trackItem = document.createElement('div');
+      trackItem.className = 'track-item';
+      
+      const trackHeader = document.createElement('div');
+      trackHeader.className = 'track-header';
+      
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = track.enabled !== false;
+      checkbox.addEventListener('change', (e) => {
+        // Toggle track enabled state
+        document.getElementById('status-text').textContent = `Track ${track.nodeId}.${track.parameterKey} ${e.target.checked ? 'enabled' : 'disabled'}`;
+      });
+      
+      const trackLabel = document.createElement('span');
+      trackLabel.className = 'track-label';
+      trackLabel.textContent = `${track.nodeId.substring(0, 15)}... | ${track.parameterKey}`;
+      trackLabel.title = `${track.nodeId} - ${track.parameterKey}`;
+      
+      const keyframeCount = document.createElement('span');
+      keyframeCount.className = 'keyframe-count';
+      keyframeCount.textContent = `${track.keyframes.length} keys`;
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'icon-btn small';
+      removeBtn.textContent = '×';
+      removeBtn.title = 'Remove Track';
+      removeBtn.addEventListener('click', async () => {
+        // Remove all keyframes for this track
+        for (const kf of track.keyframes) {
+          await window.ragevfxAPI.removeKeyframe(track.nodeId, track.parameterKey, kf.frame);
+        }
+        updateTracksPanel();
+        document.getElementById('status-text').textContent = `Track removed: ${track.parameterKey}`;
+      });
+      
+      trackHeader.appendChild(checkbox);
+      trackHeader.appendChild(trackLabel);
+      trackHeader.appendChild(keyframeCount);
+      trackHeader.appendChild(removeBtn);
+      
+      // Show keyframes list
+      const keyframesList = document.createElement('div');
+      keyframesList.className = 'keyframes-list';
+      track.keyframes.forEach(kf => {
+        const kfItem = document.createElement('div');
+        kfItem.className = 'keyframe-item';
+        kfItem.textContent = `Frame ${kf.frame}: ${typeof kf.value === 'number' ? kf.value.toFixed(2) : JSON.stringify(kf.value)}`;
+        kfItem.title = `Interpolation: ${kf.interpolation}`;
+        keyframesList.appendChild(kfItem);
+      });
+      
+      trackItem.appendChild(trackHeader);
+      trackItem.appendChild(keyframesList);
+      tracksPanel.appendChild(trackItem);
+    });
+  }
+
+  document.getElementById('add-track-btn').addEventListener('click', () => {
+    alert('To add a track, select a node and click the keyframe button (◆) next to a parameter.');
+  });
+
+  document.getElementById('clear-tracks-btn').addEventListener('click', async () => {
+    if (confirm('Clear all animation tracks and keyframes?')) {
+      const keyframesData = await window.ragevfxAPI.getKeyframes();
+      if (keyframesData && keyframesData.tracks) {
+        for (const track of keyframesData.tracks) {
+          for (const kf of track.keyframes) {
+            await window.ragevfxAPI.removeKeyframe(track.nodeId, track.parameterKey, kf.frame);
+          }
+        }
+      }
+      updateTracksPanel();
+      document.getElementById('status-text').textContent = 'All tracks cleared';
+    }
+  });
+
+  // Update tracks panel periodically
+  setInterval(updateTracksPanel, 2000);
+
   // Expose for debugging
   window.graphUI = graphUI;
 });
