@@ -7,6 +7,8 @@ release/
 .env
 .env.local
 .env.*.local
+.env.production
+.env.production.local
 coverage/
 *.tsbuildinfo
 .idea/
