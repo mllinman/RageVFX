@@ -221,6 +221,45 @@ class NodeGraphUI {
     </div>`;
 
     try {
+      // Add preset selector if presets are available for this node type
+      const presets = this.getPresetsForNode(node.type);
+      if (presets && presets.length > 0) {
+        const presetSection = document.createElement('div');
+        presetSection.className = 'preset-section';
+        
+        const presetLabel = document.createElement('label');
+        presetLabel.textContent = '🎨 Presets';
+        presetLabel.className = 'preset-label';
+        
+        const presetSelect = document.createElement('select');
+        presetSelect.className = 'preset-select';
+        
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = '-- Select Preset --';
+        presetSelect.appendChild(defaultOption);
+        
+        presets.forEach((preset, index) => {
+          const option = document.createElement('option');
+          option.value = index;
+          option.textContent = `${preset.name} - ${preset.description}`;
+          presetSelect.appendChild(option);
+        });
+        
+        presetSelect.addEventListener('change', async (e) => {
+          if (e.target.value !== '') {
+            const preset = presets[parseInt(e.target.value)];
+            await this.applyPresetToNode(node, preset);
+            // Refresh the properties panel to show updated values
+            this.updatePropertiesPanel(node);
+          }
+        });
+        
+        presetSection.appendChild(presetLabel);
+        presetSection.appendChild(presetSelect);
+        container.appendChild(presetSection);
+      }
+
       // Fetch full properties from core via IPC
       const props = await window.ragevfxAPI.getNodeProperties(node.id);
       if (!props) return;
@@ -254,9 +293,38 @@ class NodeGraphUI {
             window.ragevfxAPI.updateNodeParameter(node.id, key, newVal);
           });
 
+          // Add keyframe button for numeric parameters
+          const keyframeBtn = document.createElement('button');
+          keyframeBtn.className = 'keyframe-btn';
+          keyframeBtn.textContent = '◆';
+          keyframeBtn.title = 'Add Keyframe';
+          keyframeBtn.addEventListener('click', async () => {
+            const currentFrame = parseInt(document.getElementById('timeline-start').value) || 1;
+            await window.ragevfxAPI.addKeyframe(node.id, key, currentFrame, parseFloat(input.value), 'smooth');
+            keyframeBtn.classList.add('has-keyframe');
+            document.getElementById('status-text').textContent = `Keyframe added for ${key} at frame ${currentFrame}`;
+          });
+
           row.appendChild(label);
           row.appendChild(input);
           row.appendChild(valueDisplay);
+          row.appendChild(keyframeBtn);
+        } else if (typeof value === 'object' && value !== null) {
+          // Handle color objects
+          const valueStr = JSON.stringify(value);
+          input = document.createElement('input');
+          input.type = 'text';
+          input.value = valueStr;
+          input.addEventListener('change', (e) => {
+            try {
+              const parsed = JSON.parse(e.target.value);
+              window.ragevfxAPI.updateNodeParameter(node.id, key, parsed);
+            } catch (err) {
+              console.error('Invalid JSON:', err);
+            }
+          });
+          row.appendChild(label);
+          row.appendChild(input);
         } else {
           input = document.createElement('input');
           input.type = 'text';
@@ -286,6 +354,101 @@ class NodeGraphUI {
     } catch (err) {
       console.error('Failed to load node properties:', err);
     }
+  }
+
+  // Get presets for a specific node type
+  getPresetsForNode(nodeType) {
+    // Preset definitions for various node types
+    const presets = {
+      Fire: [
+        {
+          name: 'Campfire',
+          description: 'Small, warm campfire',
+          parameters: { intensity: 0.8, speed: 0.6, turbulence: 1.5, scale: 0.008, height_falloff: 0.8 }
+        },
+        {
+          name: 'Explosion',
+          description: 'Intense explosion fire',
+          parameters: { intensity: 1.5, speed: 3.0, turbulence: 4.0, scale: 0.003, height_falloff: 0.4 }
+        },
+        {
+          name: 'Dragon Fire',
+          description: 'Magical blue-tinted fire',
+          parameters: { intensity: 1.2, speed: 1.5, turbulence: 3.0, scale: 0.004, height_falloff: 0.6 }
+        },
+        {
+          name: 'Torch',
+          description: 'Medieval torch flame',
+          parameters: { intensity: 0.9, speed: 0.8, turbulence: 2.0, scale: 0.007, height_falloff: 0.75 }
+        }
+      ],
+      Clouds: [
+        {
+          name: 'Cumulus',
+          description: 'Puffy white clouds',
+          parameters: { coverage: 0.5, scale: 0.003, speed: 0.2, layers: 3, fluffiness: 0.6, type: 'cumulus' }
+        },
+        {
+          name: 'Storm Clouds',
+          description: 'Dark storm clouds',
+          parameters: { coverage: 0.8, scale: 0.002, speed: 1.5, layers: 4, fluffiness: 0.8, type: 'cumulus' }
+        },
+        {
+          name: 'Wispy Cirrus',
+          description: 'High-altitude thin clouds',
+          parameters: { coverage: 0.3, scale: 0.001, speed: 2.0, layers: 2, fluffiness: 0.3, type: 'cirrus' }
+        }
+      ],
+      Water: [
+        {
+          name: 'Ocean Surface',
+          description: 'Calm ocean waves',
+          parameters: { waveHeight: 0.5, waveSpeed: 0.8, waveFrequency: 2.0, turbulence: 1.0 }
+        },
+        {
+          name: 'Storm Waves',
+          description: 'Rough ocean during storm',
+          parameters: { waveHeight: 2.5, waveSpeed: 2.0, waveFrequency: 4.0, turbulence: 3.5 }
+        }
+      ],
+      Smoke: [
+        {
+          name: 'Cigarette Smoke',
+          description: 'Thin wispy smoke',
+          parameters: { density: 0.3, rise_speed: 0.5, turbulence: 1.5, dissipation: 0.8 }
+        },
+        {
+          name: 'Industrial Smoke',
+          description: 'Heavy black emissions',
+          parameters: { density: 1.2, rise_speed: 0.8, turbulence: 2.5, dissipation: 0.3 }
+        }
+      ],
+      Explosion: [
+        {
+          name: 'Small Blast',
+          description: 'Grenade explosion',
+          parameters: { size: 1.0, speed: 1.5, shockwave: 0.8, fire_intensity: 1.0 }
+        },
+        {
+          name: 'Car Explosion',
+          description: 'Vehicle explosion',
+          parameters: { size: 3.0, speed: 1.2, shockwave: 1.5, fire_intensity: 1.5 }
+        }
+      ]
+    };
+    
+    return presets[nodeType] || [];
+  }
+
+  // Apply preset to node
+  async applyPresetToNode(node, preset) {
+    if (!preset || !preset.parameters) return;
+    
+    for (const [key, value] of Object.entries(preset.parameters)) {
+      await window.ragevfxAPI.updateNodeParameter(node.id, key, value);
+    }
+    
+    document.getElementById('status-text').textContent = `Applied preset: ${preset.name}`;
   }
 
   async groupSelectedNodes() {
@@ -544,6 +707,31 @@ class NodeGraphUI {
 
   drawNode(node) {
     const ctx = this.ctx;
+    
+    // Handle backdrop rendering differently
+    if (node.isBackdrop) {
+      const { x, y, width, height, color, name } = node;
+      
+      // Draw backdrop background
+      ctx.fillStyle = color || '#2a2a3e';
+      ctx.globalAlpha = 0.3;
+      ctx.fillRect(x, y, width, height);
+      ctx.globalAlpha = 1.0;
+      
+      // Draw backdrop border
+      ctx.strokeStyle = color || '#2a2a3e';
+      ctx.lineWidth = 2 / this.scale;
+      ctx.strokeRect(x, y, width, height);
+      
+      // Draw backdrop name
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `${16 / this.scale}px Arial`;
+      ctx.fillText(name || 'Backdrop', x + 10, y + 20);
+      
+      return;
+    }
+    
+    // Normal node rendering
     const { x, y, width, height, type, selected, disabled, category, color } = node;
     const isVFX = VFX_NODE_TYPES.has(type);
     const isHovered = this.hoveredNode?.id === node.id;
@@ -777,6 +965,270 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('status-text').textContent = '3D View initialized';
     }
   });
+
+  // Camera controls
+  document.getElementById('create-camera-btn').addEventListener('click', () => {
+    const x = 100;
+    const y = 100;
+    graphUI.createNode('Camera', x, y);
+    document.getElementById('status-text').textContent = 'Camera node created';
+  });
+
+  document.getElementById('look-through-camera-btn').addEventListener('click', () => {
+    const cameraNodes = graphUI.nodes.filter(n => n.type === 'Camera');
+    if (cameraNodes.length === 0) {
+      document.getElementById('status-text').textContent = 'No camera nodes found. Create a camera first.';
+      return;
+    }
+    
+    if (cameraNodes.length === 1) {
+      document.getElementById('status-text').textContent = `Looking through ${cameraNodes[0].id}`;
+    } else {
+      // If multiple cameras, use selected one or show message
+      const selectedCamera = cameraNodes.find(n => n.selected);
+      if (selectedCamera) {
+        document.getElementById('status-text').textContent = `Looking through ${selectedCamera.id}`;
+      } else {
+        document.getElementById('status-text').textContent = `Multiple cameras found (${cameraNodes.length}). Select one and try again.`;
+      }
+    }
+  });
+
+  // Backdrop creation
+  document.getElementById('create-backdrop-btn').addEventListener('click', () => {
+    const selectedNodes = graphUI.nodes.filter(n => n.selected);
+    if (selectedNodes.length === 0) {
+      alert('Select nodes first to create a backdrop around them.');
+      return;
+    }
+    
+    const backdropName = prompt('Enter backdrop name:', 'Backdrop');
+    if (!backdropName) return;
+    
+    const backdropColor = prompt('Enter backdrop color (hex):', '#2a2a3e');
+    
+    // Calculate bounding box of selected nodes
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    selectedNodes.forEach(node => {
+      minX = Math.min(minX, node.x);
+      minY = Math.min(minY, node.y);
+      maxX = Math.max(maxX, node.x + node.width);
+      maxY = Math.max(maxY, node.y + node.height);
+    });
+    
+    // Add padding
+    const padding = 40;
+    const backdrop = {
+      id: `backdrop_${Date.now()}`,
+      name: backdropName,
+      x: minX - padding,
+      y: minY - padding,
+      width: maxX - minX + padding * 2,
+      height: maxY - minY + padding * 2,
+      color: backdropColor,
+      isBackdrop: true
+    };
+    
+    // Add to beginning of nodes array so it renders behind
+    graphUI.nodes.unshift(backdrop);
+    graphUI.render();
+    document.getElementById('status-text').textContent = `Backdrop "${backdropName}" created`;
+  });
+
+  // Viewport controls
+  document.getElementById('refresh-viewport-btn').addEventListener('click', () => {
+    document.getElementById('status-text').textContent = 'Viewport refreshed';
+  });
+
+  document.getElementById('clear-viewport-btn').addEventListener('click', () => {
+    const previewCanvas = document.getElementById('preview-canvas');
+    const ctx = previewCanvas.getContext('2d');
+    ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+    document.getElementById('status-text').textContent = 'Viewport cleared';
+  });
+
+  document.getElementById('fullscreen-viewport-btn').addEventListener('click', () => {
+    const viewport = document.querySelector('.viewport');
+    if (viewport.requestFullscreen) {
+      viewport.requestFullscreen();
+    }
+  });
+
+  // Timeline controls
+  let isPlaying = false;
+  let playbackInterval = null;
+
+  document.getElementById('timeline-apply-btn').addEventListener('click', async () => {
+    const start = parseInt(document.getElementById('timeline-start').value);
+    const end = parseInt(document.getElementById('timeline-end').value);
+    const fps = parseInt(document.getElementById('timeline-fps').value);
+    
+    await window.ragevfxAPI.setTimelineRange(start, end, fps);
+    document.getElementById('status-text').textContent = `Timeline: ${start}-${end} @ ${fps}fps`;
+  });
+
+  // Add playback controls to timeline
+  const timelineControls = document.querySelector('.timeline-controls');
+  
+  const playBtn = document.createElement('button');
+  playBtn.className = 'icon-btn';
+  playBtn.id = 'timeline-play-btn';
+  playBtn.textContent = '▶️';
+  playBtn.title = 'Play/Pause';
+  playBtn.addEventListener('click', () => {
+    isPlaying = !isPlaying;
+    playBtn.textContent = isPlaying ? '⏸️' : '▶️';
+    
+    if (isPlaying) {
+      const fps = parseInt(document.getElementById('timeline-fps').value) || 24;
+      const frameTime = 1000 / fps;
+      const start = parseInt(document.getElementById('timeline-start').value);
+      const end = parseInt(document.getElementById('timeline-end').value);
+      let currentFrame = start;
+      
+      playbackInterval = setInterval(async () => {
+        currentFrame++;
+        if (currentFrame > end) {
+          currentFrame = start;
+        }
+        
+        document.getElementById('timeline-start').value = currentFrame;
+        await window.ragevfxAPI.setCurrentFrame(currentFrame);
+        document.getElementById('status-text').textContent = `Playing... Frame: ${currentFrame}`;
+      }, frameTime);
+    } else {
+      if (playbackInterval) {
+        clearInterval(playbackInterval);
+        playbackInterval = null;
+      }
+      document.getElementById('status-text').textContent = 'Playback paused';
+    }
+  });
+  
+  const stopBtn = document.createElement('button');
+  stopBtn.className = 'icon-btn';
+  stopBtn.id = 'timeline-stop-btn';
+  stopBtn.textContent = '⏹️';
+  stopBtn.title = 'Stop';
+  stopBtn.addEventListener('click', () => {
+    isPlaying = false;
+    if (playbackInterval) {
+      clearInterval(playbackInterval);
+      playbackInterval = null;
+    }
+    playBtn.textContent = '▶️';
+    const start = parseInt(document.getElementById('timeline-start').value);
+    document.getElementById('timeline-start').value = start;
+    document.getElementById('status-text').textContent = 'Playback stopped';
+  });
+  
+  timelineControls.appendChild(playBtn);
+  timelineControls.appendChild(stopBtn);
+
+  // Lighting and grid toggles
+  document.getElementById('show-lighting-toggle').addEventListener('change', (e) => {
+    document.getElementById('status-text').textContent = `Lighting ${e.target.checked ? 'enabled' : 'disabled'}`;
+  });
+
+  document.getElementById('show-grid-toggle').addEventListener('change', (e) => {
+    document.getElementById('status-text').textContent = `Grid ${e.target.checked ? 'enabled' : 'disabled'}`;
+  });
+
+  // Track management
+  async function updateTracksPanel() {
+    const tracksPanel = document.getElementById('tracks-panel');
+    if (!tracksPanel) return;
+
+    const keyframesData = await window.ragevfxAPI.getKeyframes();
+    if (!keyframesData || !keyframesData.tracks || keyframesData.tracks.length === 0) {
+      tracksPanel.innerHTML = '<p class="empty-message">No animation tracks. Add keyframes to create tracks.</p>';
+      return;
+    }
+
+    tracksPanel.innerHTML = '';
+    
+    keyframesData.tracks.forEach(track => {
+      const trackItem = document.createElement('div');
+      trackItem.className = 'track-item';
+      
+      const trackHeader = document.createElement('div');
+      trackHeader.className = 'track-header';
+      
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = track.enabled !== false;
+      checkbox.addEventListener('change', (e) => {
+        // Toggle track enabled state
+        document.getElementById('status-text').textContent = `Track ${track.nodeId}.${track.parameterKey} ${e.target.checked ? 'enabled' : 'disabled'}`;
+      });
+      
+      const trackLabel = document.createElement('span');
+      trackLabel.className = 'track-label';
+      trackLabel.textContent = `${track.nodeId.substring(0, 15)}... | ${track.parameterKey}`;
+      trackLabel.title = `${track.nodeId} - ${track.parameterKey}`;
+      
+      const keyframeCount = document.createElement('span');
+      keyframeCount.className = 'keyframe-count';
+      keyframeCount.textContent = `${track.keyframes.length} keys`;
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'icon-btn small';
+      removeBtn.textContent = '×';
+      removeBtn.title = 'Remove Track';
+      removeBtn.addEventListener('click', async () => {
+        // Remove all keyframes for this track
+        for (const kf of track.keyframes) {
+          await window.ragevfxAPI.removeKeyframe(track.nodeId, track.parameterKey, kf.frame);
+        }
+        updateTracksPanel();
+        document.getElementById('status-text').textContent = `Track removed: ${track.parameterKey}`;
+      });
+      
+      trackHeader.appendChild(checkbox);
+      trackHeader.appendChild(trackLabel);
+      trackHeader.appendChild(keyframeCount);
+      trackHeader.appendChild(removeBtn);
+      
+      // Show keyframes list
+      const keyframesList = document.createElement('div');
+      keyframesList.className = 'keyframes-list';
+      track.keyframes.forEach(kf => {
+        const kfItem = document.createElement('div');
+        kfItem.className = 'keyframe-item';
+        kfItem.textContent = `Frame ${kf.frame}: ${typeof kf.value === 'number' ? kf.value.toFixed(2) : JSON.stringify(kf.value)}`;
+        kfItem.title = `Interpolation: ${kf.interpolation}`;
+        keyframesList.appendChild(kfItem);
+      });
+      
+      trackItem.appendChild(trackHeader);
+      trackItem.appendChild(keyframesList);
+      tracksPanel.appendChild(trackItem);
+    });
+  }
+
+  document.getElementById('add-track-btn').addEventListener('click', () => {
+    document.getElementById('status-text').textContent = 'To add a track, select a node and click the keyframe button (◆) next to a parameter.';
+  });
+
+  document.getElementById('clear-tracks-btn').addEventListener('click', async () => {
+    if (confirm('Clear all animation tracks and keyframes?')) {
+      const keyframesData = await window.ragevfxAPI.getKeyframes();
+      if (keyframesData && keyframesData.tracks) {
+        for (const track of keyframesData.tracks) {
+          for (const kf of track.keyframes) {
+            await window.ragevfxAPI.removeKeyframe(track.nodeId, track.parameterKey, kf.frame);
+          }
+        }
+      }
+      updateTracksPanel();
+      document.getElementById('status-text').textContent = 'All tracks cleared';
+    }
+  });
+
+  // Update tracks panel periodically
+  setInterval(updateTracksPanel, 2000);
 
   // Expose for debugging
   window.graphUI = graphUI;

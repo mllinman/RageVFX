@@ -53,69 +53,69 @@
               🌈 Gradient
             </div>
           </div>
-          <div class="category">
-            <div class="category-header">VFX Effects</div>
-            <div class="node-item" draggable="true" data-node-type="Fire">
+          <div class="category" data-color="#ff4444">
+            <div class="category-header" style="border-left: 4px solid #ff4444; padding-left: 8px;">🔥 VFX Effects</div>
+            <div class="node-item vfx-node" draggable="true" data-node-type="Fire">
               🔥 Fire
             </div>
-            <div class="node-item" draggable="true" data-node-type="Water">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Water">
               💧 Water
             </div>
-            <div class="node-item" draggable="true" data-node-type="Rain">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Rain">
               🌧️ Rain
             </div>
-            <div class="node-item" draggable="true" data-node-type="Snow">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Snow">
               ❄️ Snow
             </div>
-            <div class="node-item" draggable="true" data-node-type="Smoke">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Smoke">
               💨 Smoke
             </div>
-            <div class="node-item" draggable="true" data-node-type="Clouds">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Clouds">
               ☁️ Clouds
             </div>
-            <div class="node-item" draggable="true" data-node-type="Explosion">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Explosion">
               💥 Explosion
             </div>
-            <div class="node-item" draggable="true" data-node-type="Tornado">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Tornado">
               🌪️ Tornado
             </div>
-            <div class="node-item" draggable="true" data-node-type="Fog">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Fog">
               🌫️ Fog
             </div>
-            <div class="node-item" draggable="true" data-node-type="Lightning">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Lightning">
               ⚡ Lightning
             </div>
-            <div class="node-item" draggable="true" data-node-type="Spark">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Spark">
               ✨ Spark
             </div>
-            <div class="node-item" draggable="true" data-node-type="Dissolve">
+            <div class="node-item vfx-node" draggable="true" data-node-type="Dissolve">
               🔀 Dissolve
             </div>
-            <div class="node-item" draggable="true" data-node-type="LensFlare">
+            <div class="node-item vfx-node" draggable="true" data-node-type="LensFlare">
               ☀️ Lens Flare
             </div>
           </div>
-          <div class="category">
-            <div class="category-header">Color</div>
-            <div class="node-item" draggable="true" data-node-type="ColorCorrect">
+          <div class="category" data-color="#44cc88">
+            <div class="category-header" style="border-left: 4px solid #44cc88; padding-left: 8px;">🎨 Color</div>
+            <div class="node-item color-node" draggable="true" data-node-type="ColorCorrect">
               🎨 Color Correct
             </div>
-            <div class="node-item" draggable="true" data-node-type="Grade">
+            <div class="node-item color-node" draggable="true" data-node-type="Grade">
               🎭 Grade
             </div>
-            <div class="node-item" draggable="true" data-node-type="Curves">
+            <div class="node-item color-node" draggable="true" data-node-type="Curves">
               📈 Curves
             </div>
-            <div class="node-item" draggable="true" data-node-type="Levels">
+            <div class="node-item color-node" draggable="true" data-node-type="Levels">
               📊 Levels
             </div>
-            <div class="node-item" draggable="true" data-node-type="HSL">
+            <div class="node-item color-node" draggable="true" data-node-type="HSL">
               🌡️ HSL
             </div>
           </div>
-          <div class="category">
-            <div class="category-header">Filter</div>
-            <div class="node-item" draggable="true" data-node-type="Blur">
+          <div class="category" data-color="#4488ff">
+            <div class="category-header" style="border-left: 4px solid #4488ff; padding-left: 8px;">🔧 Filter</div>
+            <div class="node-item filter-node" draggable="true" data-node-type="Blur">
               🌫️ Blur
             </div>
             <div class="node-item" draggable="true" data-node-type="EdgeDetect">
@@ -230,12 +230,26 @@
           <span class="separator">|</span>
           <button class="tool-btn active" id="view-2d-btn">2D</button>
           <button class="tool-btn" id="view-3d-btn">3D</button>
+          <span class="separator">|</span>
+          <button class="tool-btn" id="create-camera-btn">📷 Camera</button>
+          <button class="tool-btn" id="look-through-camera-btn">👁️ Look Through</button>
+          <span class="separator">|</span>
+          <button class="tool-btn" id="create-backdrop-btn">🎨 Backdrop</button>
         </div>
         <canvas id="node-canvas" class="node-canvas"></canvas>
         <div id="node-canvas-3d" class="node-canvas-3d" style="display: none;"></div>
         <div class="status-bar">
           <span id="status-text">Ready</span>
           <span id="node-count">Nodes: 0</span>
+          <div class="timeline-controls">
+            <label>Timeline: </label>
+            <input type="number" id="timeline-start" value="1" min="0" style="width: 50px;" title="Start Frame">
+            <span> - </span>
+            <input type="number" id="timeline-end" value="100" min="1" style="width: 50px;" title="End Frame">
+            <span> | FPS: </span>
+            <input type="number" id="timeline-fps" value="24" min="1" max="120" style="width: 40px;">
+            <button class="icon-btn" id="timeline-apply-btn" title="Apply Timeline">✓</button>
+          </div>
         </div>
       </main>
 
@@ -251,14 +265,31 @@
         </div>
         <div class="panel">
           <div class="panel-header">
+            <h3>Animation Tracks</h3>
+            <div class="panel-controls">
+              <button class="icon-btn" id="add-track-btn" title="Add Track">➕</button>
+              <button class="icon-btn" id="clear-tracks-btn" title="Clear All">🗑️</button>
+            </div>
+          </div>
+          <div class="panel-content" id="tracks-panel">
+            <p class="empty-message">No animation tracks. Add keyframes to create tracks.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
             <h3>Viewport</h3>
             <div class="panel-controls">
-              <button class="icon-btn" title="Refresh">🔄</button>
-              <button class="icon-btn" title="Fullscreen">⛶</button>
+              <button class="icon-btn" id="refresh-viewport-btn" title="Refresh">🔄</button>
+              <button class="icon-btn" id="clear-viewport-btn" title="Clear/Reset">🗑️</button>
+              <button class="icon-btn" id="fullscreen-viewport-btn" title="Fullscreen">⛶</button>
             </div>
           </div>
           <div class="panel-content viewport">
             <canvas id="preview-canvas" class="preview-canvas"></canvas>
+            <div id="viewport-controls" class="viewport-controls">
+              <label><input type="checkbox" id="show-lighting-toggle" checked> Lighting</label>
+              <label><input type="checkbox" id="show-grid-toggle" checked> Grid</label>
+            </div>
           </div>
         </div>
       </aside>
