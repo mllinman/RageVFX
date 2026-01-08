@@ -452,9 +452,10 @@ export class ReviewToolNode extends Node {
         switch (sortBy) {
           case 'frame':
             return (a.frame || 0) - (b.frame || 0);
-          case 'priority':
+          case 'priority': {
             const priorities = { critical: 0, high: 1, normal: 2, low: 3 };
             return priorities[a.priority] - priorities[b.priority];
+          }
           case 'date':
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
           default:

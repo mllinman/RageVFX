@@ -23,7 +23,7 @@ interface GeometryData {
 }
 
 export class WrangleNode extends Node {
-  private compiledCode: Function | null = null;
+  private compiledCode: ((...args: unknown[]) => unknown) | null = null;
   private errorMessage: string = '';
 
   constructor(id: string) {
@@ -155,7 +155,7 @@ float dist = length(@P);
       const jsCode = this.transformVEXToJS(code);
       
       // Create function with wrangle context
-      this.compiledCode = new Function('context', 'libs', jsCode);
+      this.compiledCode = new Function('context', 'libs', jsCode) as (...args: unknown[]) => unknown;
       this.errorMessage = '';
     } catch (error) {
       this.errorMessage = `Compilation error: ${error}`;

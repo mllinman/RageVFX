@@ -680,7 +680,7 @@ export class StereoConverterNode extends Node {
           anaglyph.data[i + 2] = right.data[i + 2]; // Blue from right
           break;
         case 'dubois':
-        case 'optimized':
+        case 'optimized': {
           // Dubois optimized anaglyph (better color)
           const lR = left.data[i] / 255;
           const lG = left.data[i + 1] / 255;
@@ -693,6 +693,7 @@ export class StereoConverterNode extends Node {
           anaglyph.data[i + 1] = Math.max(0, Math.min(255, (-0.0400822 * lR - 0.0378246 * lG - 0.0157589 * lB + 0.378476 * rR + 0.73364 * rG - 0.0184503 * rB) * 255));
           anaglyph.data[i + 2] = Math.max(0, Math.min(255, (-0.0152161 * lR - 0.0205971 * lG - 0.00546856 * lB - 0.0721527 * rR - 0.112961 * rG + 1.2264 * rB) * 255));
           break;
+        }
       }
       anaglyph.data[i + 3] = 255;
     }

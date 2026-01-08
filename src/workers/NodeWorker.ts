@@ -3,7 +3,7 @@
  * Enables multi-threaded processing for improved performance
  */
 
-import { Node } from '../core/Node';
+import type { Node } from '../core/Node';
 
 // Message types for worker communication
 export enum WorkerMessageType {

@@ -432,7 +432,7 @@ export class MoGraphEffectorNode extends Node {
       const t = index / Math.max(1, count - 1);
       
       // Replace variables in formula
-      let processedFormula = formula
+      const processedFormula = formula
         .replace(/\bindex\b/g, index.toString())
         .replace(/\bcount\b/g, count.toString())
         .replace(/\bt\b/g, t.toString())

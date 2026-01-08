@@ -305,7 +305,7 @@ export class OpticalFlowNode extends Node {
     const endX = Math.floor(x1);
     const endY = Math.floor(y1);
     
-    // eslint-disable-next-line no-constant-condition
+     
     while (true) {
       if (x >= 0 && x < width && y >= 0 && y < height) {
         const idx = (y * width + x) * 4;

@@ -232,16 +232,18 @@ export class Transform3DNode extends Node {
       case 'origin':
         this.pivotPoint.set(0, 0, 0);
         break;
-      case 'center':
+      case 'center': {
         // Calculate center from bounding box
         const box = new THREE.Box3().setFromObject(this.transformedObject);
         box.getCenter(this.pivotPoint);
         break;
-      case 'boundingBox':
+      }
+      case 'boundingBox': {
         // Use bounding box minimum (corner)
         const bbox = new THREE.Box3().setFromObject(this.transformedObject);
         this.pivotPoint.copy(bbox.min);
         break;
+      }
       case 'custom':
         this.pivotPoint.set(
           this.getParameter('pivotX'),

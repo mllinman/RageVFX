@@ -176,7 +176,7 @@ export class BackgroundCardNode extends Node {
     const mediaType = this.detectMediaType(filepath);
     
     // Get dimensions
-    let width = this.getParameter('width');
+    const width = this.getParameter('width');
     let height = this.getParameter('height');
     
     // Auto aspect ratio from image if available

@@ -155,7 +155,7 @@ export class PortalNode extends Node {
         const dx = x - cx;
         const dy = y - cy;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        let angle = Math.atan2(dy, dx);
+        const angle = Math.atan2(dy, dx);
         
         // Normalize distance
         const normalizedDist = dist / radiusPx;

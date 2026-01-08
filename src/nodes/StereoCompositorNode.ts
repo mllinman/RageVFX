@@ -423,14 +423,15 @@ export class StereoCompositorNode extends Node {
           outG = lG;
           outB = rB;
           break;
-        case 'true-anaglyph':
+        case 'true-anaglyph': {
           // True anaglyph uses gray left image
           const grayL = 0.299 * lR + 0.587 * lG + 0.114 * lB;
           outR = grayL;
           outG = rG;
           outB = rB;
           break;
-        case 'gray-anaglyph':
+        }
+        case 'gray-anaglyph': {
           // Both eyes converted to gray
           const grayLeft = 0.299 * lR + 0.587 * lG + 0.114 * lB;
           const grayRight = 0.299 * rR + 0.587 * rG + 0.114 * rB;
@@ -438,6 +439,7 @@ export class StereoCompositorNode extends Node {
           outG = grayRight;
           outB = grayRight;
           break;
+        }
         case 'dubois':
         case 'optimized':
           // Dubois optimized anaglyph using pre-defined coefficients

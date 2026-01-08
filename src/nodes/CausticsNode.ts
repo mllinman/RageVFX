@@ -140,7 +140,7 @@ export class CausticsNode extends Node {
           
           // Caustic intensity based on cell edge proximity
           const edgeDist = minDist2 - minDist1;
-          let layerCaustic = Math.pow(Math.max(0, 1 - edgeDist * complexity), sharpness);
+          const layerCaustic = Math.pow(Math.max(0, 1 - edgeDist * complexity), sharpness);
           
           causticValue += layerCaustic / layers;
         }

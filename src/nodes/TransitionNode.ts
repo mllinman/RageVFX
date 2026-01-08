@@ -475,8 +475,8 @@ export class TransitionNode extends Node {
         }
         
         // Determine which image to show
-        let useA = srcXA >= 0 && srcXA < width && srcYA >= 0 && srcYA < height;
-        let useB = srcXB >= 0 && srcXB < width && srcYB >= 0 && srcYB < height;
+        const useA = srcXA >= 0 && srcXA < width && srcYA >= 0 && srcYA < height;
+        const useB = srcXB >= 0 && srcXB < width && srcYB >= 0 && srcYB < height;
         
         if (useA && !useB) {
           const srcIdx = (srcYA * width + srcXA) * 4;

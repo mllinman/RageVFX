@@ -611,11 +611,12 @@ export class BloodSplatterNode extends Node {
               inside = dist <= halfSize * 0.8;
               distFactor = Math.pow(1 - dist / (halfSize * 0.8), 1.5);
               break;
-            case 'splatter':
+            case 'splatter': {
               const splatRadius = halfSize * (1 + Math.sin((dx + dy) * 0.5) * edgeRoughness * 0.3);
               inside = dist <= splatRadius;
               distFactor = 1 - dist / splatRadius;
               break;
+            }
             case 'drip':
               inside = Math.abs(dx) <= halfSize * 0.3 && dy >= -halfSize && dy <= halfSize * 2;
               distFactor = 1 - Math.abs(dx) / (halfSize * 0.3);
