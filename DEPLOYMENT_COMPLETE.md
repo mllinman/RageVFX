@@ -147,7 +147,7 @@ curl http://localhost:3000/health
 ### Deployment Process
 1. Push to GitHub
 2. Railway automatically detects nixpacks.toml
-3. Installs Node.js 20.x
+3. Installs Node.js 22.x
 4. Runs `npm ci --include=dev`
 5. Runs `npm run build:web` (creates dist-web/ with web app)
 6. Starts `node server.js` on Railway's assigned PORT
