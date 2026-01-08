@@ -311,7 +311,7 @@ export class LightningNode extends Node {
     const endX = Math.floor(x1);
     const endY = Math.floor(y1);
     
-    // eslint-disable-next-line no-constant-condition
+     
     while (true) {
       // Draw with width
       const halfWidth = Math.ceil(lineWidth / 2);

@@ -276,9 +276,9 @@ export class MotionGraphicsNode extends Node {
   ): { position: { x: number; y: number }; rotation: number; scale: { x: number; y: number }; opacity: number } {
     const easedT = this.interpolateEasing(t, easing);
     
-    let position = { x: layer.position.x, y: layer.position.y };
+    const position = { x: layer.position.x, y: layer.position.y };
     let rotation = layer.rotation;
-    let scale = { x: layer.scale.x, y: layer.scale.y };
+    const scale = { x: layer.scale.x, y: layer.scale.y };
     let opacity = layer.opacity;
     
     switch (preset) {

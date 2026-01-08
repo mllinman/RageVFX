@@ -713,7 +713,7 @@ export class DepthMapGeneratorNode extends Node {
             b = 0;
           }
           break;
-        case 'rainbow':
+        case 'rainbow': {
           // Full rainbow spectrum
           const hue = value * 360;
           const rgb = this.hslToRgb(hue / 360, 1, 0.5);
@@ -721,6 +721,7 @@ export class DepthMapGeneratorNode extends Node {
           g = rgb[1];
           b = rgb[2];
           break;
+        }
         case 'terrain':
           // Blue (water) -> Green (land) -> Brown (mountain) -> White (snow)
           if (value < 0.3) {

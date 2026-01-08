@@ -219,7 +219,7 @@ export class ModelExportNode extends Node {
     const flipUV = this.getParameter('objFlipUV');
     
     let objContent = '# RageVFX OBJ Export\n';
-    let mtlContent = '# RageVFX MTL Export\n';
+    const mtlContent = '# RageVFX MTL Export\n';
     
     // Export vertices
     if (geometry) {

@@ -124,8 +124,8 @@ export class StereoCamera3DNode extends Node {
     let aspectRatio = this.getParameter('aspectRatio');
     const nearClip = this.getParameter('nearClip');
     const farClip = this.getParameter('farClip');
-    let position = new THREE.Vector3();
-    let rotation = new THREE.Euler();
+    const position = new THREE.Vector3();
+    const rotation = new THREE.Euler();
     const quaternion = new THREE.Quaternion();
 
     if (useInputCamera && inputCamera) {

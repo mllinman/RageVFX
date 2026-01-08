@@ -73,7 +73,7 @@ export class GlitchNode extends Node {
         const blockRandom = this.seededRandom(seed + blockY + Math.floor(this.time * 10));
         
         let srcX = x;
-        let srcY = y;
+        const srcY = y;
         
         // Random block shift
         if (blockRandom < intensity * 0.3) {
@@ -105,7 +105,7 @@ export class GlitchNode extends Node {
         let r = inputData ? (inputData.data[rIdx] || 0) : 128;
         let g = inputData ? (inputData.data[gIdx + 1] || 0) : 128;
         let b = inputData ? (inputData.data[bIdx + 2] || 0) : 128;
-        let a = inputData ? (inputData.data[srcIdx + 3] || 255) : 255;
+        const a = inputData ? (inputData.data[srcIdx + 3] || 255) : 255;
         
         // Color shift
         if (colorShift > 0 && this.seededRandom(seed + x + y + Math.floor(this.time * 5)) < intensity * colorShift) {

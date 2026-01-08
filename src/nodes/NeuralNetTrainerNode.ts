@@ -768,21 +768,24 @@ export class NeuralNetTrainerNode extends Node {
     const baseLR = this.getParameter('learningRate');
     
     switch (schedule) {
-      case 'step':
+      case 'step': {
         const decaySteps = this.getParameter('decaySteps');
         const decayRate = this.getParameter('decayRate');
         this.trainingState.learningRate = baseLR * Math.pow(decayRate, Math.floor(epoch / decaySteps));
         break;
-      case 'cosine':
+      }
+      case 'cosine': {
         const totalEpochs = this.getParameter('epochs');
         this.trainingState.learningRate = baseLR * 0.5 * (1 + Math.cos(Math.PI * epoch / totalEpochs));
         break;
-      case 'warmup':
+      }
+      case 'warmup': {
         const warmupEpochs = this.getParameter('warmupEpochs');
         if (epoch < warmupEpochs) {
           this.trainingState.learningRate = baseLR * (epoch + 1) / warmupEpochs;
         }
         break;
+      }
     }
   }
 

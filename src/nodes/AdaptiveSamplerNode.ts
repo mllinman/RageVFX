@@ -486,7 +486,7 @@ export class AdaptiveSamplerNode extends Node {
   private hasConverged(): boolean {
     const targetQuality = this.getParameter('targetQuality') as number;
     let convergedPixels = 0;
-    let totalPixels = this.sampleMap.size;
+    const totalPixels = this.sampleMap.size;
 
     for (const pixel of this.sampleMap.values()) {
       if (pixel.converged) convergedPixels++;
@@ -595,7 +595,7 @@ export class AdaptiveSamplerNode extends Node {
   }
 
   private generateStatistics(): any {
-    let totalPixels = this.sampleMap.size;
+    const totalPixels = this.sampleMap.size;
     let convergedPixels = 0;
     let totalVariance = 0;
     let minSamples = Infinity;

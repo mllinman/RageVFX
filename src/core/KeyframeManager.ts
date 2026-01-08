@@ -177,15 +177,17 @@ export class KeyframeManager {
       case 'linear':
         return this.interpolateValue(prevValue, nextValue, t);
 
-      case 'smooth':
+      case 'smooth': {
         // Smooth step (ease-in-out)
         const smoothT = t * t * (3 - 2 * t);
         return this.interpolateValue(prevValue, nextValue, smoothT);
+      }
 
-      case 'bezier':
+      case 'bezier': {
         // Simple bezier (could be enhanced with control points)
         const bezierT = t * t * t * (t * (t * 6 - 15) + 10);
         return this.interpolateValue(prevValue, nextValue, bezierT);
+      }
 
       default:
         return prevValue;
@@ -272,7 +274,7 @@ export class KeyframeManager {
       tracks: []
     };
 
-    this.tracks.forEach((nodeTracks, nodeId) => {
+    this.tracks.forEach((nodeTracks, _nodeId) => {
       nodeTracks.forEach(track => {
         data.tracks.push({
           nodeId: track.nodeId,

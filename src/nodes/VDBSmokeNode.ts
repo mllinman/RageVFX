@@ -91,7 +91,7 @@ export class VDBSmokeNode extends Node {
           // Turbulent noise
           const noise = this.turbulentNoise(wx, wy + this.time * buoyancy, wz);
           
-          let smokeDensity = noise * heightFactor * timeFactor * density;
+          const smokeDensity = noise * heightFactor * timeFactor * density;
           
           if (smokeDensity > 0.01) {
             vdbGrid.set(`${x},${y},${z}`, smokeDensity);
