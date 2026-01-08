@@ -442,9 +442,12 @@ export class MoGraphEffectorNode extends Node {
       // This is a simplified safe evaluator - in production, use a proper math expression parser
       const safeEval = (expr: string): number => {
         // Allow only numbers, operators, and safe Math functions
+        // Sanitize input: only allow numbers and basic operators
         const sanitized = expr.replace(/[^0-9+\-*/().\s]/g, '');
         
         // Parse and evaluate basic arithmetic
+        // Note: Function constructor with sanitized input is used here for formula evaluation
+        // Input is restricted to numbers and basic operators only - no variables or complex expressions
         try {
           // Use Function constructor as a safer alternative to eval for simple expressions
           // Still not recommended for untrusted input in production
