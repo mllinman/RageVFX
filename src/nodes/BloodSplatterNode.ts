@@ -165,25 +165,25 @@ export class BloodSplatterNode extends Node {
     const height = inputImage?.height || this.getParameter('height');
     
     // Get all parameters
-    const emitterX = this.getParameter('emitterX');
-    const emitterY = this.getParameter('emitterY');
-    const emitterRadius = this.getParameter('emitterRadius');
+    const _emitterX = this.getParameter('emitterX');
+    const _emitterY = this.getParameter('emitterY');
+    const _emitterRadius = this.getParameter('emitterRadius');
     const emissionMode = this.getParameter('emissionMode');
     const emissionRate = this.getParameter('emissionRate');
     const burstCount = this.getParameter('burstCount');
-    const impactForce = this.getParameter('impactForce');
-    const speed = this.getParameter('speed');
-    const speedVariation = this.getParameter('speedVariation');
-    const direction = this.getParameter('direction');
-    const spread = this.getParameter('spread');
+    const _impactForce = this.getParameter('impactForce');
+    const _speed = this.getParameter('speed');
+    const _speedVariation = this.getParameter('speedVariation');
+    const _direction = this.getParameter('direction');
+    const _spread = this.getParameter('spread');
     const gravity = this.getParameter('gravity');
     const drag = this.getParameter('drag');
-    const viscosity = this.getParameter('viscosity');
+    const _viscosity = this.getParameter('viscosity');
     const bounce = this.getParameter('bounce');
     const bounceFactor = this.getParameter('bounceFactor');
-    const lifespan = this.getParameter('lifespan');
+    const _lifespan = this.getParameter('lifespan');
     const enableDrips = this.getParameter('enableDrips');
-    const dripSpeed = this.getParameter('dripSpeed');
+    const _dripSpeed = this.getParameter('dripSpeed');
     const enablePooling = this.getParameter('enablePooling');
     const poolRadius = this.getParameter('poolRadius');
     const maxParticles = this.getParameter('maxParticles');
@@ -531,7 +531,7 @@ export class BloodSplatterNode extends Node {
     });
   }
 
-  private spawnDrip(x: number, y: number, width: number, height: number): void {
+  private spawnDrip(x: number, y: number, _width: number, _height: number): void {
     const dripSpeed = this.getParameter('dripSpeed');
     const lifespan = this.getParameter('lifespan') * 2;
     const bloodColor = this.getParameter('bloodColor');
@@ -682,7 +682,7 @@ export class BloodSplatterNode extends Node {
     height: number,
     pool: { x: number; y: number; radius: number; opacity: number }
   ): void {
-    const bloodColor = this.getParameter('bloodColor');
+    const _bloodColor = this.getParameter('bloodColor');
     const oldColor = this.getParameter('oldColor');
     
     // Pools are older, darker blood

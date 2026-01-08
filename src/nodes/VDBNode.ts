@@ -221,7 +221,7 @@ export class VDBNode extends Node {
 
     // CSG union: max(A, B) for level sets
     // For fog volumes: A + B
-    const isoValue = this.getParameter('isoValue') as number;
+    const _isoValue = this.getParameter('isoValue') as number;
 
     // Simplified union operation
     // In production, would use proper sparse voxel traversal
@@ -276,7 +276,7 @@ export class VDBNode extends Node {
     }
   }
 
-  private applyFilter(volume: any): void {
+  private applyFilter(_volume: any): void {
     const filterType = this.getParameter('filterType') as string;
     const filterRadius = this.getParameter('filterRadius') as number;
     const iterations = this.getParameter('filterIterations') as number;
@@ -305,30 +305,30 @@ export class VDBNode extends Node {
     }
   }
 
-  private applyGaussianFilter(grid: VDBGrid, radius: number): void {
+  private applyGaussianFilter(_grid: VDBGrid, _radius: number): void {
     // Simplified Gaussian blur for sparse voxels
-    const sigma = radius / 3.0;
-    const kernel = this.generateGaussianKernel(radius, sigma);
+    const sigma = _radius / 3.0;
+    const _kernel = this.generateGaussianKernel(_radius, sigma);
     
     // Apply separable Gaussian filter
     // In production, would use efficient sparse voxel iteration
   }
 
-  private applyMedianFilter(grid: VDBGrid, radius: number): void {
+  private applyMedianFilter(_grid: VDBGrid, _radius: number): void {
     // Median filter for noise reduction
     // Preserves edges better than Gaussian
   }
 
-  private applyMeanFilter(grid: VDBGrid, radius: number): void {
+  private applyMeanFilter(_grid: VDBGrid, _radius: number): void {
     // Simple box filter averaging
   }
 
-  private applyLaplacianFilter(grid: VDBGrid): void {
+  private applyLaplacianFilter(_grid: VDBGrid): void {
     // Edge detection and sharpening
   }
 
   private generateGaussianKernel(radius: number, sigma: number): number[] {
-    const size = radius * 2 + 1;
+    const _size = radius * 2 + 1;
     const kernel: number[] = [];
     let sum = 0;
 
@@ -342,13 +342,13 @@ export class VDBNode extends Node {
     return kernel.map(v => v / sum);
   }
 
-  private performDilation(volume: any): void {
-    const dilateVoxels = this.getParameter('dilateVoxels') as number;
+  private performDilation(_volume: any): void {
+    const _dilateVoxels = this.getParameter('dilateVoxels') as number;
     // Expand volume by specified voxel count
   }
 
-  private performErosion(volume: any): void {
-    const erodeVoxels = this.getParameter('erodeVoxels') as number;
+  private performErosion(_volume: any): void {
+    const _erodeVoxels = this.getParameter('erodeVoxels') as number;
     // Shrink volume by specified voxel count
   }
 
@@ -397,11 +397,11 @@ export class VDBNode extends Node {
     this.grids.set(gridName, grid);
   }
 
-  private convertMeshToVDB(mesh: any): void {
-    const mode = this.getParameter('meshToVDBMode') as string;
-    const voxelSize = this.getParameter('voxelSize') as number;
-    const exteriorBand = this.getParameter('exteriorBandWidth') as number;
-    const interiorBand = this.getParameter('interiorBandWidth') as number;
+  private convertMeshToVDB(_mesh: any): void {
+    const _mode = this.getParameter('meshToVDBMode') as string;
+    const _voxelSize = this.getParameter('voxelSize') as number;
+    const _exteriorBand = this.getParameter('exteriorBandWidth') as number;
+    const _interiorBand = this.getParameter('interiorBandWidth') as number;
 
     // Voxelize mesh into signed distance field
     // This is a complex operation that requires:
@@ -410,10 +410,10 @@ export class VDBNode extends Node {
     // 3. Narrow band extraction
   }
 
-  private convertVDBToMesh(volume: any): any {
-    const isoValue = this.getParameter('isoValue') as number;
-    const quality = this.getParameter('meshConversionQuality') as string;
-    const adaptivity = this.getParameter('adaptivity') as number;
+  private convertVDBToMesh(_volume: any): any {
+    const _isoValue = this.getParameter('isoValue') as number;
+    const _quality = this.getParameter('meshConversionQuality') as string;
+    const _adaptivity = this.getParameter('adaptivity') as number;
 
     // Use marching cubes or dual contouring
     // to extract isosurface from volume
@@ -466,12 +466,12 @@ export class VDBNode extends Node {
   }
 
   // Public API for VDB file I/O
-  public async loadVDB(filepath: string): Promise<void> {
+  public async loadVDB(_filepath: string): Promise<void> {
     // Load VDB file from disk
     // Would use proper VDB library in production
   }
 
-  public async saveVDB(filepath: string): Promise<void> {
+  public async saveVDB(_filepath: string): Promise<void> {
     // Save VDB file to disk
     // Would use proper VDB library with compression
   }
